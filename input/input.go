@@ -1,4 +1,4 @@
-package utils
+package input
 
 import (
 	"bufio"
@@ -9,23 +9,38 @@ import (
 	"strconv"
 )
 
-func FetchInputFromFileAsIntArray(path string) ([]int, error) {
+/*
+recieves error as an arg to be chainable, bad design but looks cool
+#compatitive-programming #in-that-zone
+*/
+func AsIntArray(lines []string, err error) ([]int, error) {
+	if err != nil {
+		return nil, fmt.Errorf("input had error | %v", err)
+	}
+	input := make([]int, 0)
+	for i := 0; i < len(lines); i++ {
+		v, err := strconv.Atoi(lines[i])
+		if err != nil {
+			err = fmt.Errorf("strconv.Atoi failed for (%v) | %v", v, err)
+			return nil, err
+		}
+		input = append(input, v)
+	}
+	return input, nil
+}
+
+func FromFile(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("os.Open failed | %v", err)
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
 	// optionally, resize scanner's capacity for lines over 64K, see next example
-	input := make([]int, 0)
+	scanner := bufio.NewScanner(file)
+	input := make([]string, 0)
 	for scanner.Scan() {
-		v, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			err = fmt.Errorf("strconv.Atoi failed for (%v) | %v", v, err)
-			return nil, err
-		}
-		input = append(input, v)
+		input = append(input, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("scanner.Err() failed | %v", err)

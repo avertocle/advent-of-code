@@ -5,25 +5,30 @@ import (
 	"time"
 )
 
-var metrics *Metrics
+var m *Metrics
 
 type Metrics struct {
 	StartTime int64
 	EndTime   int64
+	InputLen  int
 }
 
 func init() {
-	metrics = new(Metrics)
+	m = new(Metrics)
 }
 
 func ProgStart() {
-	metrics.StartTime = time.Now().Unix()
+	m.StartTime = time.Now().Unix()
 }
 
 func ProgEnd() {
-	metrics.EndTime = time.Now().Unix()
+	m.EndTime = time.Now().Unix()
+}
+
+func InputLen(x int) {
+	m.InputLen = x
 }
 
 func ToString() string {
-	return fmt.Sprintf("prog time = %vms", metrics.EndTime-metrics.StartTime)
+	return fmt.Sprintf("input-len (%v) | prog-time (%vms)", m.InputLen, m.EndTime-m.StartTime)
 }

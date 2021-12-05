@@ -2,25 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/avertocle/adventofcode/input"
 	"github.com/avertocle/adventofcode/metrics"
-	"github.com/avertocle/adventofcode/utils"
 )
 
 const inputFilePath = "input.txt"
+const window = 1
 
 func main() {
 	metrics.ProgStart()
 
-	input, err := utils.FetchInputFromFileAsIntArray(inputFilePath)
-	if err != nil {
-		fmt.Printf("utils.FetchInputFromFileAsIntArray failed | %v", err)
-		return
-	}
-
-	var ans, window, sum1, sum2 int
+	input := getInputOrDie()
+	var ans, sum1, sum2 int
 	inputLen := len(input)
-	window = 3
+	metrics.InputLen(inputLen)
 	for i := 0; i < inputLen-window; i++ {
 		sum1 = 0
 		sum2 = 0
@@ -32,10 +29,16 @@ func main() {
 			ans++
 		}
 	}
-
-	fmt.Println(inputLen)
 	fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
 	fmt.Printf("metrics : [%v]", metrics.ToString())
+}
+
+func getInputOrDie() []int {
+	input, err := input.AsIntArray(input.FromFile(inputFilePath))
+	if err != nil {
+		log.Fatalf("input error | %v", err)
+	}
+	return input
 }
