@@ -2,7 +2,7 @@ package io
 
 import "fmt"
 
-func PrettyArray2D(arr [][]int) {
+func PrettyArray2DInt(arr [][]int) {
 	for _, row := range arr {
 		for _, cell := range row {
 			fmt.Printf("%v ", cell)
@@ -11,9 +11,18 @@ func PrettyArray2D(arr [][]int) {
 	}
 }
 
-func PrettyArray3D(arr [][][]int) {
+func PrettyArray2DByte(arr [][]byte) {
+	for _, row := range arr {
+		for _, cell := range row {
+			fmt.Printf("%v ", cell)
+		}
+		fmt.Println()
+	}
+}
+
+func PrettyArray3DInt(arr [][][]int) {
 	for _, d1 := range arr {
-		PrettyArray2D(d1)
+		PrettyArray2DInt(d1)
 		fmt.Println()
 	}
 }

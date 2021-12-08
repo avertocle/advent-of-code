@@ -99,3 +99,39 @@ func SplitToIntArray(line string, sep string) []int {
 	}
 	return ans
 }
+
+func MaxInt(x, y int) int {
+	if x >= y {
+		return x
+	} else {
+		return y
+	}
+}
+
+func MinInt(x, y int) int {
+	if x <= y {
+		return x
+	} else {
+		return y
+	}
+}
+
+func CountIn2dByteIf(grid [][]byte, f func(byte, int, int) bool) int {
+	count := 0
+	for i, row := range grid {
+		for j, cell := range row {
+			if f(cell, i, j) {
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func Init2DByte(size int) [][]byte {
+	ans := make([][]byte, size)
+	for i := 0; i < size; i++ {
+		ans[i] = make([]byte, size)
+	}
+	return ans
+}
