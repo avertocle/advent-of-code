@@ -128,10 +128,18 @@ func CountIn2dByteIf(grid [][]byte, f func(byte, int, int) bool) int {
 	return count
 }
 
-func Init2DByte(size int) [][]byte {
-	ans := make([][]byte, size)
-	for i := 0; i < size; i++ {
-		ans[i] = make([]byte, size)
+func Init2DByte(rows, cols int) [][]byte {
+	ans := make([][]byte, rows)
+	for i := 0; i < rows; i++ {
+		ans[i] = make([]byte, cols)
+	}
+	return ans
+}
+
+func Init2DInit(rows, cols int) [][]int {
+	ans := make([][]int, rows)
+	for i := 0; i < rows; i++ {
+		ans[i] = make([]int, cols)
 	}
 	return ans
 }

@@ -30,7 +30,7 @@ func main() {
 
 func problem1(input []*GeoLine) int {
 	dim := getMaxCoord(input) + 1
-	grid := io.Init2DByte(dim)
+	grid := io.Init2DByte(dim, dim)
 	for _, gl := range input {
 		if gl.isHori() {
 			markGridHori(grid, gl.x1, gl.x2, gl.y1)
@@ -47,7 +47,7 @@ func problem1(input []*GeoLine) int {
 
 func problem2(input []*GeoLine) int {
 	dim := getMaxCoord(input) + 1
-	grid := io.Init2DByte(dim)
+	grid := io.Init2DByte(dim, dim)
 	for _, gl := range input {
 		if gl.isHori() {
 			markGridHori(grid, gl.x1, gl.x2, gl.y1)
