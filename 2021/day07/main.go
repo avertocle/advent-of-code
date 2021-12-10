@@ -18,22 +18,25 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	ans := problem1(input)
+	// ans := problemBoth(input, fuelCost1)
+	// fmt.Printf("ans = %v\n", ans)
+
+	ans := problemBoth(input, fuelCost2)
 	fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
 	fmt.Printf("metrics : [%v]", metrics.ToString())
 }
 
-func problem1(input []int) int {
+func problemBoth(input []int, calcFuelCost func(int, int) int64) int64 {
 	min, _ := io.FindMin1DInt(input)
 	max, _ := io.FindMax1DInt(input)
-	fuelCost := 0
-	minFuelCost := math.MaxInt32
+	fuelCost := int64(0)
+	minFuelCost := int64(math.MaxInt64)
 	for i := min; i <= max; i++ {
 		fuelCost = 0
 		for _, x := range input {
-			fuelCost += int(math.Abs(float64(i - x)))
+			fuelCost += calcFuelCost(x, i)
 		}
 		if fuelCost < minFuelCost {
 			minFuelCost = fuelCost
@@ -43,8 +46,13 @@ func problem1(input []int) int {
 	return minFuelCost
 }
 
-func problem2(input []int) {
+func fuelCost1(src, des int) int64 {
+	return int64(math.Abs(float64(des - src)))
+}
 
+func fuelCost2(src, des int) int64 {
+	n := int64(math.Abs(float64(des - src)))
+	return (n * (n + 1)) / 2
 }
 
 func getInputOrDie() []int {
