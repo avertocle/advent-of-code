@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 
 	"github.com/avertocle/adventofcode/io"
 	"github.com/avertocle/adventofcode/metrics"
@@ -15,7 +16,7 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	ans := problem1(input)
+	ans := problem2(input)
 	fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
@@ -29,7 +30,7 @@ func problem1(input [][]byte) int {
 	for i, row := range input {
 		for j, ele := range row {
 			if isValley(input, rows, cols, i, j) {
-				fmt.Printf("%v,%v = %v\n", i, j, ele-'0')
+				//fmt.Printf("%v,%v = %v\n", i, j, ele-'0')
 				riskLevel += (int(ele-'0') + 1)
 			}
 		}
@@ -37,8 +38,55 @@ func problem1(input [][]byte) int {
 	return riskLevel
 }
 
-func problem2() {
+func problem2(input [][]byte) int64 {
+	rows := len(input)
+	cols := len(input[0])
+	topBasins := make([]int, 3)
+	basinSize := 0
+	for i, row := range input {
+		for j, _ := range row {
+			visited := io.Init2DByte(rows, cols)
+			basinSize = getBasinSize(input, 0, i, j, rows, cols, visited)
+			fmt.Printf("%v, %v, %v, %v\n", i, j, input[i][j]-'0', basinSize)
+			topBasins = processForTopSlots(topBasins, basinSize)
+		}
+	}
+	fmt.Printf("topBasins : %v\n", topBasins)
+	prod := int64(1)
+	for _, b := range topBasins {
+		prod *= int64(b)
+	}
+	return prod
+}
 
+func getBasinSize(input [][]byte, base byte, i, j, rows, cols int, visited [][]byte) int {
+	//fmt.Printf("%v, %v, %v\n", base-'0', i, j)
+	if !isValidCoord(i, j, rows, cols) {
+		return 0
+	} else if input[i][j] < base || input[i][j] == '9' {
+		return 0
+	} else if visited[i][j] == 1 {
+		return 0
+	}
+	visited[i][j] = 1
+	basinSize := 1 +
+		getBasinSize(input, input[i][j], i+1, j, rows, cols, visited) +
+		getBasinSize(input, input[i][j], i, j+1, rows, cols, visited) +
+		getBasinSize(input, input[i][j], i-1, j, rows, cols, visited) +
+		getBasinSize(input, input[i][j], i, j-1, rows, cols, visited)
+
+	//fmt.Printf("%v, %v, %v\n", i, j, basinSize)
+	return basinSize
+}
+
+func isValidCoord(x, y, rows, cols int) bool {
+	return !(x < 0 || y < 0 || x >= rows || y >= cols)
+}
+
+func processForTopSlots(topBasins []int, b int) []int {
+	topBasins = append(topBasins, b)
+	sort.Ints(topBasins)
+	return topBasins[1:]
 }
 
 func isValley(a [][]byte, rows, cols, x, y int) bool {
@@ -69,10 +117,5 @@ func getInputOrDie() [][]byte {
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
-
-	input := make([][]byte, len(lines))
-	for i, row := range lines {
-		input[i] = []byte(row)
-	}
-	return input
+	return io.ParseToByteArray(lines)
 }
