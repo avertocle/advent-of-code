@@ -122,5 +122,5 @@ func getInputOrDie() [][]byte {
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
-	return io.ParseToByteArray(lines)
+	return io.String1DToByte2D(lines)
 }

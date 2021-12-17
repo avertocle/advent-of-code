@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/avertocle/adventofcode/io"
 	"github.com/avertocle/adventofcode/metrics"
@@ -116,11 +118,11 @@ func getInputOrDie() ([][][]int, []int) {
 	}
 	inputLen := len(lines)
 	boards := make([][][]int, (inputLen-1)/boardSize)
-	draws := io.SplitToIntArray(lines[0], ",")
+	draws := SplitToIntArray(lines[0], ",")
 	boardNo := 0
 	boardRowNo := 0
 	for i := 1; i < inputLen; i++ {
-		x := io.SplitToIntArray(lines[i], " ")
+		x := SplitToIntArray(lines[i], " ")
 		boardNo = (i - 1) / boardSize
 		boardRowNo = (i - 1) % boardSize
 		if len(boards[boardNo]) == 0 {
@@ -129,4 +131,21 @@ func getInputOrDie() ([][][]int, []int) {
 		boards[boardNo][boardRowNo] = x
 	}
 	return boards, draws
+}
+
+func SplitToIntArray(line string, sep string) []int {
+	tokens := strings.Split(line, sep)
+	if sep == " " {
+		tokens = strings.Fields(line)
+	}
+	ans := make([]int, len(tokens))
+	var err error
+	for i, t := range tokens {
+		ans[i], err = strconv.Atoi(t)
+		if err != nil {
+			fmt.Printf("strconv.Atoi failed for (%v) (%v) | %v", i, t, err)
+			fmt.Println(strings.Join(tokens, "|"))
+		}
+	}
+	return ans
 }

@@ -11,6 +11,7 @@ type Metrics struct {
 	StartTime int64
 	EndTime   int64
 	InputLen  int
+	RecDepth  int
 }
 
 func init() {
@@ -27,6 +28,18 @@ func ProgEnd() {
 
 func InputLen(x int) {
 	m.InputLen = x
+}
+
+func RecIn() {
+	m.RecDepth++
+}
+
+func RecOut() {
+	m.RecDepth--
+}
+
+func I() *Metrics {
+	return m
 }
 
 func ToString() string {

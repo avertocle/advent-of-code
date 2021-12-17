@@ -10,10 +10,13 @@ func Init2DByte(rows, cols int) [][]byte {
 	return ans
 }
 
-func Init2DInt(rows, cols int) [][]int {
+func Init2DInt(val, rows, cols int) [][]int {
 	ans := make([][]int, rows)
 	for i := 0; i < rows; i++ {
 		ans[i] = make([]int, cols)
+		for j := 0; j < cols; j++ {
+			ans[i][j] = val
+		}
 	}
 	return ans
 }

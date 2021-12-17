@@ -61,7 +61,7 @@ func problem2(input [][]byte) int64 {
 
 func getBasinSize(input [][]byte, base byte, i, j, rows, cols int, visited [][]byte) int {
 	//fmt.Printf("%v, %v, %v\n", base-'0', i, j)
-	if !isValidCoord(i, j, rows, cols) {
+	if !io.IsValidCoord2D(i, j, rows, cols) {
 		return 0
 	} else if input[i][j] < base || input[i][j] == '9' {
 		return 0
@@ -77,10 +77,6 @@ func getBasinSize(input [][]byte, base byte, i, j, rows, cols int, visited [][]b
 
 	//fmt.Printf("%v, %v, %v\n", i, j, basinSize)
 	return basinSize
-}
-
-func isValidCoord(x, y, rows, cols int) bool {
-	return !(x < 0 || y < 0 || x >= rows || y >= cols)
 }
 
 func processForTopSlots(topBasins []int, b int) []int {
@@ -117,5 +113,5 @@ func getInputOrDie() [][]byte {
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
-	return io.ParseToByteArray(lines)
+	return io.String1DToByte2D(lines)
 }

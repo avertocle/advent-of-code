@@ -9,7 +9,7 @@ import (
 )
 
 const inputFilePath = "input.txt"
-const window = 1
+const window = 3
 
 func main() {
 	metrics.ProgStart()
@@ -36,9 +36,10 @@ func main() {
 }
 
 func getInputOrDie() []int {
-	input, err := io.AsIntArray(io.FromFile(inputFilePath, false))
+	lines, err := io.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
+	input := io.String1DToInt1D(lines, " ")
 	return input
 }

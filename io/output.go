@@ -9,15 +9,17 @@ func PrettyArray2DInt(arr [][]int) {
 		}
 		fmt.Println()
 	}
+	fmt.Println()
 }
 
 func PrettyArray2DByte(arr [][]byte) {
 	for _, row := range arr {
 		for _, cell := range row {
-			fmt.Printf("%v ", cell)
+			fmt.Printf("%q ", cell)
 		}
 		fmt.Println()
 	}
+	fmt.Println()
 }
 
 func PrettyArray3DInt(arr [][][]int) {
@@ -25,4 +27,5 @@ func PrettyArray3DInt(arr [][][]int) {
 		PrettyArray2DInt(d1)
 		fmt.Println()
 	}
+	fmt.Println()
 }

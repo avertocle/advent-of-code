@@ -10,27 +10,115 @@ import (
 
 const inputFilePath = "input.txt"
 
+var in *input
+
+type input struct {
+	grid [][]int
+	rows int
+	cols int
+}
+
 func main() {
 	metrics.ProgStart()
-	input := getInputOrDie()
-	metrics.InputLen(len(input))
+	in = getInputOrDie()
+	metrics.InputLen(in.rows)
+
+	ans := problem1()
+	//ans := problem2()
+	fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
 	fmt.Printf("metrics : [%v]", metrics.ToString())
 }
 
-func problem1() {
-
-}
-
-func problem2() {
-
-}
-
-func getInputOrDie() []string {
+func getInputOrDie() *input {
 	lines, err := io.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
-	return lines
+	grid := io.String1DToInt2D(lines, "")
+	return &input{
+		grid: grid,
+		rows: len(grid),
+		cols: len(grid[0]),
+	}
+}
+
+/***** Logic Begins here *****/
+
+const simCount = 100
+
+func problem1() int {
+	flashCount := 0
+	for i := 0; i < simCount; i++ {
+		flashCount += iterate()
+		fmt.Printf("%v.", i)
+	}
+	return flashCount
+}
+
+func problem2() int {
+	for i := 0; ; i++ {
+		fmt.Printf("%v.", i)
+		iterate()
+		if AreAllZero() {
+			return i + 1
+		}
+	}
+}
+
+func AreAllZero() bool {
+	sum := 0
+	for _, row := range in.grid {
+		for _, ele := range row {
+			sum += ele
+		}
+	}
+	return sum == 0
+}
+
+func iterate() int {
+	step1()
+	flashCount := step2()
+	//io.PrettyArray2DInt(in.grid)
+	for x := flashCount; x > 0; {
+		x = step2()
+		//io.PrettyArray2DInt(in.grid)
+		flashCount += x
+	}
+	step3()
+	//io.PrettyArray2DInt(in.grid)
+	return flashCount
+}
+
+func step1() {
+	for i, row := range in.grid {
+		for j, _ := range row {
+			in.grid[i][j]++
+		}
+	}
+}
+
+func step2() int {
+	flashCount := 0
+	for i, row := range in.grid {
+		for j, ele := range row {
+			if ele > 9 {
+				flashCount++
+				in.grid[i][j] = -1 * (in.grid[i][j])
+				io.ApplyToAdjacent(in.grid, i, j, in.rows, in.cols, true, func(b int) int { return b + 1 })
+			}
+		}
+	}
+	return flashCount
+}
+
+func step3() {
+	for i, row := range in.grid {
+		for j, ele := range row {
+			if ele > 9 || ele < 0 {
+				in.grid[i][j] = 0
+			}
+		}
+	}
 }
