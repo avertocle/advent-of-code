@@ -1,0 +1,268 @@
+inp w       w,x,y,z
+mul x 0     w,0,y,z
+add x z     w,z,y,z
+mod x 26    w,z%26,y,z
+div z 1 *   w,z%26,y,z/k1
+add x 12 *  w,(z%26)+k2,y,z/k1
+eql x w     w,0,y,z/k1(F) OR w,1,y,z/k1 (T)
+eql x 0     w,1,y,z/k1 OR w,0,y,z/k1
+mul y 0     w,1,0,z/k1 OR w,0,0,z/k1
+add y 25    w,1,25,z/k1 OR w,0,25,z/k1
+mul y x     w,1,25,z/k1 OR w,0,0,z/k1
+add y 1     w,1,26,z/k1 OR w,0,1,z/k1
+mul z y     w,1,26,(z/k1)*26 OR w,0,1,(z/k1)
+mul y 0     w,1,0,(z/k1)*26 OR w,0,0,(z/k1)
+add y w     w,1,w,(z/k1)*26 OR w,0,w,(z/k1)
+add y 4 *   w,1,w+k3,(z/k1)*26 OR w,0,w+k3,(z/k1)
+mul y x     w,1,w+k3,(z/k1)*26 OR w,0,0,(z/k1)
+add z y     
+
+w,1,w+k3,((z/k1)*26+(w+k3)) OR w,0,0,(z/k1)  ==> (0,0,0 & 1,12,4) 
+==> w,1,w+4,w+4 OR w,0,0,0 (w==z%26+k2)
+==> w,1,w1+4,w1+4
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 15
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y     
+
+w,1,w+k3,((z/k1)*26+(w+k3)) OR w,0,0,(z/k1)  ==> (0,0,0 & 1,15,11)
+w,1,w2+k3,()
+
+
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 7
+mul y x
+add z y
+
+
+1,11,7
+
+
+inp w         
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 2
+mul y x
+add z y
+inp w       w,1,w+k3,((z/k1)*26+(w+k3)) OR w,0,0,(z/k1)  ==> (0,0,0 & 26,-14,2) ==> w,1,w+2,w+2 OR w,0,0,0 => w,0,0,0  
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -10
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 9
+mul y x
+add z y
+inp w      w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 13
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -7
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 10
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 2
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -2
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -1
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y
+inp w       w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -4
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 3
+mul y x
+add z y
+inp w     w,0,0,0
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+add z y   w,0,0,0

@@ -1,5 +1,7 @@
 package io
 
+import "fmt"
+
 func IsValidCoord2D(x, y, rows, cols int) bool {
 	return !(x < 0 || y < 0 || x >= rows || y >= cols)
 }
@@ -21,4 +23,12 @@ func ApplyIfValid(g [][]int, x, y, rows, cols int, f func(int) int) {
 	if IsValidCoord2D(x, y, rows, cols) {
 		g[x][y] = f(g[x][y])
 	}
+}
+
+func Unique1DIntIn2DInt(arr [][]int) int {
+	m := make(map[string]bool)
+	for _, row := range arr {
+		m[fmt.Sprintf("%v", row)] = true
+	}
+	return len(m)
 }

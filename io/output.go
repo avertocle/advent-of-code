@@ -14,8 +14,15 @@ func PrettyArray2DInt(arr [][]int) {
 
 func PrettyArray2DByte(arr [][]byte) {
 	for _, row := range arr {
-		for _, cell := range row {
-			fmt.Printf("%q ", cell)
+		fmt.Printf("%v\n", string(row))
+	}
+	fmt.Println()
+}
+
+func PrettyArray2DString(arr [][]string) {
+	for _, row := range arr {
+		for _, ele := range row {
+			fmt.Printf("%v | ", ele)
 		}
 		fmt.Println()
 	}

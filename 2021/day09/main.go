@@ -45,7 +45,7 @@ func problem2(input [][]byte) int64 {
 	basinSize := 0
 	for i, row := range input {
 		for j, _ := range row {
-			visited := io.Init2DByte(rows, cols)
+			visited := io.Init2DByte(rows, cols, 0)
 			basinSize = getBasinSize(input, 0, i, j, rows, cols, visited)
 			fmt.Printf("%v, %v, %v, %v\n", i, j, input[i][j]-'0', basinSize)
 			topBasins = processForTopSlots(topBasins, basinSize)
