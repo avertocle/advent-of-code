@@ -25,8 +25,8 @@ func main() {
 	metrics.InputLen(len(in.rules))
 
 	//ans := problem1()
-	ans := problem2()
-	fmt.Printf("ans = %v\n", ans)
+	//ans := problem2()
+	//fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
 	fmt.Printf("metrics : [%v]", metrics.ToString())
