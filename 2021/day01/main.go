@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/avertocle/adventofcode/io"
 	"github.com/avertocle/adventofcode/metrics"
+	"log"
 )
 
 const inputFilePath = "input.txt"
