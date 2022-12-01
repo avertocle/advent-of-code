@@ -52,7 +52,7 @@ func getInputOrDie() *input {
 				flag = true
 				continue
 			} else {
-				grid = append(grid, io.StringToInt1D(l, ","))
+				grid = append(grid, io.String0DToInt1D(l, ","))
 			}
 		} else {
 			axes = append(axes, parseFolds(l))
