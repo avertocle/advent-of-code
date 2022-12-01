@@ -1,0 +1,6 @@
+github.com/avertocle/contests/io v0.0.0-20221201111210-702fb242532b h1:j/8fROtavIjvHatkan95kKhkUcuSDSqyh7IXd5plL78=
+github.com/avertocle/contests/io v0.0.0-20221201111210-702fb242532b/go.mod h1:pEyKy601ItRw0blIYHV2VcKXZ3Fx6UMugNt/f88tUtw=
+github.com/avertocle/contests/metrics v0.0.0-20221201111210-702fb242532b h1:ZCa3sGsuiGZkCKnaA1PphVVIvSlqCTjXTQqGRIJNcC4=
+github.com/avertocle/contests/metrics v0.0.0-20221201111210-702fb242532b/go.mod h1:RxvPZJ2WmGYRYlO+xnuDFhIj6tdODBB2MHmkwiOQgw8=
+github.com/emirpasic/gods v1.18.1 h1:FXtiHYKDGKCW2KzwZKx0iC0PQmdlorYgdFG9jPXJ1Bc=
+github.com/emirpasic/gods v1.18.1/go.mod h1:8tpGGwCnJ5H4r6BWwaV6OrWmMoPhUl5jm/FMNAnJvWQ=
