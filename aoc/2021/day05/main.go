@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 	"strconv"
 	"strings"
@@ -95,7 +96,7 @@ func getMaxCoord(input []*GeoLine) int {
 }
 
 func getInputOrDie() []*GeoLine {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}

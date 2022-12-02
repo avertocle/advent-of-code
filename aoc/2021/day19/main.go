@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -28,7 +28,7 @@ func problem2() {
 }
 
 func getInputOrDie() []string {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}

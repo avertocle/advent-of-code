@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -20,7 +20,7 @@ func main() {
 
 	fmt.Printf("draws = %v\n\n", draws)
 	fmt.Printf("boards(%v), board-size(%vx%v)\n\n", len(boards), len(boards[0]), len(boards[0][0]))
-	//io.PrettyArray3D(boards)
+	//input.PrettyArray3D(boards)
 
 	// sum, draw := problem1(boards, draws)
 	// fmt.Printf("score(%v) sum(%v) draw(%v) \n", sum*draw, sum, draw)
@@ -28,7 +28,7 @@ func main() {
 	sum, draw := problem2(boards, draws)
 	fmt.Printf("score(%v) sum(%v) draw(%v) \n", sum*draw, sum, draw)
 
-	//io.PrettyArray3D(boards)
+	//input.PrettyArray3D(boards)
 
 	metrics.ProgEnd()
 	fmt.Printf("metrics : [%v]", metrics.ToString())
@@ -112,7 +112,7 @@ func sumUnmarkedNumbers(board [][]int) int {
 }
 
 func getInputOrDie() ([][][]int, []int) {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}

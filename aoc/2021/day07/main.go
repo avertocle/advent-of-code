@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 	"math"
 	"strconv"
@@ -56,7 +57,7 @@ func fuelCost2(src, des int) int64 {
 }
 
 func getInputOrDie() []int {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}

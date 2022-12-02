@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 	"math"
 
@@ -118,9 +119,9 @@ func calcSynErrorScore(errChar byte) int {
 }
 
 func getInputOrDie() [][]byte {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
-	return io.String1DToByte2D(lines)
+	return input.String1DToByte2D(lines)
 }

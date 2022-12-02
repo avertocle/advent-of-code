@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/input"
 	"log"
 	"strconv"
 	"strings"
@@ -58,7 +59,7 @@ func getFishCount(currAge, simDaysLeft int) int {
 }
 
 func getInputOrDie() []int {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input.FromFile(inputFilePath, true)
 	if err != nil {
 		log.Fatalf("input error | %v", err)
 	}
