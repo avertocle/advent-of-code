@@ -4,7 +4,7 @@
 #competitive-programming #in-that-zone
 */
 
-package input
+package iutils
 
 import (
 	"fmt"

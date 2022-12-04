@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"sort"
@@ -174,9 +174,9 @@ func SortString(str string) string {
 }
 
 func getInputOrDie() ([][]string, [][]string) {
-	lines, err := input.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	patterns := io.Init2DString(len(lines), 10)

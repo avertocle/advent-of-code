@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"sort"
@@ -65,11 +65,11 @@ func minInt(x ...int) int {
 }
 
 func getInputOrDie() [][]byte {
-	lines, err := input.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
-	input := input.String1DToByte2D(lines)
+	input := iutils.String1DToByte2D(lines)
 	return input
 }

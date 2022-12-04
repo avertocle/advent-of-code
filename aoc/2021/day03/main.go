@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 
@@ -90,9 +90,9 @@ func getMostLeastCommonBitsAt(input [][]byte, pos int) (byte, byte) {
 }
 
 func getInputOrDie() [][]byte {
-	lines, err := input.FromFile(inputFilePath, false)
+	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	inputLen := len(lines)

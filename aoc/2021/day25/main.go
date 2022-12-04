@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	input2 "github.com/avertocle/contests/io/input"
+	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
 	"github.com/avertocle/contests/io"
@@ -34,9 +34,9 @@ func main() {
 func getInputOrDie() *input {
 	lines, err := input2.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
-	fmt.Printf("input-len = %v\n", len(lines))
+	fmt.Printf("iutils-len = %v\n", len(lines))
 	grid := input2.String1DToByte2D(lines)
 	return &input{
 		grid: grid,
@@ -53,7 +53,7 @@ func problem1() int {
 	movesDone := 0
 	for i := 0; true; i++ {
 		movesDone = 0
-		//input.PrettyArray2DByte(in.grid)
+		//iutils.PrettyArray2DByte(in.grid)
 		movesDone += iterate1(moveHori1)
 		movesDone += iterate1(moveVert1)
 		if movesDone == 0 {

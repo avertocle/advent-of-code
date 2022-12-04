@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	input2 "github.com/avertocle/contests/io/input"
+	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
 	"github.com/avertocle/contests/io"
@@ -35,7 +35,7 @@ func main() {
 func getInputOrDie() *input {
 	lines, err := input2.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 	grid := io.String1DToInt2D(lines, "")
 	return &input{

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
 	"log"
 	"strings"
@@ -22,7 +22,7 @@ func main() {
 	metrics.ProgStart()
 	input := getInputOrDie()
 
-	//io.PrettyArray2DByte(input)
+	//io.PrettyArray2DByte(iutils)
 
 	ans01 := solvePartOne(input)
 	fmt.Printf("answer part-01 = %v\n", ans01)
@@ -86,11 +86,11 @@ func calcMoveScore(move byte) int {
 
 // input : [][]byte : each row contains a move pair
 func getInputOrDie() [][]byte {
-	lines, err := input.FromFile(inputFilePath, false)
+	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
-	input := input.ExtractByte2DFromString1D(lines, " ", nil, 0)
+	input := iutils.ExtractByte2DFromString1D(lines, " ", nil, 0)
 	return input
 }
 

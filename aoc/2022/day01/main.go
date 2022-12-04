@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
 	"log"
 	"sort"
@@ -55,11 +55,11 @@ func solvePartTwo(input [][]int) int {
 
 // input : [][]int : each row contains elf calories
 func getInputOrDie() [][]int {
-	lines, err := input.FromFile(inputFilePath, false)
+	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
-	linesInt := input.ExtractInt1DFromString1D(lines, " ", 0, -1)
+	linesInt := iutils.ExtractInt1DFromString1D(lines, " ", 0, -1)
 
 	//	fmt.Printf("%+v\n", linesInt)
 
@@ -70,7 +70,7 @@ func getInputOrDie() [][]int {
 		for ; i < len(linesInt) && linesInt[i] > -1; i++ {
 			temp = append(temp, linesInt[i])
 		}
-		//		fmt.Printf("%+v\n", input)
+		//		fmt.Printf("%+v\n", iutils)
 		input = append(input, temp)
 	}
 	return input

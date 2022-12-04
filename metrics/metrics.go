@@ -43,5 +43,5 @@ func I() *Metrics {
 }
 
 func ToString() string {
-	return fmt.Sprintf("input-len (%v) | prog-time (%vms)", m.InputLen, m.EndTime-m.StartTime)
+	return fmt.Sprintf("iutils-len (%v) | prog-time (%vms)", m.InputLen, m.EndTime-m.StartTime)
 }

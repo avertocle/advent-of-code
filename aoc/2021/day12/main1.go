@@ -5,7 +5,7 @@
 // 	"log"
 // 	"strings"
 
-// 	"github.com/avertocle/contests/input"
+// 	"github.com/avertocle/contests/iutils"
 // 	"github.com/avertocle/contests/metrics"
 // )
 
@@ -13,8 +13,8 @@
 
 // func main() {
 // 	metrics.ProgStart()
-// 	input := getInputOrDie()
-// 	metrics.InputLen(input.size)
+// 	iutils := getInputOrDie()
+// 	metrics.InputLen(iutils.size)
 
 // 	metrics.ProgEnd()
 // 	fmt.Printf("metrics : [%v]", metrics.ToString())
@@ -29,14 +29,14 @@
 // }
 
 // func getInputOrDie() *graph {
-// 	lines, err := input.FromFile(inputFilePath, true)
+// 	lines, err := iutils.FromFile(inputFilePath, true)
 // 	if err != nil {
-// 		log.Fatalf("input error | %v", err)
+// 		log.Fatalf("iutils error | %v", err)
 // 	}
 
 // 	tokens := make([]string, 2)
 // 	nodeSet := make(map[string]bool, 0)
-// 	paths := input.Init2DString(len(lines), 2)
+// 	paths := iutils.Init2DString(len(lines), 2)
 // 	for i, l := range lines {
 // 		tokens = strings.Split(l, "-")
 // 		//fmt.Printf("%v,%v|", tokens[0], tokens[1])
@@ -50,16 +50,16 @@
 // 		paths[i][1] = tokens[1]
 // 	}
 
-// 	input := newGraph(len(nodeSet))
+// 	iutils := newGraph(len(nodeSet))
 // 	for _, l := range lines {
 // 		tokens = strings.Split(l, "-")
-// 		input.addPaths(paths)
+// 		iutils.addPaths(paths)
 // 	}
 
-// 	input.PrettyArray2DByte(input.mat)
-// 	fmt.Printf("%v\n", input.iToCap)
+// 	iutils.PrettyArray2DByte(iutils.mat)
+// 	fmt.Printf("%v\n", iutils.iToCap)
 
-// 	return input
+// 	return iutils
 // }
 
 // type graph struct {
@@ -74,7 +74,7 @@
 // func newGraph(size int) *graph {
 // 	g := new(graph)
 // 	g.size = size
-// 	g.mat = input.Init2DByte(size, size, 0)
+// 	g.mat = iutils.Init2DByte(size, size, 0)
 // 	g.vToI = make(map[string]int)
 // 	g.iToV = make(map[int]string)
 // 	g.iToCap = make(map[int]bool)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/input"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
@@ -22,7 +22,7 @@ func main() {
 	ans := problem1(input)
 	fmt.Printf("ans = %v\n", ans)
 
-	// ans := problem2(input)
+	// ans := problem2(iutils)
 	// fmt.Printf("ans = %v\n", ans)
 
 	metrics.ProgEnd()
@@ -96,9 +96,9 @@ func getMaxCoord(input []*GeoLine) int {
 }
 
 func getInputOrDie() []*GeoLine {
-	lines, err := input.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 	input := make([]*GeoLine, len(lines))
 	var tokens []string

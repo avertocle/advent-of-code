@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	input2 "github.com/avertocle/contests/io/input"
+	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
@@ -27,7 +27,7 @@ func main() {
 	in = getInputOrDie()
 	metrics.InputLen(in.rows)
 
-	//input.PrettyArray2DInt(in.grid)
+	//iutils.PrettyArray2DInt(in.grid)
 	fmt.Printf("%v\n", in.axes)
 
 	ans := problem1()
@@ -41,7 +41,7 @@ func main() {
 func getInputOrDie() *input {
 	lines, err := input2.FromFile(inputFilePath, false)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	var grid [][]int

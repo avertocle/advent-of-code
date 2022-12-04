@@ -4,7 +4,7 @@
 #competitive-programming #in-that-zone
 */
 
-package input
+package iutils
 
 import (
 	"strings"
@@ -80,9 +80,9 @@ func ExtractByte1DFromString0D(line string, sep string, col int, defaultVal byte
 
 //
 //func String1DToByte2D(lines []string) [][]byte {
-//	input := make([][]byte, len(lines))
+//	iutils := make([][]byte, len(lines))
 //	for i, row := range lines {
-//		input[i] = []byte(row)
+//		iutils[i] = []byte(row)
 //	}
-//	return input
+//	return iutils
 //}

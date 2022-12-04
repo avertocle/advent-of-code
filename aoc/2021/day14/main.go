@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	input2 "github.com/avertocle/contests/io/input"
+	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"strings"
@@ -37,7 +37,7 @@ func main() {
 func getInputOrDie() *input {
 	lines, err := input2.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 	poly := []byte(lines[0])
 	rules := make(map[string]byte)
