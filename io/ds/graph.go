@@ -58,18 +58,22 @@ func (this *Graph) PrintAdList() {
 
 func (this *Graph) PrintAdMat() {
 
-	matSize := len(this.AdMat) + 1
+	matSize := len(this.VMap) + 1
 	mat := make([][]string, matSize)
 
 	vToIdxMap := make(map[string]int)
-	i := 0
 	for i := 0; i < matSize; i++ {
 		mat[i] = make([]string, matSize)
+		for j := 0; j < len(mat[i]); j++ {
+			mat[i][j] = "0"
+		}
 	}
+
+	i := 0
 	for v, _ := range this.VMap {
 		vToIdxMap[v] = i
-		mat[i][1] = v
-		mat[1][i] = v
+		mat[0][i+1] = v
+		mat[i+1][0] = v
 		i++
 	}
 

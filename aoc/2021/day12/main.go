@@ -2,54 +2,66 @@ package main
 
 import (
 	"fmt"
-	input2 "github.com/avertocle/contests/io/iutils"
-	"log"
-	"strings"
-
+	"github.com/avertocle/contests/io"
+	"github.com/avertocle/contests/io/ds"
+	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
+	"log"
 )
 
-const inputFilePath = "input.txt"
-
-var in *input
-
-type input struct {
-	poly    []byte
-	rules   map[string]byte
-	pairMap map[string]int
-}
+const inputFilePath = "input_small.txt"
 
 func main() {
 	metrics.ProgStart()
-	in = getInputOrDie()
-	metrics.InputLen(len(in.rules))
+	input := getInputOrDie()
 
-	//ans := problem1()
-	//ans := problem2()
-	//fmt.Printf("ans = %v\n", ans)
+	input.PrintAdList()
 
-	metrics.ProgEnd()
-	fmt.Printf("metrics : [%v]", metrics.ToString())
+	input.PrintAdMat()
+
+	ans01 := solvePartOne(input)
+	fmt.Printf("answer part-01 = %v\n", ans01)
+
+	ans02 := solvePartTwo(input)
+	fmt.Printf("answer part-02 = %v\n", ans02)
 }
 
-func getInputOrDie() *input {
-	lines, err := input2.FromFile(inputFilePath, true)
+func solvePartOne(input *ds.Graph) int {
+	return 0
+}
+
+func solvePartTwo(input *ds.Graph) int {
+	return 0
+}
+
+/***** Common Functions *****/
+
+/***** Input *****/
+
+// input : [][]int : each row contains start and end ranges of both elves {e1s,e1e,e2s,e2e}
+func getInputOrDie() *ds.Graph {
+	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	poly := []byte(lines[0])
-	rules := make(map[string]byte)
-	var tokens []string
-	for i := 1; i < len(lines); i++ {
-		tokens = strings.Split(lines[i], "->")
-		rules[strings.TrimSpace(tokens[0])] = []byte(strings.TrimSpace(tokens[1]))[0]
+	linesSplit := iutils.ExtractString2DFromString1D(lines, "-", nil, "")
+	io.PrettyArray2DString(linesSplit)
+	input := ds.NewGraph()
+	for _, ls := range linesSplit {
+		input.AddVertex(ls[0], arrToMap(ls[1]))
+		input.AddVertex(ls[1], arrToMap(ls[0]))
 	}
-	return &input{
-		poly:  poly,
-		rules: rules,
-	}
+	return input
 }
 
-/***** Logic Begins here *****/
+func arrToMap(arr ...string) map[string]int {
+	m := make(map[string]int)
+	for _, a := range arr {
+		m[a] = 1
+	}
+	return m
+}
 
-const simCount = 40
+/***** PART 01 Functions *****/
+
+/***** PART 02 Functions *****/
