@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
 	"github.com/avertocle/contests/io"
@@ -32,9 +33,9 @@ func main() {
 }
 
 func getInputOrDie() *input {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := input2.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 	grid := io.String1DToInt2D(lines, "")
 	return &input{
@@ -80,14 +81,14 @@ func AreAllZero() bool {
 func iterate() int {
 	step1()
 	flashCount := step2()
-	//io.PrettyArray2DInt(in.grid)
+	//iutils.PrettyArray2DInt(in.grid)
 	for x := flashCount; x > 0; {
 		x = step2()
-		//io.PrettyArray2DInt(in.grid)
+		//iutils.PrettyArray2DInt(in.grid)
 		flashCount += x
 	}
 	step3()
-	//io.PrettyArray2DInt(in.grid)
+	//iutils.PrettyArray2DInt(in.grid)
 	return flashCount
 }
 

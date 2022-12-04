@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"sort"
 
@@ -109,9 +110,9 @@ func isValley(a [][]byte, rows, cols, x, y int) bool {
 }
 
 func getInputOrDie() [][]byte {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
-	return io.String1DToByte2D(lines)
+	return iutils.String1DToByte2D(lines)
 }

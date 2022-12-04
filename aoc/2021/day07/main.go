@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"strconv"
@@ -18,7 +19,7 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	// ans := problemBoth(input, fuelCost1)
+	// ans := problemBoth(iutils, fuelCost1)
 	// fmt.Printf("ans = %v\n", ans)
 
 	ans := problemBoth(input, fuelCost2)
@@ -56,9 +57,9 @@ func fuelCost2(src, des int) int64 {
 }
 
 func getInputOrDie() []int {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	tokens := strings.Split(lines[0], ",")

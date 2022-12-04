@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -17,7 +17,7 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	//hpos, vpos := problem1(input)
+	//hpos, vpos := problem1(iutils)
 
 	hpos, vpos := problem2(input)
 
@@ -67,9 +67,9 @@ func problem2(input [][]int) (int, int) {
 }
 
 func getInputOrDie() [][]int {
-	lines, err := io.FromFile(inputFilePath, false)
+	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	inputLen := len(lines)
@@ -79,7 +79,7 @@ func getInputOrDie() [][]int {
 		tokens = strings.Split(lines[i], " ")
 		amt, err := strconv.Atoi(tokens[1])
 		if err != nil {
-			log.Fatalf("input error while strconv.Atoi (%v) (%v) (%v) | %v", i, lines[i], tokens, err)
+			log.Fatalf("iutils error while strconv.Atoi (%v) (%v) (%v) | %v", i, lines[i], tokens, err)
 		}
 		dir := -1
 		switch tokens[0] {
@@ -94,7 +94,7 @@ func getInputOrDie() [][]int {
 			break
 		}
 		if dir == -1 {
-			log.Fatalf("input error while getting dir (%v) (%v) (%v) | %v", i, lines[i], tokens, err)
+			log.Fatalf("iutils error while getting dir (%v) (%v) (%v) | %v", i, lines[i], tokens, err)
 		}
 		input[i] = []int{dir, amt}
 	}

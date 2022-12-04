@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
@@ -14,7 +15,7 @@ const inputFilePath = "input.txt"
 const maxFishAge = 9
 const simDays = 256
 
-//caches fish-count produced by one fish starting at [init-age] on a [current-day]
+// caches fish-count produced by one fish starting at [init-age] on a [current-day]
 var simCache [][]int
 
 func main() {
@@ -58,9 +59,9 @@ func getFishCount(currAge, simDaysLeft int) int {
 }
 
 func getInputOrDie() []int {
-	lines, err := io.FromFile(inputFilePath, true)
+	lines, err := iutils.FromFile(inputFilePath, true)
 	if err != nil {
-		log.Fatalf("input error | %v", err)
+		log.Fatalf("iutils error | %v", err)
 	}
 
 	tokens := strings.Split(lines[0], ",")
