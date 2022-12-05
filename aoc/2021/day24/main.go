@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	input2 "github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"log"
 	"math"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	metrics.InputLen(in.rows)
 
 	//iutils.PrettyArray2DString(in.cmds)
-	io.PrettyArray2DInt(in.params)
+	outils.PrettyArray2DInt(in.params)
 
 	ans := problem1()
 	//ans := problem2()

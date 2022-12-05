@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
 	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -126,7 +126,7 @@ func iterate() {
 	repMap := make(map[int]byte)
 	var matches []int
 	for pat, rep := range in.rules {
-		matches = io.Find1DByteIn1DByte(in.poly, []byte(pat))
+		matches = bytez.FindSubseq1D(in.poly, []byte(pat))
 		for _, m := range matches {
 			repMap[m+1] = rep
 		}
@@ -148,7 +148,7 @@ func iterate() {
 func findMinMaxCount() (int, int) {
 	min := math.MaxInt32
 	max := 0
-	m := io.CountUniqByteIn1DByte(in.poly)
+	m := bytez.GroupUniq1D(in.poly)
 	for _, v := range m {
 		if v < min {
 			min = v
@@ -161,6 +161,6 @@ func findMinMaxCount() (int, int) {
 }
 
 func libTest() {
-	fmt.Printf("%v \n", io.Find1DByteIn1DByte([]byte("VHCKBFOVCHHKOHBPNCKO"), []byte("CY")))
+	fmt.Printf("%v \n", bytez.FindSubseq1D([]byte("VHCKBFOVCHHKOHBPNCKO"), []byte("CY")))
 
 }

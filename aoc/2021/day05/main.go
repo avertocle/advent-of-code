@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -31,7 +32,7 @@ func main() {
 
 func problem1(input []*GeoLine) int {
 	dim := getMaxCoord(input) + 1
-	grid := io.Init2DByte(dim, dim, 0)
+	grid := bytez.Init2D(dim, dim, 0)
 	for _, gl := range input {
 		if gl.isHori() {
 			markGridHori(grid, gl.x1, gl.x2, gl.y1)
@@ -40,7 +41,7 @@ func problem1(input []*GeoLine) int {
 		} else {
 		}
 	}
-	ans := io.CountIn2dByteIf(grid, func(val byte, x, y int) bool {
+	ans := bytez.CountIf2D(grid, func(val byte, x, y int) bool {
 		return val >= maxIntersections
 	})
 	return ans
@@ -48,7 +49,7 @@ func problem1(input []*GeoLine) int {
 
 func problem2(input []*GeoLine) int {
 	dim := getMaxCoord(input) + 1
-	grid := io.Init2DByte(dim, dim, 0)
+	grid := bytez.Init2D(dim, dim, 0)
 	for _, gl := range input {
 		if gl.isHori() {
 			markGridHori(grid, gl.x1, gl.x2, gl.y1)
@@ -58,20 +59,20 @@ func problem2(input []*GeoLine) int {
 			markGridDiag(grid, gl.x1, gl.y1, gl.x2, gl.y2)
 		}
 	}
-	ans := io.CountIn2dByteIf(grid, func(val byte, x, y int) bool {
+	ans := bytez.CountIf2D(grid, func(val byte, x, y int) bool {
 		return val >= maxIntersections
 	})
 	return ans
 }
 
 func markGridHori(grid [][]byte, x1, x2, y int) {
-	for i := io.MinInt(x1, x2); i <= io.MaxInt(x1, x2); i++ {
+	for i := intz.Min(x1, x2); i <= intz.Max(x1, x2); i++ {
 		grid[i][y]++
 	}
 }
 
 func markGridVert(grid [][]byte, y1, y2, x int) {
-	for i := io.MinInt(y1, y2); i <= io.MaxInt(y1, y2); i++ {
+	for i := intz.Min(y1, y2); i <= intz.Max(y1, y2); i++ {
 		grid[x][i]++
 	}
 }
@@ -81,7 +82,7 @@ func markGridDiag(grid [][]byte, x1, y1, x2, y2 int) {
 	m := (y2 - y1) / (x2 - x1)
 	c := (y1 - (m * x1))
 	var x, y int
-	for x = io.MinInt(x1, x2); x <= io.MaxInt(x1, x2); x++ {
+	for x = intz.Min(x1, x2); x <= intz.Max(x1, x2); x++ {
 		y = (m * x) + c
 		grid[x][y]++
 	}
@@ -90,7 +91,7 @@ func markGridDiag(grid [][]byte, x1, y1, x2, y2 int) {
 func getMaxCoord(input []*GeoLine) int {
 	maxCoord := 0
 	for _, gl := range input {
-		maxCoord = io.MaxInt(maxCoord, io.MaxInt(io.MaxInt(gl.x1, gl.x2), io.MaxInt(gl.x1, gl.x2)))
+		maxCoord = intz.Max(maxCoord, intz.Max(intz.Max(gl.x1, gl.x2), intz.Max(gl.x1, gl.x2)))
 	}
 	return maxCoord
 }

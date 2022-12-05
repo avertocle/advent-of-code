@@ -13,8 +13,6 @@ func main() {
 	metrics.ProgStart()
 	input := getInputOrDie()
 
-	//io.PrettyArray2DByte(iutils)
-
 	ans01 := solvePartOne(input)
 	fmt.Printf("answer part-01 = %v\n", ans01)
 
@@ -32,18 +30,17 @@ func solvePartTwo(input [][]byte) int {
 
 /***** Common Functions *****/
 
+/***** PART 01 Functions *****/
+
+/***** PART 02 Functions *****/
+
 /***** Input *****/
 
 // input : [][]byte : each row contains a move pair
 func getInputOrDie() [][]byte {
-	lines, err := iutils.FromFile(inputFilePath, false)
+	_, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	input := iutils.ExtractByte2DFromString1D(lines, " ", nil, 0)
-	return input
+	return nil
 }
-
-/***** PART 01 Functions *****/
-
-/***** PART 02 Functions *****/

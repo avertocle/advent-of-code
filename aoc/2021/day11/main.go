@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/intz"
+	"github.com/avertocle/contests/io/geom"
 	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
-	"github.com/avertocle/contests/io"
+	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -38,7 +38,7 @@ func getInputOrDie() *input {
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	grid := io.String1DToInt2D(lines, "")
+	grid := iutils.ExtractInt2DFromString1D(lines, "", nil, -1)
 	return &input{
 		grid: grid,
 		rows: len(grid),
@@ -108,7 +108,7 @@ func step2() int {
 			if ele > 9 {
 				flashCount++
 				in.grid[i][j] = -1 * (in.grid[i][j])
-				intz.ApplyToAdjacent(in.grid, i, j, in.rows, in.cols, true, func(b int) int { return b + 1 })
+				geom.ApplyToAdjacent(in.grid, i, j, in.rows, in.cols, true, func(b int) int { return b + 1 })
 			}
 		}
 	}

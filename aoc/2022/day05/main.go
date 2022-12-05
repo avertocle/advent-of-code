@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/io/ds"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
 	"github.com/avertocle/contests/metrics"
 	"log"
@@ -106,7 +106,7 @@ func getInputOrDie() ([][]string, [][]int) {
 		}
 	}
 
-	io.PrettyArray2DString(piles)
+	outils.PrettyArray2DString(piles)
 
 	// transform piles
 	iPiles := make([][]string, len(piles[0]))

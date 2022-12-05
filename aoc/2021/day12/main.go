@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/io/ds"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/metrics"
 	"log"
 )
@@ -45,7 +45,7 @@ func getInputOrDie() *ds.Graph {
 		log.Fatalf("iutils error | %v", err)
 	}
 	linesSplit := iutils.ExtractString2DFromString1D(lines, "-", nil, "")
-	io.PrettyArray2DString(linesSplit)
+	outils.PrettyArray2DString(linesSplit)
 	input := ds.NewGraph()
 	for _, ls := range linesSplit {
 		input.AddVertex(ls[0], arrToMap(ls[1]))

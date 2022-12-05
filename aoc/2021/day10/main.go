@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 	lls "github.com/emirpasic/gods/stacks/linkedliststack"
 )
@@ -62,7 +62,7 @@ func problem2(input [][]byte) (int, int) {
 	}
 	fmt.Printf("syn-errors : %q\n", errors)
 	fmt.Printf("auto-comp-scores :%v\n", autoCompScores)
-	return errorScore, io.FindMiddleElem1DInt(autoCompScores)
+	return errorScore, intz.FindMid1D(autoCompScores)
 }
 
 func isOpeningBrace(b byte) bool {
@@ -123,5 +123,5 @@ func getInputOrDie() [][]byte {
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	return iutils.String1DToByte2D(lines)
+	return iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 }

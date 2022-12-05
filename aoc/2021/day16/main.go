@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
-
 	"github.com/avertocle/contests/metrics"
+	"log"
 )
 
 const inputFilePath = "input.txt"
@@ -13,24 +12,35 @@ const inputFilePath = "input.txt"
 func main() {
 	metrics.ProgStart()
 	input := getInputOrDie()
-	metrics.InputLen(len(input))
 
-	metrics.ProgEnd()
-	fmt.Printf("metrics : [%v]", metrics.ToString())
+	ans01 := solvePartOne(input)
+	fmt.Printf("answer part-01 = %v\n", ans01)
+
+	ans02 := solvePartTwo(input)
+	fmt.Printf("answer part-02 = %v\n", ans02)
 }
 
-func problem1() {
-
+func solvePartOne(input [][]byte) int {
+	return 0
 }
 
-func problem2() {
-
+func solvePartTwo(input [][]byte) int {
+	return 0
 }
 
-func getInputOrDie() []string {
-	lines, err := iutils.FromFile(inputFilePath, true)
+/***** Common Functions *****/
+
+/***** PART 01 Functions *****/
+
+/***** PART 02 Functions *****/
+
+/***** Input *****/
+
+// input : [][]byte : each row contains a move pair
+func getInputOrDie() [][]byte {
+	_, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	return lines
+	return nil
 }

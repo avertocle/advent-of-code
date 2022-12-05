@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/metrics"
 	"log"
 	"sort"
@@ -15,7 +15,7 @@ func main() {
 	metrics.ProgStart()
 	input := getInputOrDie()
 
-	io.PrettyArray2DInt(input)
+	outils.PrettyArray2DInt(input)
 
 	ans01 := solvePartOne(input)
 	fmt.Printf("answer part-01 = %v\n", ans01)

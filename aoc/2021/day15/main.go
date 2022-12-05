@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/geom"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"log"
 	"math"
 	"sort"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -33,16 +34,16 @@ var pathCache [][]int
 func problem1(graph [][]byte) int {
 	rows := len(graph)
 	cols := len(graph[0])
-	pathCache = io.Init2DInt(-1, rows, cols)
+	pathCache = intz.Init2D(-1, rows, cols)
 	pathCache[rows-1][cols-1] = int(graph[rows-1][cols-1] - '0')
 	fmt.Printf("%v,%v\n", rows, cols)
 	findMinPathCost(graph, 0, 0, rows, cols)
-	io.PrettyArray2DInt(pathCache)
+	outils.PrettyArray2DInt(pathCache)
 	return pathCache[0][0]
 }
 
 func findMinPathCost(graph [][]byte, x, y, rows, cols int) int {
-	if !intz.IsValidCoord2D(x, y, rows, cols) {
+	if !geom.IsValidCoord2D(x, y, rows, cols) {
 		return math.MaxInt32
 	} else if pathCache[x][y] >= 0 {
 		return pathCache[x][y]
@@ -71,6 +72,6 @@ func getInputOrDie() [][]byte {
 		log.Fatalf("iutils error | %v", err)
 	}
 
-	input := iutils.String1DToByte2D(lines)
+	input := iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 	return input
 }

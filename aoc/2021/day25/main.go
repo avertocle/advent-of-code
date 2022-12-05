@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
 	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -37,7 +37,7 @@ func getInputOrDie() *input {
 		log.Fatalf("iutils error | %v", err)
 	}
 	fmt.Printf("iutils-len = %v\n", len(lines))
-	grid := input2.String1DToByte2D(lines)
+	grid := input2.ExtractByte2DFromString1D(lines, "", nil, 0)
 	return &input{
 		grid: grid,
 		rows: len(grid),
@@ -64,7 +64,7 @@ func problem1() int {
 }
 
 func iterate1(move func(int, int) (bool, int, int)) int {
-	gridNew := io.Init2DByte(in.rows, in.cols, 0)
+	gridNew := bytez.Init2D(in.rows, in.cols, 0)
 	movesDone := 0
 	for i := 0; i < in.rows; i++ {
 		for j := 0; j < in.cols; j++ {
