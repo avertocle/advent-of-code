@@ -7,17 +7,17 @@ import (
 	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/metrics"
 	"log"
+	"strings"
 )
 
-const inputFilePath = "input_small.txt"
+const inputFilePath = "input_final.txt"
+
+type visitCriteriaFunc func(sv string, graph *ds.Graph, visMap map[string]int) bool
 
 func main() {
 	metrics.ProgStart()
 	input := getInputOrDie()
-
 	input.PrintAdList()
-
-	input.PrintAdMat()
 
 	ans01 := solvePartOne(input)
 	fmt.Printf("answer part-01 = %v\n", ans01)
@@ -26,15 +26,119 @@ func main() {
 	fmt.Printf("answer part-02 = %v\n", ans02)
 }
 
-func solvePartOne(input *ds.Graph) int {
-	return 0
+func solvePartOne(iGraph *ds.Graph) int {
+	vis := make(map[string]int)
+	pathCount := new(int)
+	*pathCount = 0
+	traverse("start", iGraph, vis, pathCount, canVisitP1)
+	return *pathCount
 }
 
-func solvePartTwo(input *ds.Graph) int {
-	return 0
+func solvePartTwo(iGraph *ds.Graph) int {
+	vis := make(map[string]int)
+	pathCount := new(int)
+	*pathCount = 0
+	visSmallTwice := new(bool)
+	*visSmallTwice = false
+	traverse("start", iGraph, vis, pathCount, canVisitP2)
+	return *pathCount
+}
+
+func traverse(sv string, graph *ds.Graph, visMap map[string]int,
+	pathCount *int, canVisit visitCriteriaFunc) {
+	if isEnd(sv) {
+		*pathCount++
+		return
+	}
+	if !canVisit(sv, graph, visMap) {
+		return
+	}
+	visit(sv, visMap)
+	adj, _ := graph.AdList[sv]
+	for v, _ := range adj {
+		traverse(v, graph, visMap, pathCount, canVisit)
+	}
+	unVisit(sv, visMap)
+}
+
+/***** PART 01 Functions *****/
+
+func canVisitP1(v string, graph *ds.Graph, visMap map[string]int) bool {
+	if !isVisited(v, visMap) {
+		return true
+	} else if isBigCave(v) {
+		return true
+	} else {
+		return false
+	}
+}
+
+/***** PART 02 Functions *****/
+
+func canVisitP2(v string, graph *ds.Graph, visMap map[string]int) bool {
+	if !isVisited(v, visMap) {
+		return true
+	} else if isBigCave(v) {
+		return true
+	} else if isSmallCave(v) && !hasAnySmallCaveVisitedTwice(visMap) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func hasAnySmallCaveVisitedTwice(visMap map[string]int) bool {
+	for v, count := range visMap {
+		if isSmallCave(v) && count > 1 {
+			return true
+		}
+	}
+	return false
 }
 
 /***** Common Functions *****/
+
+func isStart(v string) bool {
+	return strings.Compare(v, "start") == 0
+}
+
+func isEnd(v string) bool {
+	return strings.Compare(v, "end") == 0
+}
+
+func isVisited(v string, visMap map[string]int) bool {
+	_, ok := visMap[v]
+	return ok
+}
+
+func isBigCave(v string) bool {
+	b := []byte(v)[0]
+	return b >= 'A' && b <= 'Z'
+}
+
+func isSmallCave(v string) bool {
+	return !isBigCave(v) && !isStart(v) && !isEnd(v)
+}
+
+func visit(v string, visMap map[string]int) {
+	if c, ok := visMap[v]; !ok {
+		visMap[v] = 1
+	} else {
+		visMap[v] = c + 1
+	}
+}
+
+func unVisit(v string, visMap map[string]int) {
+	c, ok := visMap[v]
+	if !ok || c < 1 {
+		fmt.Errorf("invalid viscount %v %+v", v, visMap)
+		return
+	} else if c == 1 {
+		delete(visMap, v)
+	} else {
+		visMap[v] = c - 1
+	}
+}
 
 /***** Input *****/
 
@@ -61,7 +165,3 @@ func arrToMap(arr ...string) map[string]int {
 	}
 	return m
 }
-
-/***** PART 01 Functions *****/
-
-/***** PART 02 Functions *****/
