@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
@@ -41,7 +42,7 @@ func problem1(graph [][]byte) int {
 }
 
 func findMinPathCost(graph [][]byte, x, y, rows, cols int) int {
-	if !io.IsValidCoord2D(x, y, rows, cols) {
+	if !intz.IsValidCoord2D(x, y, rows, cols) {
 		return math.MaxInt32
 	} else if pathCache[x][y] >= 0 {
 		return pathCache[x][y]

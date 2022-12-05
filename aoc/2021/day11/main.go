@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 
@@ -107,7 +108,7 @@ func step2() int {
 			if ele > 9 {
 				flashCount++
 				in.grid[i][j] = -1 * (in.grid[i][j])
-				io.ApplyToAdjacent(in.grid, i, j, in.rows, in.cols, true, func(b int) int { return b + 1 })
+				intz.ApplyToAdjacent(in.grid, i, j, in.rows, in.cols, true, func(b int) int { return b + 1 })
 			}
 		}
 	}

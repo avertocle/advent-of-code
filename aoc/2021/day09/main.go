@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"sort"
@@ -62,7 +63,7 @@ func problem2(input [][]byte) int64 {
 
 func getBasinSize(input [][]byte, base byte, i, j, rows, cols int, visited [][]byte) int {
 	//fmt.Printf("%v, %v, %v\n", base-'0', i, j)
-	if !io.IsValidCoord2D(i, j, rows, cols) {
+	if !intz.IsValidCoord2D(i, j, rows, cols) {
 		return 0
 	} else if input[i][j] < base || input[i][j] == '9' {
 		return 0

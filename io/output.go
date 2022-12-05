@@ -33,7 +33,7 @@ func PrettyArray2DByte(arr [][]byte) {
 func PrettyArray2DString(arr [][]string) {
 	for _, row := range arr {
 		for _, ele := range row {
-			fmt.Printf("%v | ", ele)
+			fmt.Printf("| %v ", ele)
 		}
 		fmt.Println()
 	}

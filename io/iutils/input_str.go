@@ -6,6 +6,7 @@ import "strings"
 ExtractString2DFromString1D extracts columns for a list of lines
 ab,ef ; seps[",","-"] ==> [ab, cd][ef,gh]
 uv,wx						[st, uv][wx,yz]
+bug : size of sub-array is fixed by size of first line is cols == nil
 */
 func ExtractString2DFromString1D(lines []string, sep string, cols []int, defaultVal string) [][]string {
 	ans := make([][]string, len(lines))

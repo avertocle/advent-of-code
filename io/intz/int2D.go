@@ -1,4 +1,4 @@
-package io
+package intz
 
 import "fmt"
 

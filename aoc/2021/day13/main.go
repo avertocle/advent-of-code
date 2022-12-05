@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	input2 "github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
@@ -88,7 +89,7 @@ func problem1() int {
 		}
 	}
 	showGrid(100, 100)
-	return io.Unique1DIntIn2DInt(in.grid)
+	return intz.Unique1DIntIn2DInt(in.grid)
 }
 
 func foldAlongY(axis int) {
