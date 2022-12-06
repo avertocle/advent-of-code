@@ -88,7 +88,7 @@ func (this *Graph) PrintAdMat() {
 func mapToStr(m map[string]int) string {
 	s := ""
 	for k, v := range m {
-		s += fmt.Sprintf("%v-%v ", k, v)
+		s += fmt.Sprintf("%v(%v) ", k, v)
 	}
 	return s
 }

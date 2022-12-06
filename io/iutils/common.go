@@ -3,7 +3,10 @@ package iutils
 import (
 	"bufio"
 	"fmt"
+	"io/fs"
+	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func FromFile(path string, skipEmpty bool) ([]string, error) {
@@ -29,4 +32,19 @@ func FromFile(path string, skipEmpty bool) ([]string, error) {
 		return nil, fmt.Errorf("scanner.Err() failed | %v", err)
 	}
 	return input, nil
+}
+
+func GetInputFileList(dirPath string) ([]string, error) {
+	var files []fs.FileInfo
+	var err error
+	if files, err = ioutil.ReadDir(dirPath); err != nil {
+		return nil, fmt.Errorf("ioutil.ReadDir failed | %v", err)
+	}
+	ans := make([]string, 0)
+	for _, f := range files {
+		if strings.HasPrefix(f.Name(), "input_") {
+			ans = append(ans, f.Name())
+		}
+	}
+	return ans, nil
 }

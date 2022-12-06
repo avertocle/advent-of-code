@@ -3,47 +3,37 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/metrics"
 	"log"
 )
 
-const inputFilePath = "input.txt"
+var input []string
 
-func main() {
-	metrics.ProgStart()
-	input := getInputOrDie()
-
-	//io.PrettyArray2DByte(iutils)
-
-	ans01 := solvePartOne(input)
-	fmt.Printf("answer part-01 = %v\n", ans01)
-
-	ans02 := solvePartTwo(input)
-	fmt.Printf("answer part-02 = %v\n", ans02)
+func ParseInput(inputFilePath string) {
+	input = getInputOrDie(inputFilePath)
 }
 
-func solvePartOne(input [][]byte) int {
-	return 0
+func SolveP1() string {
+	ans := "0"
+	return fmt.Sprintf("%v", ans)
 }
 
-func solvePartTwo(input [][]byte) int {
-	return 0
+func SolveP2() string {
+	ans := "0"
+	return fmt.Sprintf("%v", ans)
+}
+
+func PrintInputMetadata(inputFilePath string) {
+	fmt.Printf("input length = %v\n", len(input))
 }
 
 /***** Common Functions *****/
 
 /***** Input *****/
 
-// input : [][]byte : each row contains a move pair
-func getInputOrDie() [][]byte {
+func getInputOrDie(inputFilePath string) []string {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	input := iutils.ExtractByte2DFromString1D(lines, " ", nil, 0)
-	return input
+	return lines
 }
-
-/***** PART 01 Functions *****/
-
-/***** PART 02 Functions *****/
