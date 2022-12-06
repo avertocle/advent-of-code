@@ -1,4 +1,4 @@
-package main
+package day19
 
 import (
 	"github.com/avertocle/contests/aoc/testz"

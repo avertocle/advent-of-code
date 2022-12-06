@@ -1,4 +1,4 @@
-package main
+package day21
 
 import (
 	"fmt"
