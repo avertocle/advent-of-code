@@ -6,14 +6,14 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day06"
+	prob "github.com/avertocle/contests/aoc/2021/day15"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/outils"
 	"log"
 	"path"
 )
 
-const dirPath = "../2022/day06"
+const dirPath = "../2021/day15"
 
 func main() {
 
@@ -21,6 +21,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("error fetching input file : dir(%v) | %v", dirPath, err)
 	}
+
+	//inputFileNames = []string{"input_small.txt"}
 
 	var ansP1, ansP2 string
 	var ifPath string
