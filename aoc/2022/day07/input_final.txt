@@ -433,7 +433,6 @@ $ ls
 $ cd ..
 $ cd ..
 $ cd ..
-$ cd ..
 $ cd hmwqgjnl
 $ ls
 207726 cqn.rds
@@ -491,7 +490,6 @@ $ ls
 72929 jvzfccm
 18353 lwz.clt
 144822 rnvfllt.fwn
-$ cd ..
 $ cd ..
 $ cd ..
 $ cd nzdvqb
