@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/geom"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"sort"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -46,7 +47,7 @@ func problem2(input [][]byte) int64 {
 	basinSize := 0
 	for i, row := range input {
 		for j, _ := range row {
-			visited := io.Init2DByte(rows, cols, 0)
+			visited := bytez.Init2D(rows, cols, 0)
 			basinSize = getBasinSize(input, 0, i, j, rows, cols, visited)
 			fmt.Printf("%v, %v, %v, %v\n", i, j, input[i][j]-'0', basinSize)
 			topBasins = processForTopSlots(topBasins, basinSize)
@@ -62,7 +63,7 @@ func problem2(input [][]byte) int64 {
 
 func getBasinSize(input [][]byte, base byte, i, j, rows, cols int, visited [][]byte) int {
 	//fmt.Printf("%v, %v, %v\n", base-'0', i, j)
-	if !io.IsValidCoord2D(i, j, rows, cols) {
+	if !geom.IsValidCoord2D(i, j, rows, cols) {
 		return 0
 	} else if input[i][j] < base || input[i][j] == '9' {
 		return 0
@@ -114,5 +115,5 @@ func getInputOrDie() [][]byte {
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	return iutils.String1DToByte2D(lines)
+	return iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 }

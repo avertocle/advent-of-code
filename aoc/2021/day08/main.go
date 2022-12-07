@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/stringz"
 	"log"
 	"math"
 	"sort"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -179,8 +179,8 @@ func getInputOrDie() ([][]string, [][]string) {
 		log.Fatalf("iutils error | %v", err)
 	}
 
-	patterns := io.Init2DString(len(lines), 10)
-	digits := io.Init2DString(len(lines), 4)
+	patterns := stringz.Init2D(len(lines), 10)
+	digits := stringz.Init2D(len(lines), 4)
 	var tok1, tok2 []string
 	for i, l := range lines {
 		tok1 = strings.Split(l, "|")

@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	simCache = io.Init2DInt(0, maxFishAge, simDays+1)
+	simCache = intz.Init2D(0, maxFishAge, simDays+1)
 
 	ans := problemBoth(input, simDays)
 	fmt.Printf("ans = %v\n", ans)

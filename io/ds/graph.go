@@ -2,7 +2,7 @@ package ds
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io"
+	"github.com/avertocle/contests/io/outils"
 	"strings"
 )
 
@@ -82,13 +82,13 @@ func (this *Graph) PrintAdMat() {
 		tokens = strings.Split(key, keySep)
 		mat[vToIdxMap[tokens[0]]+1][vToIdxMap[tokens[1]]+1] = fmt.Sprintf("%v", wei)
 	}
-	io.PrettyArray2DString(mat)
+	outils.PrettyArray2DString(mat)
 }
 
 func mapToStr(m map[string]int) string {
 	s := ""
 	for k, v := range m {
-		s += fmt.Sprintf("%v-%v ", k, v)
+		s += fmt.Sprintf("%v(%v) ", k, v)
 	}
 	return s
 }
