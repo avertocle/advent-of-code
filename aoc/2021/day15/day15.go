@@ -15,16 +15,16 @@ var gInput [][]byte
 var gInpRows, gInpCols int
 
 func SolveP1() string {
-	vis := intz.Init2D(0, gInpRows, gInpCols)
-	shortPaths := intz.Init2D(math.MaxInt, gInpRows, gInpCols)
+	vis := intz.Init2D(gInpRows, gInpCols, 0)
+	shortPaths := intz.Init2D(gInpRows, gInpCols, math.MaxInt)
 	ans := traverse(shortPaths, vis)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
 	gInput, gInpRows, gInpCols = getBloatedInputP2()
-	vis := intz.Init2D(0, gInpRows, gInpCols)
-	shortPaths := intz.Init2D(math.MaxInt, gInpRows, gInpCols)
+	vis := intz.Init2D(gInpRows, gInpCols, 0)
+	shortPaths := intz.Init2D(gInpRows, gInpCols, math.MaxInt)
 	ans := traverse(shortPaths, vis)
 	return fmt.Sprintf("%v", ans)
 }

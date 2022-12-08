@@ -23,7 +23,7 @@ func main() {
 	input := getInputOrDie()
 	metrics.InputLen(len(input))
 
-	simCache = intz.Init2D(0, maxFishAge, simDays+1)
+	simCache = intz.Init2D(maxFishAge, simDays+1, 0)
 
 	ans := problemBoth(input, simDays)
 	fmt.Printf("ans = %v\n", ans)

@@ -97,11 +97,11 @@ func makeTreeFromRawInput() *tnode {
 					curr = root
 				} else if isPrevDirCmd(dName) {
 					curr = curr.parent
-				} else if strings.Compare(curr.name, dName) != 0 { // not same dir, ignore same dir command
+				} else {
 					//fmt.Printf("#### %v , %v,  %+v\n", dName, curr.name, curr.children)
 					curr = curr.children[dName] // assuming cd is always into valid dir and after ls
 				}
-				//fmt.Printf("==> inside %v\n", curr.absPath)
+				fmt.Printf("==> inside %v\n", curr.absPath)
 				i++
 			}
 		} else {
