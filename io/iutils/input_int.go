@@ -31,10 +31,18 @@ func ExtractInt2DFromString1D(lines []string, sep string, cols []int, defaultVal
 
 func ExtractInt1DFromString1D(lines []string, sep string, col int, defaultVal int) []int {
 	ans := make([]int, len(lines))
-	var temp []int
+	var err error
+	var tokens []string
 	for i, line := range lines {
-		temp = ExtractInt1DFromString0D(line, sep, defaultVal)
-		ans[i] = temp[col]
+		tokens = strings.Split(line, sep)
+		ans[i] = defaultVal
+		if col < len(tokens) {
+			ans[i], err = strconv.Atoi(tokens[col])
+			if err != nil {
+				fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", tokens[col], err, defaultVal)
+				ans[i] = defaultVal
+			}
+		}
 	}
 	return ans
 }

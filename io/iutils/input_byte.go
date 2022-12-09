@@ -71,7 +71,7 @@ func ExtractByte1DFromString0D(line string, sep string, col int, defaultVal byte
 	ans := make([]byte, len(tokens))
 	for i, t := range tokens {
 		ans[i] = defaultVal
-		if len(t) < col {
+		if col < len(t) {
 			ans[i] = []byte(t)[col]
 		}
 	}
