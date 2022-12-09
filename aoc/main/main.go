@@ -6,14 +6,14 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day08"
+	prob "github.com/avertocle/contests/aoc/2022/day09"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/outils"
 	"log"
 	"path"
 )
 
-const dirPath = "../2022/day08"
+const dirPath = "../2022/day09"
 
 func main() {
 
