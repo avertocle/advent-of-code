@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/geom"
 	input2 "github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
+	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -53,7 +56,7 @@ func getInputOrDie() *input {
 				flag = true
 				continue
 			} else {
-				grid = append(grid, io.String0DToInt1D(l, ","))
+				grid = append(grid, iutils.ExtractInt1DFromString0D(l, ",", -1))
 			}
 		} else {
 			axes = append(axes, parseFolds(l))
@@ -88,7 +91,7 @@ func problem1() int {
 		}
 	}
 	showGrid(100, 100)
-	return io.Unique1DIntIn2DInt(in.grid)
+	return geom.Unique1DIntIn2DInt(in.grid)
 }
 
 func foldAlongY(axis int) {
@@ -116,9 +119,9 @@ func foldAlongX(axis int) {
 }
 
 func showGrid(rows, cols int) {
-	g := io.Init2DByte(rows, cols, '.')
+	g := bytez.Init2D(rows, cols, '.')
 	for _, p := range in.grid {
 		g[p[1]][p[0]] = '#'
 	}
-	io.PrettyArray2DByte(g)
+	outils.PrettyArray2DByte(g)
 }

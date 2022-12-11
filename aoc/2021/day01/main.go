@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/metrics"
 	"log"
@@ -40,6 +39,6 @@ func getInputOrDie() []int {
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	input := io.String1DToInt1D(lines, " ")
+	input := iutils.ExtractInt1DFromString1D(lines, " ", 0, -1)
 	return input
 }

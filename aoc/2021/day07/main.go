@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"log"
 	"math"
 	"strconv"
 	"strings"
 
-	"github.com/avertocle/contests/io"
 	"github.com/avertocle/contests/metrics"
 )
 
@@ -30,8 +30,8 @@ func main() {
 }
 
 func problemBoth(input []int, calcFuelCost func(int, int) int64) int64 {
-	min, _ := io.FindMin1DInt(input)
-	max, _ := io.FindMax1DInt(input)
+	min, _ := intz.FindMin1D(input)
+	max, _ := intz.FindMax1D(input)
 	fuelCost := int64(0)
 	minFuelCost := int64(math.MaxInt64)
 	for i := min; i <= max; i++ {

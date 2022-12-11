@@ -33,6 +33,13 @@ func (this *Stack) Pop() (string, error) {
 	return n.Data, nil
 }
 
+func (this *Stack) Peek() string {
+	if this.Top == nil {
+		return ""
+	}
+	return this.Top.Data
+}
+
 func (this *Stack) Truncate() {
 	var t *Node
 	for this.Top != nil {
@@ -42,7 +49,7 @@ func (this *Stack) Truncate() {
 	}
 }
 
-func (this *Stack) isEmpty() bool {
+func (this *Stack) IsEmpty() bool {
 	return this.Size == 0
 }
 
@@ -53,4 +60,34 @@ func (this *Stack) Print() {
 	}
 	fmt.Printf("nil")
 	fmt.Printf("\n")
+}
+
+/***** Util Functions ***/
+
+func (this *Stack) PushAll(s1d []string) {
+	for _, s := range s1d {
+		this.Push(s)
+	}
+}
+
+func (this *Stack) PushAllRev(s1d []string) {
+	for i := len(s1d) - 1; i >= 0; i-- {
+		this.Push(s1d[i])
+	}
+}
+
+// pop N from stack or all is N < size
+func (this *Stack) PopN(n int) []string {
+	ans := make([]string, 0)
+	x := ""
+	var err error
+	for i := 0; i < n; i++ {
+		if x, err = this.Pop(); err != nil {
+			fmt.Println(err)
+			continue
+		} else {
+			ans = append(ans, x)
+		}
+	}
+	return ans
 }
