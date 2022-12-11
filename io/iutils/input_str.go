@@ -27,3 +27,15 @@ func ExtractString2DFromString1D(lines []string, sep string, cols []int, default
 	}
 	return ans
 }
+
+func ExtractString1DFromString1D(lines []string, sep string, col int, defaultVal string) []string {
+	ans := make([]string, len(lines))
+	var tokens []string
+	for i, line := range lines {
+		tokens = strings.Split(line, sep)
+		if col < len(tokens) {
+			ans[i] = tokens[col]
+		}
+	}
+	return ans
+}
