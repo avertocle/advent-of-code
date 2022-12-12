@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("error fetching input file : dir(%v) | %v", dirPath, err)
 	}
 
-	inputFileNames = []string{"input_small.txt"}
+	//inputFileNames = []string{"input_small.txt"}
 
 	var ansP1, ansP2 string
 	var ifPath string

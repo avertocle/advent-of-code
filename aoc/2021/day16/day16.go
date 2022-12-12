@@ -15,36 +15,38 @@ var gInpLen int
 
 func SolveP1() string {
 	var pktVer, pktTid int
-	var litEnd, litDec int
+	var litEnd int
 	var subPktStart, subPktLen, subPktCnt int
 	var lenTid byte
-	ptr := 0
+	var ptr, depth int
 	versions := make([]int, 0)
-	depth := 0
+	pktDebugStr := ""
+	hasEnded := false
+	fmt.Printf("\n\n")
 	for {
-		if ptr+6 >= gInpLen {
+		pktDebugStr = ""
+		if ptr+6 >= gInpLen || hasEnded {
+			fmt.Printf("break01 %v >= %v\n", ptr+6, gInpLen)
 			break
 		}
 		pktVer, pktTid = parsePktHeader(gInpBin[ptr : ptr+6])
 		ptr += 6
-		if pktVer == 0 {
-			break
-		} else {
-			versions = append(versions, pktVer)
-		}
+		versions = append(versions, pktVer)
+		pktDebugStr = fmt.Sprintf("%v v(%v) t(%v)", pktDebugStr, pktVer, pktTid)
 		if pktTid == 4 {
-			litEnd, litDec = parseLitPkt(ptr)
+			litEnd, _ = parseLitPkt(ptr)
 			ptr = litEnd
+			pktDebugStr = fmt.Sprintf("%v lt e(%v)", pktDebugStr, litEnd)
 		} else {
 			subPktStart, lenTid, subPktLen, subPktCnt = parseOprPkt(ptr)
 			ptr = subPktStart
+			pktDebugStr = fmt.Sprintf("%v op s(%v) t(%v) l(%v) c(%v)", pktDebugStr, subPktStart, string(lenTid), subPktLen, subPktCnt)
+		}
+		fmt.Printf("%v-%v\n", strings.Repeat(" ", depth), pktDebugStr)
+		if pktTid != 4 {
 			depth++
 		}
-		fmt.Printf("%v - v(%v) t(%v)\n", strings.Repeat(" ", 2*depth), pktVer, pktTid)
 	}
-	fmt.Printf(">>>>>> ignore %v,%v,%v\n", lenTid, subPktLen, subPktCnt)
-	//fmt.Printf("%v\n", string(gInpBin))
-	fmt.Printf(">>>>>> ignore %v, %v, %v, %v\n", pktVer, pktTid, litEnd, litDec)
 	ans := intz.Sum1D(versions)
 	fmt.Printf("%v = sum(%v)\n", ans, versions)
 	return fmt.Sprintf("%v", ans)
@@ -69,15 +71,15 @@ func parsePktHeader(vbits []byte) (int, int) {
 func parseLitPkt(start int) (int, int) {
 	end := start
 	litBin := make([]byte, 0)
-	for i := start; i < gInpLen; i += 5 {
+	for i := start; i+5 < gInpLen; i += 5 {
 		litBin = append(litBin, gInpBin[i+1:i+5]...)
 		if gInpBin[i] == '0' {
 			end = i + 5
 			break
 		}
 	}
-	litDec := baze.BTod32Q(litBin, -1)
-	return end, litDec
+	//litDec := baze.BTod32Q(litBin, -1)
+	return end, 0
 }
 
 // return : subPktStart, lenTid, subPktLen, subPktCnt
@@ -87,6 +89,9 @@ func parseOprPkt(start int) (int, byte, int, int) {
 	ptr = start
 	lenTid = gInpBin[ptr]
 	ptr++
+	if ptr >= gInpLen || (lenTid == '0' && ptr+16 >= gInpLen) || (lenTid == '1' && ptr+12 >= gInpLen) {
+		return ptr, lenTid, 0, 0
+	}
 	if lenTid == '0' {
 		subPktLen = baze.BTod32Q(gInpBin[ptr:ptr+15+1], -1)
 		ptr += 15
