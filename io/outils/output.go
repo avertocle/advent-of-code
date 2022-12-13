@@ -1,6 +1,8 @@
 package outils
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func PrettyArray2DInt(arr [][]int) {
 	for _, row := range arr {
@@ -25,9 +27,11 @@ func PrettyArray3DByte(arr [][][]byte) {
 
 func PrettyArray2DByte(arr [][]byte) {
 	for _, row := range arr {
-		fmt.Printf("%v\n", string(row))
+		for _, c := range row {
+			fmt.Printf("%v ", string(c))
+		}
+		fmt.Println()
 	}
-	fmt.Println()
 }
 
 func PrettyArray2DString(arr [][]string) {

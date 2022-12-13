@@ -12,29 +12,55 @@ import (
 var gInput [][]byte
 
 func SolveP1() string {
-	nums := parseAll()
-	fmt.Printf("nums parsed = %v\n", len(nums))
-	//printTree(root, 0)
-	ans := "0"
+	var r1, r2, rs *tnode
+	r1 = parse(gInput[0])
+	for i := 1; i < len(gInput); i++ {
+		r2 = parse(gInput[i])
+		rs = sum(r1, r2)
+		for reduce(rs) {
+		}
+		r1 = rs
+	}
+	ans := magnitude(r1)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	nums := parseAll()
-	fmt.Printf("nums parsed = %v\n", len(nums))
 	ans := "0"
 	return fmt.Sprintf("%v", ans)
 }
 
-func parseAll() []*tnode {
-	nums := make([]*tnode, len(gInput))
-	var root *tnode
-	for i, arr := range gInput {
-		root = newNode(-1, nil)
-		root.v, root.l, root.r = parsePair(root, arr)
-		nums[i] = root
-	}
-	return nums
+func parse(arr []byte) *tnode {
+	root := newNode(-1, nil)
+	root.v, root.l, root.r = parsePair(root, arr)
+	return root
+}
+
+func sum(r1, r2 *tnode) *tnode {
+	rs := newNode(-1, nil)
+	rs.l = r1
+	rs.r = r2
+	return rs
+}
+
+//func sum(arr1, arr2 []byte) []byte {
+//	return []byte(fmt.Sprintf("[%v,%v]", string(arr1), string(arr1)))
+//}
+
+func reduce(r *tnode) bool {
+	return false
+}
+
+func explode(r *tnode) {
+
+}
+
+func split(r *tnode) {
+
+}
+
+func magnitude(r *tnode) int {
+	return 0
 }
 
 /***** Common Functions *****/
