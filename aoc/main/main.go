@@ -6,17 +6,17 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2021/day16"
+	prob "github.com/avertocle/contests/aoc/2021/day17"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/outils"
 	"log"
 	"path"
 )
 
-const dirPath = "../2021/day16"
+const dirPath = "../2021/day17"
 
 func main() {
-
+	fmt.Printf("\nstart\n")
 	inputFileNames, err := iutils.GetInputFileList(dirPath)
 	if err != nil {
 		log.Fatalf("error fetching input file : dir(%v) | %v", dirPath, err)

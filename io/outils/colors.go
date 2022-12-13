@@ -17,3 +17,8 @@ const (
 func Clr(s string, color string) string {
 	return fmt.Sprintf("%v%v%v", color, s, Reset)
 }
+
+func ClrI(i int, color string) string {
+	s := fmt.Sprintf("%v", i)
+	return Clr(s, color)
+}

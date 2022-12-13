@@ -5,7 +5,7 @@ import "fmt"
 func PrettyArray2DInt(arr [][]int) {
 	for _, row := range arr {
 		for _, cell := range row {
-			fmt.Printf("%v ", cell)
+			fmt.Printf("%v ", ClrI(cell, Cyan))
 		}
 		fmt.Println()
 	}
