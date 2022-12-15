@@ -14,15 +14,29 @@ var gInput [][]byte
 func SolveP1() string {
 	var r1, r2, rs *tnode
 	r1 = parse(gInput[0])
+	//printTree(parse(gInput[2]), 0)
 	for i := 1; i < len(gInput); i++ {
+		fmt.Printf("adding %v and %v\n", i-1, i)
 		r2 = parse(gInput[i])
 		rs = sum(r1, r2)
-		for reduce(rs) {
+		//printTree(rs, 0)
+		for reduce(rs, 1) {
+			fmt.Printf("reducing %v and %v\n", i-1, i)
 		}
+		//printTree(rs, 0)
 		r1 = rs
+		//break
 	}
+	printTree(r1, 0)
 	ans := magnitude(r1)
 	return fmt.Sprintf("%v", ans)
+}
+
+func magnitude(root *tnode) int {
+	if root.v != -1 {
+		return root.v
+	}
+	return 3*magnitude(root.l) + 2*magnitude(root.r)
 }
 
 func SolveP2() string {
@@ -43,24 +57,80 @@ func sum(r1, r2 *tnode) *tnode {
 	return rs
 }
 
-//func sum(arr1, arr2 []byte) []byte {
-//	return []byte(fmt.Sprintf("[%v,%v]", string(arr1), string(arr1)))
-//}
+func isLeafPair(root *tnode) bool {
+	if root.v != -1 {
+		return false
+	}
+	if root.l == nil || root.r == nil {
+		log.Fatalf("error : isLeafPair : invalid prog state root(%+v)", root)
+	}
+	return root.l.v > -1 && root.r.v > -1
+}
 
-func reduce(r *tnode) bool {
+func reduce(root *tnode, depth int) bool {
+	if root == nil {
+		return false
+	}
+	if depth > 4 && isLeafPair(root) {
+		explode(root)
+		return true
+	}
+	if root.v > 9 {
+		split(root)
+		return false
+	}
+
+	if reduce(root.l, depth+1) {
+		return true
+	}
+	if reduce(root.r, depth+1) {
+		return true
+	}
 	return false
 }
 
 func explode(r *tnode) {
-
+	incLeft(r.l, r.v)
+	incRight(r.r, r.v)
+	r.v = 0
+	r.l = nil
+	r.r = nil
 }
 
-func split(r *tnode) {
-
+func incLeft(r *tnode, inc int) {
+	if r == nil {
+		return
+	} else if r.v != -1 {
+		r.v += inc
+		return
+	} else if r.p == nil {
+		return
+	} else {
+		incLeft(r.p.l, inc)
+	}
 }
 
-func magnitude(r *tnode) int {
-	return 0
+func incRight(r *tnode, inc int) {
+	if r == nil {
+		return
+	} else if r.v != -1 {
+		r.v += inc
+		return
+	} else if r.p == nil {
+		return
+	} else {
+		incRight(r.p.r, inc)
+	}
+}
+
+func split(root *tnode) bool {
+	if root.v <= 9 {
+		return false
+	}
+	root.l = newNode(root.v/2, root)
+	root.r = newNode(root.v-root.v/2, root)
+	return true
+
 }
 
 /***** Common Functions *****/
@@ -82,11 +152,11 @@ func parsePair(parent *tnode, arr []byte) (int, *tnode, *tnode) {
 	} else if arr[0] == '[' {
 		s, e, sp := findSplit(arr)
 		//fmt.Printf("===> split %v, %v, %v\n\n", s, e, sp)
-		l := newNode(0, parent)
+		l := newNode(-1, parent)
 		l.v, l.l, l.r = parsePair(l, arr[s+1:sp])
-		r := newNode(0, parent)
+		r := newNode(-1, parent)
 		r.v, r.l, r.r = parsePair(r, arr[sp+1:e])
-		return 0, l, r
+		return -1, l, r
 	} else {
 		fmt.Printf("error : parsePair %v\n", string(arr))
 		return -1, nil, nil
@@ -158,7 +228,7 @@ func printTree(r *tnode, depth int) {
 	if r == nil {
 		return
 	}
-	printWithDepth(fmt.Sprintf("%v", r.v), depth)
+	printWithDepth(fmt.Sprintf("(%v)", r.v), depth)
 	printTree(r.l, depth+1)
 	printTree(r.r, depth+1)
 }
