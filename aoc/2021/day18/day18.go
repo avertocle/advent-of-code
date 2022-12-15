@@ -2,138 +2,162 @@ package day18
 
 import (
 	"fmt"
+	. "github.com/avertocle/contests/io/ds/bintree"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/stringz"
+	"strconv"
+
 	"log"
 	"math"
-	"strings"
 )
 
 var gInput [][]byte
 
 func SolveP1() string {
-	var r1, r2, rs *tnode
+	var r1, r2, rs *TNode
 	r1 = parse(gInput[0])
-	//printTree(parse(gInput[2]), 0)
 	for i := 1; i < len(gInput); i++ {
-		fmt.Printf("adding %v and %v\n", i-1, i)
 		r2 = parse(gInput[i])
-		rs = sum(r1, r2)
-		//printTree(rs, 0)
-		for reduce(rs, 1) {
-			fmt.Printf("reducing %v and %v\n", i-1, i)
-		}
-		//printTree(rs, 0)
+		rs = sumAndReduce(r1, r2)
 		r1 = rs
-		//break
 	}
-	printTree(r1, 0)
-	ans := magnitude(r1)
-	return fmt.Sprintf("%v", ans)
-}
-
-func magnitude(root *tnode) int {
-	if root.v != -1 {
-		return root.v
-	}
-	return 3*magnitude(root.l) + 2*magnitude(root.r)
+	//prettyPrint(rs, "final : ")
+	mag := magnitude(rs)
+	return fmt.Sprintf("%v", mag)
 }
 
 func SolveP2() string {
-	ans := "0"
-	return fmt.Sprintf("%v", ans)
+	var r1, r2, rs *TNode
+	var mag, magMax int
+	for i := 0; i < len(gInput); i++ {
+		for j := 0; j < len(gInput); j++ {
+			if i != j {
+				r1 = parse(gInput[i])
+				r2 = parse(gInput[j])
+				rs = sumAndReduce(r1, r2)
+				mag = magnitude(rs)
+				if mag > magMax {
+					magMax = mag
+				}
+			}
+		}
+	}
+	return fmt.Sprintf("%v", magMax)
 }
 
-func parse(arr []byte) *tnode {
-	root := newNode(-1, nil)
-	root.v, root.l, root.r = parsePair(root, arr)
-	return root
-}
-
-func sum(r1, r2 *tnode) *tnode {
-	rs := newNode(-1, nil)
-	rs.l = r1
-	rs.r = r2
+func sumAndReduce(r1, r2 *TNode) *TNode {
+	rs := NewTNode(-1, nil)
+	rs.L, rs.R = r1, r2
+	r1.P, r2.P = rs, rs
+	for reduce(rs) {
+	}
 	return rs
 }
 
-func isLeafPair(root *tnode) bool {
-	if root.v != -1 {
-		return false
+func reduce(root *TNode) bool {
+	didReduce := false
+	for explodeAll(root, root, 1) {
+		didReduce = true
+		//prettyPrint(root, "explode : ")
 	}
-	if root.l == nil || root.r == nil {
-		log.Fatalf("error : isLeafPair : invalid prog state root(%+v)", root)
+	if didReduce = split(root); didReduce {
+		//prettyPrint(root, "split : ")
 	}
-	return root.l.v > -1 && root.r.v > -1
+	return didReduce
 }
 
-func reduce(root *tnode, depth int) bool {
-	if root == nil {
+func explodeAll(root, tn *TNode, depth int) bool {
+	if tn == nil {
 		return false
 	}
-	if depth > 4 && isLeafPair(root) {
-		explode(root)
+	if depth > 4 && isLeafPair(tn) {
+		tnLSib, tnRSib := findSiblings(root, tn)
+		safeIncVal(tnLSib, tn.L.V)
+		safeIncVal(tnRSib, tn.R.V)
+		tn.L, tn.R, tn.V = nil, nil, 0
 		return true
 	}
-	if root.v > 9 {
-		split(root)
-		return false
-	}
-
-	if reduce(root.l, depth+1) {
+	if explodeAll(root, tn.L, depth+1) {
 		return true
-	}
-	if reduce(root.r, depth+1) {
+	} else if explodeAll(root, tn.R, depth+1) {
 		return true
-	}
-	return false
-}
-
-func explode(r *tnode) {
-	incLeft(r.l, r.v)
-	incRight(r.r, r.v)
-	r.v = 0
-	r.l = nil
-	r.r = nil
-}
-
-func incLeft(r *tnode, inc int) {
-	if r == nil {
-		return
-	} else if r.v != -1 {
-		r.v += inc
-		return
-	} else if r.p == nil {
-		return
 	} else {
-		incLeft(r.p.l, inc)
-	}
-}
-
-func incRight(r *tnode, inc int) {
-	if r == nil {
-		return
-	} else if r.v != -1 {
-		r.v += inc
-		return
-	} else if r.p == nil {
-		return
-	} else {
-		incRight(r.p.r, inc)
-	}
-}
-
-func split(root *tnode) bool {
-	if root.v <= 9 {
 		return false
 	}
-	root.l = newNode(root.v/2, root)
-	root.r = newNode(root.v-root.v/2, root)
-	return true
+}
 
+func split(tn *TNode) bool {
+	if tn == nil {
+		return false
+	}
+	if tn.V > 9 {
+		tn.L = NewTNode(tn.V/2, tn)
+		tn.R = NewTNode(tn.V-tn.V/2, tn)
+		tn.V = -1
+		return true
+	}
+	if split(tn.L) {
+		return true
+	} else if split(tn.R) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func findSiblings(root, tn *TNode) (*TNode, *TNode) {
+	flatTree := FlattenLeafOnly(root)
+	lIdx, rIdx := 0, 0
+	for i := 0; i < len(flatTree); i++ {
+		if tn.L.CompareTo(flatTree[i]) {
+			lIdx = i
+		}
+		if tn.R.CompareTo(flatTree[i]) {
+			rIdx = i
+		}
+	}
+	var tnLSib, tnRSib *TNode
+	if lIdx > 0 && lIdx < len(flatTree) {
+		tnLSib = flatTree[lIdx-1]
+	}
+	if rIdx >= 0 && rIdx < len(flatTree)-1 {
+		tnRSib = flatTree[rIdx+1]
+	}
+	return tnLSib, tnRSib
 }
 
 /***** Common Functions *****/
+
+func safeIncVal(tn *TNode, inc int) {
+	if tn != nil {
+		tn.V += inc
+	}
+}
+
+func isLeafPair(tn *TNode) bool {
+	return tn != nil && !isLeaf(tn) &&
+		tn.L != nil && isLeaf(tn.L) &&
+		tn.R != nil && isLeaf(tn.R)
+}
+
+func isLeaf(root *TNode) bool {
+	return root.L == nil && root.R == nil
+}
+
+func magnitude(root *TNode) int {
+	if root == nil {
+		return 0
+	}
+	if isLeaf(root) {
+		return root.V
+	}
+	return 3*magnitude(root.L) + 2*magnitude(root.R)
+}
+
+func prettyPrint(tn *TNode, msg string) {
+	fmt.Printf(msg)
+	PrintInorderLeafOnly(tn)
+	fmt.Println()
+}
 
 /***** Input *****/
 
@@ -145,17 +169,15 @@ func ParseInput(inputFilePath string) {
 	gInput = iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 }
 
-func parsePair(parent *tnode, arr []byte) (int, *tnode, *tnode) {
-	//fmt.Printf("===> parsing %v\n", string(arr))
-	if x := stringz.AtoiQ(string(arr), -1); x > -1 {
+func parsePair(parent *TNode, arr []byte) (int, *TNode, *TNode) {
+	if x, err := strconv.Atoi(string(arr)); err == nil {
 		return x, nil, nil
 	} else if arr[0] == '[' {
-		s, e, sp := findSplit(arr)
-		//fmt.Printf("===> split %v, %v, %v\n\n", s, e, sp)
-		l := newNode(-1, parent)
-		l.v, l.l, l.r = parsePair(l, arr[s+1:sp])
-		r := newNode(-1, parent)
-		r.v, r.l, r.r = parsePair(r, arr[sp+1:e])
+		s, e, m := findSplit(arr)
+		l := NewTNode(-1, parent)
+		l.V, l.L, l.R = parsePair(l, arr[s+1:m])
+		r := NewTNode(-1, parent)
+		r.V, r.L, r.R = parsePair(r, arr[m+1:e])
 		return -1, l, r
 	} else {
 		fmt.Printf("error : parsePair %v\n", string(arr))
@@ -165,8 +187,7 @@ func parsePair(parent *tnode, arr []byte) (int, *tnode, *tnode) {
 
 // return index of "[" & "," & "]" in pattern [<>,<>]
 func findSplit(arr []byte) (int, int, int) {
-	s, e, sp := math.MaxInt, math.MaxInt, math.MaxInt
-	s = 0
+	s, e, sp := 0, math.MaxInt, math.MaxInt
 	e = findMatchingEndBrace(arr)
 	if arr[1] == '[' {
 		sp = findMatchingEndBrace(arr[1:]) + 2
@@ -185,7 +206,6 @@ func findFirstComma(arr []byte) int {
 			return i
 		}
 	}
-	fmt.Printf("error : findFirstComma arr (%v)\n", string(arr))
 	return math.MaxInt
 }
 
@@ -202,37 +222,11 @@ func findMatchingEndBrace(arr []byte) int {
 			return i
 		}
 	}
-	fmt.Printf("error : findMatchingEndBrace arr (%v)\n", string(arr))
 	return math.MaxInt
 }
 
-/***** Structs *****/
-
-type tnode struct {
-	v int
-	l *tnode
-	r *tnode
-	p *tnode
-}
-
-func newNode(v int, p *tnode) *tnode {
-	return &tnode{
-		v: v,
-		l: nil,
-		r: nil,
-		p: p,
-	}
-}
-
-func printTree(r *tnode, depth int) {
-	if r == nil {
-		return
-	}
-	printWithDepth(fmt.Sprintf("(%v)", r.v), depth)
-	printTree(r.l, depth+1)
-	printTree(r.r, depth+1)
-}
-
-func printWithDepth(s string, d int) {
-	fmt.Printf("%v- %v\n", strings.Repeat(" ", 2*d), s)
+func parse(arr []byte) *TNode {
+	root := NewTNode(-1, nil)
+	root.V, root.L, root.R = parsePair(root, arr)
+	return root
 }

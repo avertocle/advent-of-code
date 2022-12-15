@@ -2,6 +2,7 @@ package outils
 
 import (
 	"fmt"
+	"strings"
 )
 
 func PrettyArray2DInt(arr [][]int) {
@@ -50,4 +51,8 @@ func PrettyArray3DInt(arr [][][]int) {
 		fmt.Println()
 	}
 	fmt.Println()
+}
+
+func PrintWithDepth(s string, d int) {
+	fmt.Printf("%v- %v\n", strings.Repeat(" ", 2*d), s)
 }
