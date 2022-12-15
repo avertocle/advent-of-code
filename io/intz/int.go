@@ -23,3 +23,12 @@ func Abs(x int) int {
 		return -1 * x
 	}
 }
+
+func IncBounded(x, inc, max int) int {
+	inc %= max
+	x += inc
+	if x > max {
+		x = x - max
+	}
+	return x
+}

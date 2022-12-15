@@ -1,4 +1,4 @@
-package day16
+package day21
 
 import (
 	"github.com/avertocle/contests/aoc/testz"
@@ -7,8 +7,8 @@ import (
 
 func TestAll(t *testing.T) {
 	testCases := [][]string{
-		{"input_small.txt", "0", "0"},
-		{"input_final.txt", "0", "0"},
+		{"input_small.txt", "739785", "0"},
+		{"input_final.txt", "1073709", "0"},
 	}
 	testz.Execute(t, testCases, ParseInput, []func() string{SolveP1, SolveP2})
 }
