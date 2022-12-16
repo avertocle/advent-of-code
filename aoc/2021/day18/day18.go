@@ -2,11 +2,12 @@ package day18
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/bytez"
 	. "github.com/avertocle/contests/io/ds/bintree"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"strconv"
 
-	"log"
 	"math"
 )
 
@@ -71,8 +72,8 @@ func explodeAll(root, tn *TNode, depth int) bool {
 	}
 	if depth > 4 && isLeafPair(tn) {
 		tnLSib, tnRSib := findSiblings(root, tn)
-		safeIncVal(tnLSib, tn.L.V)
-		safeIncVal(tnRSib, tn.R.V)
+		incIfNotNil(tnLSib, tn.L.V)
+		incIfNotNil(tnRSib, tn.R.V)
 		tn.L, tn.R, tn.V = nil, nil, 0
 		return true
 	}
@@ -127,27 +128,23 @@ func findSiblings(root, tn *TNode) (*TNode, *TNode) {
 
 /***** Common Functions *****/
 
-func safeIncVal(tn *TNode, inc int) {
+func incIfNotNil(tn *TNode, inc int) {
 	if tn != nil {
 		tn.V += inc
 	}
 }
 
 func isLeafPair(tn *TNode) bool {
-	return tn != nil && !isLeaf(tn) &&
-		tn.L != nil && isLeaf(tn.L) &&
-		tn.R != nil && isLeaf(tn.R)
-}
-
-func isLeaf(root *TNode) bool {
-	return root.L == nil && root.R == nil
+	return tn != nil && !tn.IsLeaf() &&
+		tn.L != nil && tn.L.IsLeaf() &&
+		tn.R != nil && tn.R.IsLeaf()
 }
 
 func magnitude(root *TNode) int {
 	if root == nil {
 		return 0
 	}
-	if isLeaf(root) {
+	if root.IsLeaf() {
 		return root.V
 	}
 	return 3*magnitude(root.L) + 2*magnitude(root.R)
@@ -163,70 +160,36 @@ func prettyPrint(tn *TNode, msg string) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "parseInput error | %v", err)
 	gInput = iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 }
 
-func parsePair(parent *TNode, arr []byte) (int, *TNode, *TNode) {
+func parsePair(parent *TNode, arr []byte) *TNode {
+	tn := NewTNode(-1, parent)
 	if x, err := strconv.Atoi(string(arr)); err == nil {
-		return x, nil, nil
-	} else if arr[0] == '[' {
-		s, e, m := findSplit(arr)
-		l := NewTNode(-1, parent)
-		l.V, l.L, l.R = parsePair(l, arr[s+1:m])
-		r := NewTNode(-1, parent)
-		r.V, r.L, r.R = parsePair(r, arr[m+1:e])
-		return -1, l, r
-	} else {
-		fmt.Printf("error : parsePair %v\n", string(arr))
-		return -1, nil, nil
+		tn.V = x
+		return tn
 	}
+	s, e, m := findSplit(arr)
+	tn.L = parsePair(tn, arr[s+1:m])
+	tn.R = parsePair(tn, arr[m+1:e])
+	return tn
 }
 
 // return index of "[" & "," & "]" in pattern [<>,<>]
 func findSplit(arr []byte) (int, int, int) {
-	s, e, sp := 0, math.MaxInt, math.MaxInt
-	e = findMatchingEndBrace(arr)
+	s, e, sp := 0, math.MinInt, math.MinInt
+	e = bytez.FindNestedMatch(arr, ']')
 	if arr[1] == '[' {
-		sp = findMatchingEndBrace(arr[1:]) + 2
+		sp = bytez.FindNestedMatch(arr[1:], ']') + 2
 	} else {
-		sp = findFirstComma(arr)
+		sp = bytez.FindFirst(arr, ',')
 	}
-	if s+e+sp+1 <= 0 { // maxint will rotate
-		fmt.Errorf("error : findSplit %v\n", string(arr))
-	}
+	errz.HardAssert(e >= 0 && sp >= 0, "error : findSplit %v\n", string(arr))
 	return s, e, sp
 }
 
-func findFirstComma(arr []byte) int {
-	for i, c := range arr {
-		if c == ',' {
-			return i
-		}
-	}
-	return math.MaxInt
-}
-
-// return index of matching ']' for arr[0] (which must be '[)
-func findMatchingEndBrace(arr []byte) int {
-	ctr := 0
-	for i, b := range arr {
-		if b == '[' {
-			ctr++
-		} else if b == ']' {
-			ctr--
-		}
-		if ctr == 0 {
-			return i
-		}
-	}
-	return math.MaxInt
-}
-
 func parse(arr []byte) *TNode {
-	root := NewTNode(-1, nil)
-	root.V, root.L, root.R = parsePair(root, arr)
+	root := parsePair(nil, arr)
 	return root
 }
