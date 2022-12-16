@@ -8,10 +8,6 @@ import (
 
 var input []string
 
-func ParseInput(inputFilePath string) {
-	input = getInputOrDie(inputFilePath)
-}
-
 func SolveP1() string {
 	ans := "0"
 	return fmt.Sprintf("%v", ans)
@@ -22,18 +18,14 @@ func SolveP2() string {
 	return fmt.Sprintf("%v", ans)
 }
 
-func PrintInputMetadata(inputFilePath string) {
-	fmt.Printf("input length = %v\n", len(input))
-}
-
 /***** Common Functions *****/
 
 /***** Input *****/
 
-func getInputOrDie(inputFilePath string) []string {
+func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	if err != nil {
 		log.Fatalf("iutils error | %v", err)
 	}
-	return lines
+	input = lines
 }
