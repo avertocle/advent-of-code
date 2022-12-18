@@ -1,4 +1,4 @@
-package outils
+package clr
 
 import "fmt"
 
@@ -14,11 +14,11 @@ const (
 	White  = "\033[97m"
 )
 
-func Clr(s string, color string) string {
+func Str(s string, color string) string {
 	return fmt.Sprintf("%v%v%v", color, s, Reset)
 }
 
-func ClrI(i int, color string) string {
+func Int(i int, color string) string {
 	s := fmt.Sprintf("%v", i)
-	return Clr(s, color)
+	return Str(s, color)
 }
