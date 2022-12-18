@@ -2,11 +2,11 @@ package day15
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
-	"log"
 	"math"
 )
 
@@ -31,9 +31,7 @@ func SolveP2() string {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 
 	gInpSen = make([][]int, len(lines))
 	gInpBea = make([][]int, len(lines))

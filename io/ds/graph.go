@@ -25,40 +25,40 @@ func NewGraph() *Graph {
 	return g
 }
 
-func (this *Graph) AddVertex(v string, adjWeightMap map[string]int) {
-	this.VMap[v] = 1
-	this.addVtoAdList(v, adjWeightMap)
-	this.addVtoAdMat(v, adjWeightMap)
+func (g *Graph) AddVertex(vid string, vval int, adjWeightMap map[string]int) {
+	g.VMap[vid] = vval
+	g.addVtoAdList(vid, adjWeightMap)
+	g.addVtoAdMat(vid, adjWeightMap)
 }
 
-func (this *Graph) addVtoAdList(v string, adjWeightMap map[string]int) {
-	currAdj, ok := this.AdList[v]
+func (g *Graph) addVtoAdList(v string, adjWeightMap map[string]int) {
+	currAdj, ok := g.AdList[v]
 	if !ok {
 		currAdj = make(map[string]int)
 	}
 	for adj, wei := range adjWeightMap {
 		currAdj[adj] = wei
 	}
-	this.AdList[v] = currAdj
+	g.AdList[v] = currAdj
 }
 
-func (this *Graph) addVtoAdMat(v string, adjWeightMap map[string]int) {
+func (g *Graph) addVtoAdMat(v string, adjWeightMap map[string]int) {
 	key := ""
 	for adj, wei := range adjWeightMap {
 		key = fmt.Sprintf("%v%v%v", v, keySep, adj)
-		this.AdMat[key] = wei
+		g.AdMat[key] = wei
 	}
 }
 
-func (this *Graph) PrintAdList() {
-	for v, adj := range this.AdList {
-		fmt.Printf("%v => %v\n", v, mapToStr(adj))
+func (g *Graph) PrintAdList() {
+	for v, adj := range g.AdList {
+		fmt.Printf("%v (%v) => %v\n", v, g.VMap[v], mapToStr(adj))
 	}
 }
 
-func (this *Graph) PrintAdMat() {
+func (g *Graph) PrintAdMat() {
 
-	matSize := len(this.VMap) + 1
+	matSize := len(g.VMap) + 1
 	mat := make([][]string, matSize)
 
 	vToIdxMap := make(map[string]int)
@@ -70,7 +70,7 @@ func (this *Graph) PrintAdMat() {
 	}
 
 	i := 0
-	for v, _ := range this.VMap {
+	for v, _ := range g.VMap {
 		vToIdxMap[v] = i
 		mat[0][i+1] = v
 		mat[i+1][0] = v
@@ -78,7 +78,7 @@ func (this *Graph) PrintAdMat() {
 	}
 
 	var tokens []string
-	for key, wei := range this.AdMat {
+	for key, wei := range g.AdMat {
 		tokens = strings.Split(key, keySep)
 		mat[vToIdxMap[tokens[0]]+1][vToIdxMap[tokens[1]]+1] = fmt.Sprintf("%v", wei)
 	}
