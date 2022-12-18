@@ -36,9 +36,10 @@ func PrettyArray2DByte(arr [][]byte) {
 }
 
 func PrettyArray2DString(arr [][]string) {
-	for _, row := range arr {
+	for i, row := range arr {
+		fmt.Printf("%v => \n", i)
 		for _, ele := range row {
-			fmt.Printf("| %v ", ele)
+			fmt.Printf("%v\n", ele)
 		}
 		fmt.Println()
 	}

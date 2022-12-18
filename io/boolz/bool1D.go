@@ -23,6 +23,16 @@ func And1D(arr []bool) bool {
 	})
 }
 
+func Count1D(arr []bool, val bool) int {
+	count := 0
+	for _, b := range arr {
+		if b == val {
+			count++
+		}
+	}
+	return count
+}
+
 // f : (ans, arr, i) => ans
 func Reduce1D(arr []bool, f func(bool, []bool, int) bool) bool {
 	if len(arr) == 0 {

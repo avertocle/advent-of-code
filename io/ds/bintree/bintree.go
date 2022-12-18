@@ -27,10 +27,6 @@ func (this *TNode) CompareTo(tn *TNode) bool {
 	return this.Id == tn.Id
 }
 
-func (this *TNode) isLeaf() bool {
-	return this.L == nil && this.R == nil
-}
-
 func NewTNode(v int, p *TNode) *TNode {
 	idCtr++
 	return &TNode{
