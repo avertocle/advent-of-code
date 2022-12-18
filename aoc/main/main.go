@@ -6,22 +6,20 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day13"
+	prob "github.com/avertocle/contests/aoc/2022/day14"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/outils"
-	"log"
 	"path"
 	"strings"
 )
 
-const dirPath = "../2022/day13"
+const dirPath = "../2022/day14"
 
 func main() {
 	displayPrettyHeader()
 	inputFileNames, err := iutils.GetInputFileList(dirPath)
-	if err != nil {
-		log.Fatalf("error fetching input file : dir(%v) | %v", dirPath, err)
-	}
+	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dirPath, err)
 
 	inputFileNames = []string{"input_small.txt"}
 

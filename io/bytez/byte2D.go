@@ -51,3 +51,25 @@ func Pad2D(arr [][]byte, rows, cols, padSize int, padVal byte) [][]byte {
 	}
 	return ans
 }
+
+func Extract2D(arr [][]byte, boundTL, boundBR []int, padVal byte) [][]byte {
+	xlen, ylen := boundBR[0]-boundTL[0]+1, boundBR[1]-boundTL[1]+1
+	ans := Init2D(xlen, ylen, padVal)
+	for x := 0; x < xlen; x++ {
+		for y := 0; y < ylen; y++ {
+			ans[x][y] = arr[x+boundTL[0]][y+boundTL[1]]
+		}
+	}
+	return ans
+}
+
+func Transpose(arr [][]byte) [][]byte {
+	xlen, ylen := len(arr[0]), len(arr)
+	ans := Init2D(xlen, ylen, 0)
+	for x := 0; x < xlen; x++ {
+		for y := 0; y < ylen; y++ {
+			ans[x][y] = arr[y][x]
+		}
+	}
+	return ans
+}
