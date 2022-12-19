@@ -152,8 +152,8 @@ func getInputOrDie() *ds.Graph {
 	outils.PrettyArray2DString(linesSplit)
 	input := ds.NewGraph()
 	for _, ls := range linesSplit {
-		input.AddVertex(ls[0], arrToMap(ls[1]))
-		input.AddVertex(ls[1], arrToMap(ls[0]))
+		input.AddVertex(ls[0], 1, arrToMap(ls[1]))
+		input.AddVertex(ls[1], 1, arrToMap(ls[0]))
 	}
 	return input
 }

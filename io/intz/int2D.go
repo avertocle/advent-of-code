@@ -1,5 +1,10 @@
 package intz
 
+import (
+	"fmt"
+	"github.com/avertocle/contests/io/clr"
+)
+
 func Init2D(rows, cols, val int) [][]int {
 	ans := make([][]int, rows)
 	for i := 0; i < rows; i++ {
@@ -9,4 +14,14 @@ func Init2D(rows, cols, val int) [][]int {
 		}
 	}
 	return ans
+}
+
+func PPrint2D(arr [][]int) {
+	for _, row := range arr {
+		for _, cell := range row {
+			fmt.Printf("%v ", clr.Int(cell, clr.Cyan))
+		}
+		fmt.Println()
+	}
+	fmt.Println()
 }

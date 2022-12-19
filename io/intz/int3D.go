@@ -1,5 +1,7 @@
 package intz
 
+import "fmt"
+
 func Init3D(d1, d2, d3, val int) [][][]int {
 	ans := make([][][]int, d1)
 	for i := 0; i < d1; i++ {
@@ -67,4 +69,12 @@ func InBounds3D(x []int, bounds [][]int) bool {
 		x[1] <= bounds[0][1] &&
 		x[2] <= bounds[1][1] &&
 		x[2] <= bounds[2][1])
+}
+
+func PPrint3D(arr [][][]int) {
+	for _, d1 := range arr {
+		PPrint2D(d1)
+		fmt.Println()
+	}
+	fmt.Println()
 }

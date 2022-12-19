@@ -1,5 +1,7 @@
 package bytez
 
+import "fmt"
+
 func Init2D(rows, cols int, b byte) [][]byte {
 	ans := make([][]byte, rows)
 	for i := 0; i < rows; i++ {
@@ -63,7 +65,7 @@ func Extract2D(arr [][]byte, boundTL, boundBR []int, padVal byte) [][]byte {
 	return ans
 }
 
-func Transpose(arr [][]byte) [][]byte {
+func Transpose2D(arr [][]byte) [][]byte {
 	xlen, ylen := len(arr[0]), len(arr)
 	ans := Init2D(xlen, ylen, 0)
 	for x := 0; x < xlen; x++ {
@@ -72,4 +74,13 @@ func Transpose(arr [][]byte) [][]byte {
 		}
 	}
 	return ans
+}
+
+func PPrint2D(arr [][]byte) {
+	for _, row := range arr {
+		for _, c := range row {
+			fmt.Printf("%v ", string(c))
+		}
+		fmt.Println()
+	}
 }
