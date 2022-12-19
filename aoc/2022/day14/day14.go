@@ -78,5 +78,5 @@ func ParseInput(inputFilePath string) {
 }
 
 func printGrid(grid [][]byte) {
-	outils.PrettyArray2DByte(bytez.Transpose2D(bytez.Extract2D(grid, gBoundTL, gBoundBR, '.')))
+	outils.PrettyArray2DByte(bytez.Transpose(bytez.Extract2D(grid, gBoundTL, gBoundBR, '.')))
 }
