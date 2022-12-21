@@ -2,6 +2,24 @@ package geom
 
 import "fmt"
 
+type Coord2d struct {
+	X int
+	Y int
+}
+
+func NewCoord2d(x, y int) *Coord2d {
+	return &Coord2d{X: x, Y: y}
+}
+
+// todo : works only for Q4, fix this
+// make generic for [][]array, tl, br
+func (o *Coord2d) IsInside(boundTL, boundBR *Coord2d) bool {
+	return o.X >= boundTL.X &&
+		o.X <= boundBR.X &&
+		o.Y <= boundTL.Y &&
+		o.Y >= boundBR.Y
+}
+
 func IsValidCoord2D(x, y, rows, cols int) bool {
 	return !(x < 0 || y < 0 || x >= rows || y >= cols)
 }

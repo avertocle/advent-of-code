@@ -2,15 +2,11 @@ package day17
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 )
 
-var input []string
-
-func ParseInput(inputFilePath string) {
-	input = getInputOrDie(inputFilePath)
-}
+var input []byte
 
 func SolveP1() string {
 	ans := "0"
@@ -30,10 +26,8 @@ func PrintInputMetadata(inputFilePath string) {
 
 /***** Input *****/
 
-func getInputOrDie(inputFilePath string) []string {
+func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
-	return lines
+	errz.HardAssert(err == nil, "iutils error | %v", err)
+	input = []byte(lines[0])
 }

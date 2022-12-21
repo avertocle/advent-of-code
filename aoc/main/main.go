@@ -6,21 +6,20 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day10"
+	prob "github.com/avertocle/contests/aoc/2022/day13"
+	"github.com/avertocle/contests/io/clr"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
-	"log"
 	"path"
+	"strings"
 )
 
-const dirPath = "../2022/day10"
+const dirPath = "../2022/day13"
 
 func main() {
-
+	displayPrettyHeader()
 	inputFileNames, err := iutils.GetInputFileList(dirPath)
-	if err != nil {
-		log.Fatalf("error fetching input file : dir(%v) | %v", dirPath, err)
-	}
+	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dirPath, err)
 
 	//inputFileNames = []string{"input_small.txt"}
 
@@ -29,9 +28,11 @@ func main() {
 	for _, ifName := range inputFileNames {
 		ifPath = path.Join(dirPath, ifName)
 		ansP1, ansP2 = runForOneInputFile(ifPath)
-		displayPretty(ifPath, ansP1, ansP2)
+		displayPrettyResult(ifName, ansP1, ansP2)
 	}
 }
+
+/***** Display Functions *****/
 
 func runForOneInputFile(inputFilePath string) (string, string) {
 	prob.ParseInput(inputFilePath)
@@ -40,10 +41,29 @@ func runForOneInputFile(inputFilePath string) (string, string) {
 	return ansP1, ansP2
 }
 
-func displayPretty(ifPath, ansP1, ansP2 string) {
-	fmt.Printf("=> %v : ansP1 = %v : ans-P2 = %v\n",
-		outils.Clr(ifPath, outils.Gray),
-		outils.Clr(ansP1, outils.Green),
-		outils.Clr(ansP2, outils.Green))
+func displayPrettyHeader() {
+	fmt.Println()
+	fmt.Println()
+	displayPrettyHorLine()
+	fmt.Println(clr.Str(fmt.Sprintf("Solving %v", dirPath), clr.Green))
+	fmt.Println()
+	fmt.Println(clr.Str("<<< prog logs start >>>", clr.Yellow))
+	fmt.Println()
+}
 
+func displayPrettyResult(ifName, ansP1, ansP2 string) {
+	fmt.Println()
+	fmt.Println(clr.Str("<<< prog logs end >>>", clr.Yellow))
+	fmt.Println()
+	displayPrettyHorLine()
+	fmt.Printf("%v : ansP1 = %v : ans-P2 = %v\n",
+		clr.Str(ifName, clr.Yellow),
+		clr.Str(ansP1, clr.Green),
+		clr.Str(ansP2, clr.Green))
+	displayPrettyHorLine()
+	fmt.Println()
+}
+
+func displayPrettyHorLine() {
+	fmt.Println(clr.Str(strings.Repeat("~-", 30)+"~", clr.Yellow))
 }
