@@ -11,6 +11,14 @@ func Init1D(size int, val bool) []bool {
 	return ans
 }
 
+func Init2D(rows, cols int, val bool) [][]bool {
+	ans := make([][]bool, rows)
+	for i, _ := range ans {
+		ans[i] = Init1D(cols, val)
+	}
+	return ans
+}
+
 func Or1D(arr []bool) bool {
 	return Reduce1D(arr, func(ans bool, b1d []bool, i int) bool {
 		return ans || b1d[i]
