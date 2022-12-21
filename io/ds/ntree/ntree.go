@@ -3,13 +3,14 @@ package bintree
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/outils"
+	"strings"
 )
 
 var idCtr int
 
 type TNode struct {
 	Id int
-	C  map[int]*TNode
+	C  []*TNode // not a map because order of children matters
 	P  *TNode
 	V  int
 }
@@ -24,12 +25,12 @@ func (this *TNode) CompareTo(tn *TNode) bool {
 
 func (this *TNode) AddChildren(children []*TNode) {
 	for _, c := range children {
-		this.C[c.Id] = c
+		this.AddC(c)
 	}
 }
 
 func (this *TNode) AddC(c *TNode) {
-	this.C[c.Id] = c
+	this.C = append(this.C, c)
 }
 
 func NewTNode(v int, p *TNode) *TNode {
@@ -37,7 +38,7 @@ func NewTNode(v int, p *TNode) *TNode {
 	return &TNode{
 		Id: idCtr,
 		V:  v,
-		C:  make(map[int]*TNode),
+		C:  make([]*TNode, 0),
 		P:  p,
 	}
 }
@@ -49,15 +50,19 @@ func PrintHierarchial(tn *TNode, depth int) {
 	}
 }
 
-func PrintFlattenedLeafOnly(tn *TNode) {
+func GetFlatStringLeafOnly(tn *TNode) string {
 	if tn.IsLeaf() {
-		fmt.Printf("%v", tn.V)
+		if tn.P == nil {
+			return "[]"
+		} else {
+			return fmt.Sprintf("%v", tn.V)
+		}
 	}
-	fmt.Printf("[")
+	s := make([]string, 0)
 	for _, c := range tn.C {
-		PrintFlattenedLeafOnly(c)
+		s = append(s, GetFlatStringLeafOnly(c))
 	}
-	fmt.Printf("]")
+	return fmt.Sprintf("[%v]", strings.Join(s, ","))
 }
 
 func FlattenLeafOnly(root *TNode) []*TNode {

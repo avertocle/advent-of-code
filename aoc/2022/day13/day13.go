@@ -7,7 +7,6 @@ import (
 	. "github.com/avertocle/contests/io/ds/ntree"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"strconv"
 )
 
@@ -17,16 +16,22 @@ var gPairCount int
 func SolveP1() string {
 	var r1, r2 *TNode
 	areOrdered := boolz.Init1D(gPairCount, false)
+	ans := 0
 	for i := 0; i < gPairCount; i++ {
-		r1 = parse([]byte(gInput[0][i]))
-		prettyPrint(r1, fmt.Sprintf("r1 - %v", i+1))
-		r1 = parse([]byte(gInput[1][i]))
-		prettyPrint(r2, fmt.Sprintf("r2 - %v", i+1))
-		if checkOrder(r1, r2) {
+		r1 = parse(nil, []byte(gInput[0][i]))
+		//prettyPrint(r1, fmt.Sprintf("%v : r1 : raw = %v : parsed = ", i+1, string([]byte(gInput[0][i]))))
+		r2 = parse(nil, []byte(gInput[1][i]))
+		//prettyPrint(r2, fmt.Sprintf("%v : r2 : raw = %v : parsed = ", i+1, string([]byte(gInput[1][i]))))
+		res := compare(r1, r2)
+		if res == 1 {
 			areOrdered[i] = true
+			ans += i + 1
+		} else if res == 0 {
+			fmt.Printf("%v : res(%v) : %v vs %v\n", i+1, res,
+				string([]byte(gInput[0][i])), string([]byte(gInput[1][i])))
 		}
+
 	}
-	ans := boolz.Count1D(areOrdered, true)
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -35,8 +40,50 @@ func SolveP2() string {
 	return fmt.Sprintf("%v", ans)
 }
 
-func checkOrder(r1, r2 *TNode) bool {
-	return true
+func compare(r1, r2 *TNode) int {
+
+	res := 0
+
+	if r1.IsLeaf() && r2.IsLeaf() {
+		return compareVals(r1, r2)
+	}
+	if r1.IsLeaf() && !r2.IsLeaf() {
+		r1.AddC(NewTNode(r1.V, r1))
+		r1.V = -1
+	}
+	if !r1.IsLeaf() && r2.IsLeaf() {
+		r2.AddC(NewTNode(r2.V, r2))
+		r2.V = -1
+	}
+	r1c := r1.C
+	r2c := r2.C
+	for i := 0; i < len(r1c) && i < len(r2c); i++ {
+		res = compare(r1c[i], r2c[i])
+		if res != 0 {
+			return res
+		}
+	}
+	if len(r1c) < len(r2c) {
+		return 1
+	} else if len(r1c) > len(r2c) {
+		return -1
+	} else {
+		return 0
+	}
+}
+
+//func splitAndCompare(r1, r2 *TNode) int {
+//	r :=
+//}
+
+func compareVals(r1, r2 *TNode) int {
+	if r1.V < r2.V {
+		return 1
+	} else if r1.V > r2.V {
+		return -1
+	} else {
+		return 0
+	}
 }
 
 /***** Common Functions *****/
@@ -52,62 +99,56 @@ func ParseInput(inputFilePath string) {
 		gInput[0][i/3] = lines[i]
 		gInput[1][i/3] = lines[i+1]
 	}
-	outils.PrettyArray2DString(gInput)
+	//outils.PrettyArray2DString(gInput)
 }
 
-func parse(arr []byte) *TNode {
-	fmt.Println(string(arr))
-	r := NewTNode(-1, nil)
-	r.AddChildren(parseList(r, arr))
-	return r
-}
+func parse(parent *TNode, arr []byte) *TNode {
+	if len(arr) == 0 {
+		return nil
+	}
 
-func parseList(parent *TNode, arr []byte) []*TNode {
 	tn := NewTNode(-1, parent)
 	if x, err := strconv.Atoi(string(arr)); err == nil {
 		tn.V = x
-		return []*TNode{tn}
-	}
-	if len(arr) == 0 {
-		return []*TNode{}
+		return tn
 	}
 
-	s := 0
 	e := bytez.FindNestedMatch(arr, ']')
-	if e == -1 {
-		fmt.Printf("==> 0. %v\n", string(arr))
+	childExps := findChildExpressions(arr[1:e])
+	for _, ce := range childExps {
+		tn.AddC(parse(tn, ce))
 	}
-	sepIdxs := make([]int, 0)
-	ptr := s
-	sepIdx := 0
-	for ptr < e {
-		if arr[ptr] == '[' {
-			sepIdx = bytez.FindNestedMatch(arr[ptr+1:], ']')
-			if sepIdx == -1 {
-				fmt.Printf("==> 1. %v\n", string(arr[ptr:]))
-			}
+	return tn
+}
+
+func findChildExpressions(arr []byte) [][]byte {
+	//fmt.Printf("findChildExpressions = (%v) len(%v)\n", string(arr), len(arr))
+	ans := make([][]byte, 0)
+	if len(arr) == 0 {
+		return ans
+	}
+
+	s, t := 0, 0
+	for s < len(arr) {
+		if arr[s] == '[' {
+			t = s + bytez.FindNestedMatch(arr[s:], ']') + 1 // t at comma after [<>]
 		} else {
-			sepIdx = bytez.FindFirst(arr[ptr:], ',')
-			if sepIdx == -1 {
-				fmt.Printf("==> 2. %v\n", string(arr[ptr:]))
+			t = bytez.FindFirst(arr[s:], ',') // t at comma after V
+			if t == -1 {                      // the end digit will not have a comma after it
+				t = len(arr)
+			} else {
+				t = s + t
 			}
 		}
-		sepIdxs = append(sepIdxs, sepIdx)
-		ptr = sepIdx + 1
-		break
+		//fmt.Printf("findChildExpressions : %v to %v = ", s, t)
+		//fmt.Printf("%v\n", string(arr[s:t]))
+		ans = append(ans, arr[s:t])
+		s = t + 1
 	}
-	sepIdxs = append(sepIdxs, e)
-	s = 1
-	fmt.Printf("==> sepIdxs (%+v)\n", sepIdxs)
-	for _, si := range sepIdxs {
-		tn.AddChildren(parseList(tn, arr[s:si]))
-		s = si + 1
-	}
-	return []*TNode{}
+	return ans
 }
 
 func prettyPrint(r *TNode, msg string) {
-	fmt.Println(msg)
-	PrintFlattenedLeafOnly(r)
-	fmt.Println()
+	fmt.Printf("%v %v\n", msg, GetFlatStringLeafOnly(r))
+	GetFlatStringLeafOnly(r)
 }
