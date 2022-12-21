@@ -2,7 +2,6 @@ package day13
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/boolz"
 	"github.com/avertocle/contests/io/bytez"
 	. "github.com/avertocle/contests/io/ds/ntree"
 	"github.com/avertocle/contests/io/errz"
@@ -15,66 +14,87 @@ var gPairCount int
 
 func SolveP1() string {
 	var r1, r2 *TNode
-	areOrdered := boolz.Init1D(gPairCount, false)
+	var r1str, r2str string
 	ans := 0
 	for i := 0; i < gPairCount; i++ {
-		r1 = parse(nil, []byte(gInput[0][i]))
-		//prettyPrint(r1, fmt.Sprintf("%v : r1 : raw = %v : parsed = ", i+1, string([]byte(gInput[0][i]))))
-		r2 = parse(nil, []byte(gInput[1][i]))
-		//prettyPrint(r2, fmt.Sprintf("%v : r2 : raw = %v : parsed = ", i+1, string([]byte(gInput[1][i]))))
+		r1str, r2str = gInput[0][i], gInput[1][i]
+		r1 = parse(nil, []byte(r1str))
+		r2 = parse(nil, []byte(r2str))
 		res := compare(r1, r2)
 		if res == 1 {
-			areOrdered[i] = true
 			ans += i + 1
 		} else if res == 0 {
-			fmt.Printf("%v : res(%v) : %v vs %v\n", i+1, res,
-				string([]byte(gInput[0][i])), string([]byte(gInput[1][i])))
+			fmt.Printf("%v : res(%v) : %v vs %v\n", i+1, res, r1str, r2str)
 		}
-
 	}
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	//inpRows := len(gInput)
+	rnlen := gPairCount*2 + 2
+	rn := make([]*TNode, rnlen)
+	for i, row := range gInput {
+		for j, cell := range row {
+			rn[i*gPairCount+j] = parse(nil, []byte(cell))
+		}
+	}
+	rdiv1 := parse(nil, []byte("[[2]]"))
+	rdiv2 := parse(nil, []byte("[[6]]"))
+	rn[rnlen-2] = rdiv1
+	rn[rnlen-1] = rdiv2
+	var temp *TNode
+	for i := len(rn) - 1; i >= 0; i-- {
+		for j := 0; j < i; j++ {
+			if compare(rn[j], rn[j+1]) == -1 {
+				temp = rn[j]
+				rn[j] = rn[j+1]
+				rn[j+1] = temp
+			}
+		}
+	}
+	ans := 1
+	for i, r := range rn {
+		if r.Id == rdiv1.Id || r.Id == rdiv2.Id {
+			ans *= i + 1
+		}
+	}
 	return fmt.Sprintf("%v", ans)
 }
 
+/***** Common Functions *****/
+
 func compare(r1, r2 *TNode) int {
-
 	res := 0
-
 	if r1.IsLeaf() && r2.IsLeaf() {
 		return compareVals(r1, r2)
 	}
-	if r1.IsLeaf() && !r2.IsLeaf() {
+	if r1.IsLeaf() && !r2.IsLeaf() && r1.V > -1 {
 		r1.AddC(NewTNode(r1.V, r1))
 		r1.V = -1
 	}
-	if !r1.IsLeaf() && r2.IsLeaf() {
+	if !r1.IsLeaf() && r2.IsLeaf() && r2.V > -1 {
 		r2.AddC(NewTNode(r2.V, r2))
 		r2.V = -1
 	}
-	r1c := r1.C
-	r2c := r2.C
-	for i := 0; i < len(r1c) && i < len(r2c); i++ {
-		res = compare(r1c[i], r2c[i])
+	for i := 0; i < len(r1.C) && i < len(r2.C); i++ {
+		res = compare(r1.C[i], r2.C[i])
 		if res != 0 {
 			return res
 		}
 	}
-	if len(r1c) < len(r2c) {
+	return compareLens(r1, r2)
+}
+
+func compareLens(r1, r2 *TNode) int {
+	if len(r1.C) < len(r2.C) {
 		return 1
-	} else if len(r1c) > len(r2c) {
+	} else if len(r1.C) > len(r2.C) {
 		return -1
 	} else {
 		return 0
 	}
 }
-
-//func splitAndCompare(r1, r2 *TNode) int {
-//	r :=
-//}
 
 func compareVals(r1, r2 *TNode) int {
 	if r1.V < r2.V {
@@ -85,8 +105,6 @@ func compareVals(r1, r2 *TNode) int {
 		return 0
 	}
 }
-
-/***** Common Functions *****/
 
 /***** Input *****/
 
@@ -99,7 +117,6 @@ func ParseInput(inputFilePath string) {
 		gInput[0][i/3] = lines[i]
 		gInput[1][i/3] = lines[i+1]
 	}
-	//outils.PrettyArray2DString(gInput)
 }
 
 func parse(parent *TNode, arr []byte) *TNode {
@@ -122,7 +139,6 @@ func parse(parent *TNode, arr []byte) *TNode {
 }
 
 func findChildExpressions(arr []byte) [][]byte {
-	//fmt.Printf("findChildExpressions = (%v) len(%v)\n", string(arr), len(arr))
 	ans := make([][]byte, 0)
 	if len(arr) == 0 {
 		return ans
@@ -140,15 +156,8 @@ func findChildExpressions(arr []byte) [][]byte {
 				t = s + t
 			}
 		}
-		//fmt.Printf("findChildExpressions : %v to %v = ", s, t)
-		//fmt.Printf("%v\n", string(arr[s:t]))
 		ans = append(ans, arr[s:t])
 		s = t + 1
 	}
 	return ans
-}
-
-func prettyPrint(r *TNode, msg string) {
-	fmt.Printf("%v %v\n", msg, GetFlatStringLeafOnly(r))
-	GetFlatStringLeafOnly(r)
 }

@@ -7,8 +7,24 @@ import (
 )
 
 func main() {
-	demoExtract()
+	//demoExtract()
+	arr := []int{9, 2, 4, 3, 5, 1, 6, 8, 7, 3, 5, 6}
+	bubblesort(arr)
+	fmt.Printf("%v\n", arr)
+}
 
+func bubblesort(arr []int) {
+	l := len(arr)
+	t := 0
+	for i := l - 1; i >= 0; i-- {
+		for j := 0; j < i; j++ {
+			if arr[j] > arr[j+1] {
+				t = arr[j]
+				arr[j] = arr[j+1]
+				arr[j+1] = t
+			}
+		}
+	}
 }
 
 func demoPad() {
