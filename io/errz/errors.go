@@ -13,6 +13,6 @@ func SoftAssert(condition bool, format string, a ...any) {
 
 func HardAssert(condition bool, format string, a ...any) {
 	if !condition {
-		log.Fatalf(format, a)
+		log.Fatalf(format, a...)
 	}
 }

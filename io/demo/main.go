@@ -3,14 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/outils"
+	"github.com/avertocle/contests/io/rangez"
 )
 
 func main() {
 	//demoExtract()
-	arr := []int{9, 2, 4, 3, 5, 1, 6, 8, 7, 3, 5, 6}
-	bubblesort(arr)
-	fmt.Printf("%v\n", arr)
+	big := [][]int{{1, 3}, {5, 6}, {8, 10}, {13, 16}}
+	small := []int{11, 12}
+	ans := rangez.Union1D(big, small)
+	intz.PPrint2D(ans)
 }
 
 func bubblesort(arr []int) {
