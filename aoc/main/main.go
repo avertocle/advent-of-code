@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day20"
+	prob "github.com/avertocle/contests/aoc/2022/day23"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-const dirPath = "../2022/day20"
+const dirPath = "../2022/day23"
 
 func main() {
 	displayPrettyHeader()
