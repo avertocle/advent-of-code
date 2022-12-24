@@ -13,6 +13,16 @@ func Init1D(size, val int) []int {
 	return ans
 }
 
+func FindByVal1D(arr []int, v int) []int {
+	ans := make([]int, 0)
+	for i, x := range arr {
+		if x == v {
+			ans = append(ans, i)
+		}
+	}
+	return ans
+}
+
 func FindMax1D(arr []int) (int, int) {
 	max := arr[0]
 	pos := 0

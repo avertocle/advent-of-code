@@ -45,6 +45,10 @@ func Trim(c int, x []int) int {
 	return math.MaxInt
 }
 
+/*
+IncBounded
+returns x incremented and rotated (if) to be between 1 & max
+*/
 func IncBounded(x, inc, max int) int {
 	inc %= max
 	x += inc

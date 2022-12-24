@@ -11,6 +11,13 @@ func NewCoord2d(x, y int) *Coord2d {
 	return &Coord2d{X: x, Y: y}
 }
 
+func (o *Coord2d) Clone() *Coord2d {
+	return &Coord2d{
+		X: o.X,
+		Y: o.Y,
+	}
+}
+
 // todo : works only for Q4, fix this
 // make generic for [][]array, tl, br
 func (o *Coord2d) IsInside(boundTL, boundBR *Coord2d) bool {
