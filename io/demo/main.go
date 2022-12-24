@@ -3,12 +3,44 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/ds/ll/cdll"
+	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/outils"
+	"github.com/avertocle/contests/io/rangez"
 )
 
 func main() {
-	demoExtract()
+	demoDLL()
+}
 
+func demoDLL() {
+	s := cdll.FromArray([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+	cdll.PP(s)
+	//n := dll.NewDLLNode(11, nil, nil)
+	s = cdll.DelAt(s, 8)
+	cdll.PP(s)
+	cdll.PPDetailed(s)
+}
+
+func demoUnion1D() {
+	big := [][]int{{1, 3}, {5, 6}, {8, 10}, {13, 16}}
+	small := []int{11, 12}
+	ans := rangez.Union1D(big, small)
+	intz.PPrint2D(ans)
+}
+
+func bubblesort(arr []int) {
+	l := len(arr)
+	t := 0
+	for i := l - 1; i >= 0; i-- {
+		for j := 0; j < i; j++ {
+			if arr[j] > arr[j+1] {
+				t = arr[j]
+				arr[j] = arr[j+1]
+				arr[j+1] = t
+			}
+		}
+	}
 }
 
 func demoPad() {

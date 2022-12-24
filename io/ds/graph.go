@@ -25,6 +25,14 @@ func NewGraph() *Graph {
 	return g
 }
 
+func (g *Graph) VList() []string {
+	vlist := make([]string, 0)
+	for v, _ := range g.VMap {
+		vlist = append(vlist, v)
+	}
+	return vlist
+}
+
 func (g *Graph) AddVertex(vid string, vval int, adjWeightMap map[string]int) {
 	g.VMap[vid] = vval
 	g.addVtoAdList(vid, adjWeightMap)

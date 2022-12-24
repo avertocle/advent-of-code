@@ -2,12 +2,10 @@ package day13
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/boolz"
 	"github.com/avertocle/contests/io/bytez"
 	. "github.com/avertocle/contests/io/ds/ntree"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"strconv"
 )
 
@@ -16,30 +14,97 @@ var gPairCount int
 
 func SolveP1() string {
 	var r1, r2 *TNode
-	areOrdered := boolz.Init1D(gPairCount, false)
+	var r1str, r2str string
+	ans := 0
 	for i := 0; i < gPairCount; i++ {
-		r1 = parse([]byte(gInput[0][i]))
-		prettyPrint(r1, fmt.Sprintf("r1 - %v", i+1))
-		r1 = parse([]byte(gInput[1][i]))
-		prettyPrint(r2, fmt.Sprintf("r2 - %v", i+1))
-		if checkOrder(r1, r2) {
-			areOrdered[i] = true
+		r1str, r2str = gInput[0][i], gInput[1][i]
+		r1 = parse(nil, []byte(r1str))
+		r2 = parse(nil, []byte(r2str))
+		res := compare(r1, r2)
+		if res == 1 {
+			ans += i + 1
+		} else if res == 0 {
+			fmt.Printf("%v : res(%v) : %v vs %v\n", i+1, res, r1str, r2str)
 		}
 	}
-	ans := boolz.Count1D(areOrdered, true)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	//inpRows := len(gInput)
+	rnlen := gPairCount*2 + 2
+	rn := make([]*TNode, rnlen)
+	for i, row := range gInput {
+		for j, cell := range row {
+			rn[i*gPairCount+j] = parse(nil, []byte(cell))
+		}
+	}
+	rdiv1 := parse(nil, []byte("[[2]]"))
+	rdiv2 := parse(nil, []byte("[[6]]"))
+	rn[rnlen-2] = rdiv1
+	rn[rnlen-1] = rdiv2
+	var temp *TNode
+	for i := len(rn) - 1; i >= 0; i-- {
+		for j := 0; j < i; j++ {
+			if compare(rn[j], rn[j+1]) == -1 {
+				temp = rn[j]
+				rn[j] = rn[j+1]
+				rn[j+1] = temp
+			}
+		}
+	}
+	ans := 1
+	for i, r := range rn {
+		if r.Id == rdiv1.Id || r.Id == rdiv2.Id {
+			ans *= i + 1
+		}
+	}
 	return fmt.Sprintf("%v", ans)
 }
 
-func checkOrder(r1, r2 *TNode) bool {
-	return true
+/***** Common Functions *****/
+
+func compare(r1, r2 *TNode) int {
+	res := 0
+	if r1.IsLeaf() && r2.IsLeaf() {
+		return compareVals(r1, r2)
+	}
+	if r1.IsLeaf() && !r2.IsLeaf() && r1.V > -1 {
+		r1.AddC(NewTNode(r1.V, r1))
+		r1.V = -1
+	}
+	if !r1.IsLeaf() && r2.IsLeaf() && r2.V > -1 {
+		r2.AddC(NewTNode(r2.V, r2))
+		r2.V = -1
+	}
+	for i := 0; i < len(r1.C) && i < len(r2.C); i++ {
+		res = compare(r1.C[i], r2.C[i])
+		if res != 0 {
+			return res
+		}
+	}
+	return compareLens(r1, r2)
 }
 
-/***** Common Functions *****/
+func compareLens(r1, r2 *TNode) int {
+	if len(r1.C) < len(r2.C) {
+		return 1
+	} else if len(r1.C) > len(r2.C) {
+		return -1
+	} else {
+		return 0
+	}
+}
+
+func compareVals(r1, r2 *TNode) int {
+	if r1.V < r2.V {
+		return 1
+	} else if r1.V > r2.V {
+		return -1
+	} else {
+		return 0
+	}
+}
 
 /***** Input *****/
 
@@ -52,62 +117,47 @@ func ParseInput(inputFilePath string) {
 		gInput[0][i/3] = lines[i]
 		gInput[1][i/3] = lines[i+1]
 	}
-	outils.PrettyArray2DString(gInput)
 }
 
-func parse(arr []byte) *TNode {
-	fmt.Println(string(arr))
-	r := NewTNode(-1, nil)
-	r.AddChildren(parseList(r, arr))
-	return r
-}
+func parse(parent *TNode, arr []byte) *TNode {
+	if len(arr) == 0 {
+		return nil
+	}
 
-func parseList(parent *TNode, arr []byte) []*TNode {
 	tn := NewTNode(-1, parent)
 	if x, err := strconv.Atoi(string(arr)); err == nil {
 		tn.V = x
-		return []*TNode{tn}
-	}
-	if len(arr) == 0 {
-		return []*TNode{}
+		return tn
 	}
 
-	s := 0
 	e := bytez.FindNestedMatch(arr, ']')
-	if e == -1 {
-		fmt.Printf("==> 0. %v\n", string(arr))
+	childExps := findChildExpressions(arr[1:e])
+	for _, ce := range childExps {
+		tn.AddC(parse(tn, ce))
 	}
-	sepIdxs := make([]int, 0)
-	ptr := s
-	sepIdx := 0
-	for ptr < e {
-		if arr[ptr] == '[' {
-			sepIdx = bytez.FindNestedMatch(arr[ptr+1:], ']')
-			if sepIdx == -1 {
-				fmt.Printf("==> 1. %v\n", string(arr[ptr:]))
-			}
-		} else {
-			sepIdx = bytez.FindFirst(arr[ptr:], ',')
-			if sepIdx == -1 {
-				fmt.Printf("==> 2. %v\n", string(arr[ptr:]))
-			}
-		}
-		sepIdxs = append(sepIdxs, sepIdx)
-		ptr = sepIdx + 1
-		break
-	}
-	sepIdxs = append(sepIdxs, e)
-	s = 1
-	fmt.Printf("==> sepIdxs (%+v)\n", sepIdxs)
-	for _, si := range sepIdxs {
-		tn.AddChildren(parseList(tn, arr[s:si]))
-		s = si + 1
-	}
-	return []*TNode{}
+	return tn
 }
 
-func prettyPrint(r *TNode, msg string) {
-	fmt.Println(msg)
-	PrintFlattenedLeafOnly(r)
-	fmt.Println()
+func findChildExpressions(arr []byte) [][]byte {
+	ans := make([][]byte, 0)
+	if len(arr) == 0 {
+		return ans
+	}
+
+	s, t := 0, 0
+	for s < len(arr) {
+		if arr[s] == '[' {
+			t = s + bytez.FindNestedMatch(arr[s:], ']') + 1 // t at comma after [<>]
+		} else {
+			t = bytez.FindFirst(arr[s:], ',') // t at comma after V
+			if t == -1 {                      // the end digit will not have a comma after it
+				t = len(arr)
+			} else {
+				t = s + t
+			}
+		}
+		ans = append(ans, arr[s:t])
+		s = t + 1
+	}
+	return ans
 }

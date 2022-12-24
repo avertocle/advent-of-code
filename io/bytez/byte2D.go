@@ -79,7 +79,7 @@ func Transpose2D(arr [][]byte) [][]byte {
 func PPrint2D(arr [][]byte) {
 	for _, row := range arr {
 		for _, c := range row {
-			fmt.Printf("%v ", string(c))
+			fmt.Printf("%v", string(c))
 		}
 		fmt.Println()
 	}

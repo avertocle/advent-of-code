@@ -4,6 +4,14 @@ import (
 	"strings"
 )
 
+func Init1D(size int, b byte) []byte {
+	ans := make([]byte, size)
+	for i, _ := range ans {
+		ans[i] = b
+	}
+	return ans
+}
+
 func FindSubseq1D(arr, pat []byte) []int {
 	lenA := len(arr)
 	lenP := len(pat)
@@ -74,4 +82,20 @@ func FindNestedMatch(arr []byte, endByte byte) int {
 		}
 	}
 	return -1
+}
+
+func Count1D(arr []byte, v byte) int {
+	return CountIf1D(arr, func(b byte, i int) bool {
+		return b == v
+	})
+}
+
+func CountIf1D(arr []byte, f func(byte, int) bool) int {
+	count := 0
+	for i, b := range arr {
+		if f(b, i) {
+			count++
+		}
+	}
+	return count
 }
