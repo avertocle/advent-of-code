@@ -6,7 +6,6 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
 	"strings"
@@ -128,7 +127,8 @@ func printTroute(m map[string]int) {
 	arr[size/2][size/2] = 's'
 	fmt.Println()
 	fmt.Println()
-	outils.PrettyArray2DByte(arr)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(arr)
 }
 
 /***** Common Functions *****/

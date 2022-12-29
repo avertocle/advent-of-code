@@ -2,7 +2,7 @@ package ds
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/outils"
+	"github.com/avertocle/contests/io/stringz"
 	"strings"
 )
 
@@ -90,7 +90,7 @@ func (g *Graph) PrintAdMat() {
 		tokens = strings.Split(key, keySep)
 		mat[vToIdxMap[tokens[0]]+1][vToIdxMap[tokens[1]]+1] = fmt.Sprintf("%v", wei)
 	}
-	outils.PrettyArray2DString(mat)
+	stringz.PPrint2D(mat)
 }
 
 func mapToStr(m map[string]int) string {

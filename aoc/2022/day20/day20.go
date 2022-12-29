@@ -65,7 +65,7 @@ func calcCoordSum(idxs []*cdll.Node, keyIdxs []int) int {
 		coords[i] = cdll.NavFwd(zn, disRot).V
 		coordSum += coords[i]
 	}
-	fmt.Printf("res : zero(%v) coords(%v) sum(%v)\n", zn.V, coords, coordSum)
+	//fmt.Printf("res : zero(%v) coords(%v) sum(%v)\n", zn.V, coords, coordSum)
 	return coordSum
 }
 

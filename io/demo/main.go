@@ -3,23 +3,20 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
-	"github.com/avertocle/contests/io/ds/ll/cdll"
 	"github.com/avertocle/contests/io/intz"
-	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/rangez"
+	"strings"
 )
 
 func main() {
-	demoDLL()
+	s1 := "2=-1=0"
+	s2 := fmt.Sprintf("%s", "2=-1=0")
+	fmt.Println(strings.Compare(s1, s2) == 0)
+	fmt.Println(s1 == s2)
 }
 
 func demoDLL() {
-	s := cdll.FromArray([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
-	cdll.PP(s)
-	//n := dll.NewDLLNode(11, nil, nil)
-	s = cdll.DelAt(s, 8)
-	cdll.PP(s)
-	cdll.PPDetailed(s)
+
 }
 
 func demoUnion1D() {
@@ -51,11 +48,13 @@ func demoPad() {
 		}
 	}
 
-	outils.PrettyArray2DByte(arr)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(arr)
 	fmt.Println()
 
 	ans := bytez.Pad2D(arr, 10, 10, 10, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 }
 
@@ -66,39 +65,48 @@ func demoExtract() {
 			arr[i][j] = byte((i*10+j)%10 + '0')
 		}
 	}
-	outils.PrettyArray2DByte(arr)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(arr)
 	fmt.Println()
 
 	ans := bytez.ExtractSq2D(arr, []int{0, 0}, 3, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{1, 1}, 3, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 3, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{9, 9}, 3, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 6, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 2, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 1, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 0, '.')
-	outils.PrettyArray2DByte(ans)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(ans)
 	fmt.Println()
 
 }

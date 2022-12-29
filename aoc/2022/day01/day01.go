@@ -2,8 +2,8 @@ package day01
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 	"sort"
 )
 
@@ -41,13 +41,8 @@ func SolveP2() string {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	linesInt := iutils.ExtractInt1DFromString1D(lines, " ", 0, -1)
-
-	//	fmt.Printf("%+v\n", linesInt)
-
 	gInput = make([][]int, 0)
 	var temp []int
 	for i := 0; i < len(linesInt); i++ {
@@ -55,7 +50,6 @@ func ParseInput(inputFilePath string) {
 		for ; i < len(linesInt) && linesInt[i] > -1; i++ {
 			temp = append(temp, linesInt[i])
 		}
-		//		fmt.Printf("%+v\n", iutils)
 		gInput = append(gInput, temp)
 	}
 }

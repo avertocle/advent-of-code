@@ -2,7 +2,6 @@ package bintree
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/outils"
 	"strings"
 )
 
@@ -44,7 +43,7 @@ func NewTNode(v int, p *TNode) *TNode {
 }
 
 func PrintHierarchial(tn *TNode, depth int) {
-	outils.PrintWithDepth(fmt.Sprintf("(%v)", tn.V), depth)
+	fmt.Printf("%v- %v\n", strings.Repeat(" ", 2*depth), fmt.Sprintf("(%v)", tn.V))
 	for _, c := range tn.C {
 		PrintHierarchial(c, depth+1)
 	}

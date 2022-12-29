@@ -2,10 +2,9 @@ package day05
 
 import (
 	"github.com/avertocle/contests/io/ds"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
-	"log"
 	"strings"
 )
 
@@ -70,9 +69,7 @@ func makeSingleMovePartTwo(count, src, des int, stacks []*ds.Stack) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 
 	piles := make([][]string, 0)
 	gInpMoves = make([][]int, 0)
@@ -86,7 +83,7 @@ func ParseInput(inputFilePath string) {
 		}
 	}
 
-	outils.PrettyArray2DString(piles)
+	//stringz.PPrint2D(piles)
 
 	// transform piles
 	gInpPiles = make([][]string, len(piles[0]))

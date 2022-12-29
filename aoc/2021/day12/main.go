@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/ds"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
+	"github.com/avertocle/contests/io/stringz"
 	"github.com/avertocle/contests/metrics"
 	"log"
 	"strings"
@@ -149,7 +149,7 @@ func getInputOrDie() *ds.Graph {
 		log.Fatalf("iutils error | %v", err)
 	}
 	linesSplit := iutils.ExtractString2DFromString1D(lines, "-", nil, "")
-	outils.PrettyArray2DString(linesSplit)
+	stringz.PPrint2D(linesSplit)
 	input := ds.NewGraph()
 	for _, ls := range linesSplit {
 		input.AddVertex(ls[0], 1, arrToMap(ls[1]))

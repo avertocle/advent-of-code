@@ -159,7 +159,7 @@ func calcNewFacing(cf, turn int) int {
 			cf = 0
 		}
 	} else {
-		fmt.Println("wierd turn", turn)
+		//fmt.Println("wierd turn", turn)
 		return cf
 	}
 	return cf

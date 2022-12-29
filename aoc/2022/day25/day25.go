@@ -22,7 +22,7 @@ func SolveP1() string {
 		sumDec += b5ToU10(snafuToB5(fu))
 	}
 	ans := b5ToSnafu(u10ToB5(sumDec))
-	return fmt.Sprintf("%v", ans)
+	return fmt.Sprintf("%s", ans)
 }
 
 func SolveP2() string {
@@ -77,7 +77,7 @@ func snafuToB5(snafu string) []int {
 }
 
 func b5ToSnafu(b5 []int) string {
-	snafu := make([]byte, len(b5))
+	snafu := make([]byte, 0)
 	isPadding := true
 	for i, x := range b5 {
 		if x == 0 && isPadding == true {
@@ -86,11 +86,11 @@ func b5ToSnafu(b5 []int) string {
 			isPadding = false
 		}
 		if x == -1 {
-			snafu[i] = '-'
+			snafu = append(snafu, '-')
 		} else if x == -2 {
-			snafu[i] = '='
+			snafu = append(snafu, '=')
 		} else if x == 0 || x == 1 || x == 2 {
-			snafu[i] = byte('0' + x)
+			snafu = append(snafu, byte('0'+x))
 		} else {
 			errz.HardAssert(false, "invalid snafu array (%v) idx(%v) byte(%v)", b5, i, b5[i])
 		}
