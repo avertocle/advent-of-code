@@ -22,7 +22,7 @@ func SolveP1() string {
 func SolveP2() string {
 	jobs := parseInDS()
 	mname, res := getChildWithHumanDep(jobs)
-	fmt.Printf("%v : %v\n", mname, res)
+	//fmt.Printf("%v : %v\n", mname, res)
 	jobs[mname].res = res
 	resolveOppP2(jobs, mname)
 	ans := jobs["humn"].val

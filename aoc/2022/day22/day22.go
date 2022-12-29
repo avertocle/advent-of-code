@@ -26,16 +26,13 @@ const (
 	up    = 3
 )
 
-// 169060
-// 0,8
-// 0,50
 func SolveP1() string {
 	debugMap = bytez.Extract2D(gInpMap, []int{0, 0}, []int{gInpRows - 1, gInpCols - 1}, '*')
 	ci, cj, cf := 1, 9, right
 	for _, step := range gInpPath {
 		ci, cj, cf = walkOneStep(ci, cj, cf, step[0], step[1])
 	}
-	bytez.PPrint2D(debugMap)
+	//bytez.PPrint2D(debugMap)
 	ans := 1000*ci + 4*cj + cf
 	return fmt.Sprintf("%v", ans)
 }

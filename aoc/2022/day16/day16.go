@@ -14,11 +14,11 @@ var gInput *ds.Graph
 
 func SolveP1() string {
 	spaths := findShortestPaths()
-	fmt.Println("shortest paths done")
+	//fmt.Println("shortest paths done")
 	nonZeroV := findNonZeroValves()
 	opened := make(map[string]int)
 	ans := traverse("AA", 30, nonZeroV, opened, spaths, 0)
-	fmt.Println(itrctr)
+	//fmt.Println(itrctr)
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -138,8 +138,9 @@ func ParseInput(inputFilePath string) {
 		}
 		gInput.AddVertex(v, rate, adjMap)
 	}
-	gInput.PrintAdList()
-	fmt.Println("\n")
+	//gInput.PrintAdList()
+	//fmt.Println()
+	//fmt.Println()
 }
 
 //func traverse2(node string, timeRem int, vis map[string]int, depth int, path []string) {

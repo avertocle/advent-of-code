@@ -2,6 +2,7 @@ package day11
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
 	"sort"
@@ -81,10 +82,7 @@ func getReductionKey(monkeys []*monkey) int64 {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		fmt.Sprintf("iutils error | %v", err)
-		return
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	input = lines
 }
 
@@ -123,9 +121,9 @@ func (this *monkey) trwItem() *item {
 func (this *monkey) s() string {
 	itemsStr := ""
 	for _, it := range this.sitems {
-		itemsStr += (it.s() + " ")
+		itemsStr += it.s() + " "
 	}
-	return fmt.Sprintf("%v : op(%v) : tst(%v) : sitems(%v) : ", this.id, this.op.s(), this.tst.s(), itemsStr)
+	return fmt.Sprintf("%v : tst(%v) : sitems(%v) : ", this.id, this.tst.s(), itemsStr)
 }
 
 func newMonkey(lines []string) *monkey {
@@ -161,7 +159,7 @@ func (this *op) eval(old int64) int64 {
 }
 
 func (this *op) s() string {
-	return fmt.Sprintf("%v@%v", this.x, this.f)
+	return fmt.Sprintf("%v", this.x)
 }
 
 func newOp(s string) *op {
@@ -209,7 +207,7 @@ func newTest(s []string) *tst {
 }
 
 func (this *tst) s() string {
-	return fmt.Sprintf("%v @ %+v = %v or %v", this.x, this.f, this.mkTru, this.mkFal)
+	return fmt.Sprintf("%v = %v or %v", this.x, this.mkTru, this.mkFal)
 }
 
 func (this *tst) eval(val int64) int {
