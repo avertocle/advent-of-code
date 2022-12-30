@@ -3,8 +3,8 @@ package day20
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -70,9 +70,7 @@ func calcAlgIdx(arr [][]byte) int {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInpAlg = []byte(lines[0])
 	gInpImg = iutils.ExtractByte2DFromString1D(lines[2:], "", nil, 0)
 	gInpLen = len(lines) - 2

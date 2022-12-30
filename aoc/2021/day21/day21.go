@@ -2,10 +2,10 @@ package day21
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
-	"log"
 	"strings"
 )
 
@@ -31,7 +31,7 @@ func SolveP1() string {
 		//fmt.Printf("%v  rolls p1@%v p2@%v \n", drollCtr, p1Score, p2Score)
 	}
 	ans := drollCtr * p2Score
-	fmt.Printf("drolls(%v) p1Score(%v) p2Score(%v) ans(%v) \n", drollCtr, p1Score, p2Score, ans)
+	//fmt.Printf("drolls(%v) p1Score(%v) p2Score(%v) ans(%v) \n", drollCtr, p1Score, p2Score, ans)
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -58,12 +58,10 @@ func playOneTurn(pos, dval, drolls, dvalMax, posMax int) (int, int) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = []int{
 		stringz.AtoiQ(strings.Fields(lines[0])[4], -1),
 		stringz.AtoiQ(strings.Fields(lines[1])[4], -1),
 	}
-	fmt.Printf("start pos %v\n", gInput)
+	//fmt.Printf("start pos %v\n", gInput)
 }

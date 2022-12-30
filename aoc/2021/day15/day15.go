@@ -3,9 +3,9 @@ package day15
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 	"math"
 )
 
@@ -123,11 +123,8 @@ func riskAt(x, y int) int {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = iutils.ExtractByte2DFromString1D(lines, "", nil, 0)
 	gInpRows = len(gInput)
 	gInpCols = len(gInput[0])
-	//outils.PrettyArray2DByte(gInput)
 }
