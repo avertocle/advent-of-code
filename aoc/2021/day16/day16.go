@@ -3,10 +3,9 @@ package day16
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/baze"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
-	"strings"
 )
 
 var gInput string
@@ -22,11 +21,11 @@ func SolveP1() string {
 	versions := make([]int, 0)
 	pktDebugStr := ""
 	hasEnded := false
-	fmt.Printf("\n\n")
+	//fmt.Printf("\n\n")
 	for {
 		pktDebugStr = ""
 		if ptr+6 >= gInpLen || hasEnded {
-			fmt.Printf("break01 %v >= %v\n", ptr+6, gInpLen)
+			//fmt.Printf("break01 %v >= %v\n", ptr+6, gInpLen)
 			break
 		}
 		pktVer, pktTid = parsePktHeader(gInpBin[ptr : ptr+6])
@@ -42,13 +41,13 @@ func SolveP1() string {
 			ptr = subPktStart
 			pktDebugStr = fmt.Sprintf("%v op s(%v) t(%v) l(%v) c(%v)", pktDebugStr, subPktStart, string(lenTid), subPktLen, subPktCnt)
 		}
-		fmt.Printf("%v-%v\n", strings.Repeat(" ", depth), pktDebugStr)
+		//fmt.Printf("%v-%v\n", strings.Repeat(" ", depth), pktDebugStr)
 		if pktTid != 4 {
 			depth++
 		}
 	}
 	ans := intz.Sum1D(versions)
-	fmt.Printf("%v = sum(%v)\n", ans, versions)
+	//fmt.Printf("%v = sum(%v)\n", ans, versions)
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -107,9 +106,7 @@ func parseOprPkt(start int) (int, byte, int, int) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = lines[0]
 	gInpBin = baze.HtobQ(gInput)
 	gInpLen = len(gInpBin)

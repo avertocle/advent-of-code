@@ -8,6 +8,7 @@ package iutils
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/stringz"
 	"strconv"
 	"strings"
 )
@@ -31,17 +32,12 @@ func ExtractInt2DFromString1D(lines []string, sep string, cols []int, defaultVal
 
 func ExtractInt1DFromString1D(lines []string, sep string, col int, defaultVal int) []int {
 	ans := make([]int, len(lines))
-	var err error
 	var tokens []string
 	for i, line := range lines {
 		tokens = strings.Split(line, sep)
 		ans[i] = defaultVal
 		if col < len(tokens) {
-			ans[i], err = strconv.Atoi(tokens[col])
-			if err != nil {
-				fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", tokens[col], err, defaultVal)
-				ans[i] = defaultVal
-			}
+			ans[i] = stringz.AtoiQ(tokens[col], defaultVal)
 		}
 	}
 	return ans

@@ -3,11 +3,10 @@ package day09
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
-	"log"
 	"math"
 	"strings"
 )
@@ -49,7 +48,7 @@ func SolveP2() string {
 		}
 	}
 	ans := len(tRoute)
-	printTroute(tRoute)
+	//printTroute(tRoute)
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -64,7 +63,7 @@ func finalHPos(x, y int, direc byte, steps int) (int, int) {
 	case 'D':
 		return x, y - steps
 	default:
-		fmt.Printf("wrong move direction for H : %v, cmdIdx(%+v)", direc)
+		fmt.Printf("wrong move direction for H : %v", direc)
 		return math.MaxInt, math.MaxInt
 	}
 }
@@ -128,7 +127,8 @@ func printTroute(m map[string]int) {
 	arr[size/2][size/2] = 's'
 	fmt.Println()
 	fmt.Println()
-	outils.PrettyArray2DByte(arr)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(arr)
 }
 
 /***** Common Functions *****/
@@ -137,9 +137,7 @@ func printTroute(m map[string]int) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	inpDir = iutils.ExtractByte1DFromString1D(lines, " ", 0, 1)
 	inpSteps = iutils.ExtractInt1DFromString1D(lines, " ", 1, 0)
 	inpLen = len(inpDir)

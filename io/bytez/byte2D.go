@@ -1,6 +1,10 @@
 package bytez
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/avertocle/contests/io/intz"
+	"math"
+)
 
 func Init2D(rows, cols int, b byte) [][]byte {
 	ans := make([][]byte, rows)
@@ -13,15 +17,26 @@ func Init2D(rows, cols int, b byte) [][]byte {
 	return ans
 }
 
+func CountInSection2D(arr [][]byte, boundTl, boundBr []int, v byte) int {
+	return CountIf2D(arr, func(b byte, i int, j int) bool {
+		if i >= boundTl[0] && i <= boundBr[0] &&
+			j >= boundTl[1] && j <= boundBr[1] && b == v {
+			return true
+		} else {
+			return false
+		}
+	})
+}
+
 func Count2D(grid [][]byte, v byte) int {
-	return CountIf2D(grid, func(b byte, i int, i2 int) bool {
+	return CountIf2D(grid, func(b byte, i int, j int) bool {
 		return b == v
 	})
 }
 
-func CountIf2D(grid [][]byte, f func(byte, int, int) bool) int {
+func CountIf2D(arr [][]byte, f func(byte, int, int) bool) int {
 	count := 0
-	for i, row := range grid {
+	for i, row := range arr {
 		for j, cell := range row {
 			if f(cell, i, j) {
 				count++
@@ -76,7 +91,31 @@ func Transpose2D(arr [][]byte) [][]byte {
 	return ans
 }
 
+/*
+FindBounds2D
+returns top-left and bottom-right bounds of the array
+*/
+func FindBounds2D(arr [][]byte, empty byte) ([]int, []int) {
+	if len(arr) == 0 {
+		return []int{}, []int{}
+	}
+	tli, tlj, bri, brj := math.MaxInt, math.MaxInt, -1, -1
+	rlen, clen := len(arr), len(arr[0])
+	for i := 0; i < rlen; i++ {
+		for j := 0; j < clen; j++ {
+			if arr[i][j] != empty {
+				tli = intz.Min(tli, i)
+				tlj = intz.Min(tlj, j)
+				bri = intz.Max(bri, i)
+				brj = intz.Max(brj, j)
+			}
+		}
+	}
+	return []int{tli, tlj}, []int{bri, brj}
+}
+
 func PPrint2D(arr [][]byte) {
+	fmt.Println()
 	for _, row := range arr {
 		for _, c := range row {
 			fmt.Printf("%v", string(c))

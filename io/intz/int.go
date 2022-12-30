@@ -45,6 +45,10 @@ func Trim(c int, x []int) int {
 	return math.MaxInt
 }
 
+func Pow(x, n int) int64 {
+	return int64(math.Pow(float64(x), float64(n)))
+}
+
 /*
 IncBounded
 returns x incremented and rotated (if) to be between 1 & max

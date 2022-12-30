@@ -14,19 +14,14 @@ var gInput *ds.Graph
 
 func SolveP1() string {
 	spaths := findShortestPaths()
-	fmt.Println("shortest paths done")
 	nonZeroV := findNonZeroValves()
 	opened := make(map[string]int)
 	ans := traverse("AA", 30, nonZeroV, opened, spaths, 0)
-	fmt.Println(itrctr)
 	return fmt.Sprintf("%v", ans)
 }
 
-var itrctr int
-
 func traverse(node string, timeRem int, nonZeroV, opened, spaths map[string]int, depth int) int {
-	itrctr++
-	if len(opened) >= 6 || timeRem <= 0 {
+	if timeRem <= 0 {
 		return 0
 	}
 	var maxP, p, currP int
@@ -138,27 +133,7 @@ func ParseInput(inputFilePath string) {
 		}
 		gInput.AddVertex(v, rate, adjMap)
 	}
-	gInput.PrintAdList()
-	fmt.Println("\n")
 }
-
-//func traverse2(node string, timeRem int, vis map[string]int, depth int, path []string) {
-//	path = append(path, node)
-//	vis[node] = 1
-//	nbrs := gInput.AdList[node]
-//	for nbr, _ := range nbrs {
-//		if _, ok := vis[nbr]; ok {
-//			continue
-//		} else if timeRem == 0 {
-//			break
-//		} else {
-//			traverse2(nbr, timeRem-1, vis, depth+1, path) // valve travel time cost
-//		}
-//	}
-//	fmt.Printf("%v\n", path)
-//	delete(vis, node)
-//	return
-//}
 
 func findShortestPaths() map[string]int {
 	m := make(map[string]int)
@@ -178,16 +153,6 @@ func findShortestPaths() map[string]int {
 			m[k2] = p
 		}
 	}
-	//for i := 0; i < len(vlist); i++ {
-	//	n1 := vlist[i]
-	//	for j := 0; j < len(vlist); j++ {
-	//		n2 := vlist[j]
-	//		if i == j {
-	//			continue
-	//		}
-	//		fmt.Printf("%v,%v : %v : %v\n", n1, n2, getSPath(n1, n2, m), getSPath(n2, n1, m))
-	//	}
-	//}
 	return m
 }
 

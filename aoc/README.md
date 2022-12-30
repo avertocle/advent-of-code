@@ -3,15 +3,20 @@
 #### Create contest setup 
 
 ```
-for i in {1..9}
+# run from <>/contests/aoc
+mkdir 2023
+cd 2023
+for i in $(seq -f "%02g" 1 2)
 do
-mkdir day0$i
-touch day0$i/main.go day0$i/input.txt day0$i/input_small.txt
-done
-
-for i in {10..25}
-do
-mkdir day$i
-touch day$i/main.go day$i/input.txt day$i/input_small.txt
+  echo "creating day$i"
+  mkdir day$i
+  cd day$i
+  cp ../../samples/code.go day$i.go
+  cp ../../samples/tst.go day$i\_test.go
+  sed -i "" s/samples/day$i/g day$i.go
+  sed -i "" s/samples/day$i/g day$i\_test.go    
+  touch input_small.txt 
+  touch input_final.txt
+  cd ..
 done
 ```

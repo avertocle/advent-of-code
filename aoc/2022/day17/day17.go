@@ -33,13 +33,13 @@ func SolveP1() string {
 			//didGoDown = fallOneStepAndDisplay(grid, sh, gInput[i%(len(gInput))])
 		}
 		sh.markOnGrid(grid, '#')
-		fmt.Printf("%v\n", hmax-getTowerHeight(grid))
+		//fmt.Printf("%v\n", hmax-getTowerHeight(grid))
 		i--
 	}
 	h := getTowerHeight(grid)
 	//fmt.Printf("rock(%v), height(%v)\n", shCtr, h)
 	//grid[h][5] = '*'
-	printGrid(grid)
+	//printGrid(grid)
 	ans := hmax - h - 1
 	return fmt.Sprintf("%v", ans)
 }

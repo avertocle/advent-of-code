@@ -5,7 +5,6 @@ import (
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/geom"
 	input2 "github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"log"
 	"strconv"
 	"strings"
@@ -123,5 +122,6 @@ func showGrid(rows, cols int) {
 	for _, p := range in.grid {
 		g[p[1]][p[0]] = '#'
 	}
-	outils.PrettyArray2DByte(g)
+	fmt.Println("deprecated")
+	bytez.PPrint2D(g)
 }

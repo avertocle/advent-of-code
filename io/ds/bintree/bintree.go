@@ -2,7 +2,7 @@ package bintree
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/outils"
+	"strings"
 )
 
 var idCtr int
@@ -42,7 +42,7 @@ func PrintHierarchial(root *TNode, depth int) {
 	if root == nil {
 		return
 	}
-	outils.PrintWithDepth(fmt.Sprintf("(%v)", root.V), depth)
+	fmt.Printf("%v- %v\n", strings.Repeat(" ", 2*depth), fmt.Sprintf("(%v)", root.V))
 	PrintHierarchial(root.L, depth+1)
 	PrintHierarchial(root.R, depth+1)
 }

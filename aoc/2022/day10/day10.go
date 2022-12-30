@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"log"
 	"strings"
 )
@@ -19,7 +18,6 @@ func SolveP1() string {
 	ans := 0
 	for _, c := range ansCtrs {
 		ans += cycleVals[c] * c
-		//fmt.Printf("%v * %v = %v\n", c, cycleVals[c], c*cycleVals[c])
 	}
 	return fmt.Sprintf("%v", ans)
 }
@@ -42,8 +40,15 @@ func SolveP2() string {
 			}
 		}
 	}
-	outils.PrettyArray2DByte(screen)
-	ans := "0"
+
+	ans := ""
+	for _, row := range screen {
+		for _, c := range row {
+			ans += fmt.Sprintf("%v", string(c))
+		}
+		ans += "\n"
+	}
+	//fmt.Println(ans)
 	return fmt.Sprintf("%v", ans)
 }
 

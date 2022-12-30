@@ -30,7 +30,7 @@ func SolveP2() string {
 func findSPathFrom(starts [][]int) int {
 	var spaths [][]int
 	var visited [][]bool
-	fmt.Printf("total starting points : %v\n", len(starts))
+	//fmt.Printf("total starting points : %v\n", len(starts))
 	p, minP := 0, math.MaxInt/2
 	for _, sv := range starts {
 		spaths = intz.Init2D(gInpRows, gInpCols, math.MaxInt/2)

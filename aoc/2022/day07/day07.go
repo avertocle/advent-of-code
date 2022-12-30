@@ -2,6 +2,7 @@ package day07
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
@@ -16,7 +17,6 @@ var input []string
 func SolveP1() string {
 	root := makeTreeFromRawInput()
 	calcDirSizes(root)
-	//printFileSystem(root, 0)
 	ans := new(int)
 	traverseP1(root, ans)
 	return fmt.Sprintf("%v", *ans)
@@ -25,7 +25,6 @@ func SolveP1() string {
 func SolveP2() string {
 	root := makeTreeFromRawInput()
 	calcDirSizes(root)
-	//printFileSystem(root, 0)
 	ans := new(int)
 	*ans = math.MaxInt
 	toDelMin := root.size - (70000000 - 30000000) // min space to be deleted
@@ -98,14 +97,12 @@ func makeTreeFromRawInput() *tnode {
 				} else if isPrevDirCmd(dName) {
 					curr = curr.parent
 				} else {
-					//fmt.Printf("#### %v , %v,  %+v\n", dName, curr.name, curr.children)
 					curr = curr.children[dName] // assuming cd is always into valid dir and after ls
 				}
-				fmt.Printf("==> inside %v\n", curr.absPath)
 				i++
 			}
 		} else {
-			fmt.Printf("should not reach here : cmd (%v) at line %v", l, i)
+			errz.HardAssert(false, "should not reach here : cmd (%v) at line %v", l, i)
 		}
 	}
 	return root

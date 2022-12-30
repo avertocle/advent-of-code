@@ -29,6 +29,11 @@ func SolveP1() string {
 }
 
 func SolveP2() string {
+	ans := 0
+	return fmt.Sprintf("%v", ans)
+}
+
+func SolveP2x() string {
 	//max := 20
 	max := 4000000
 	t0sec, t1sec := time.Now().Unix(), time.Now().Unix()
@@ -53,8 +58,8 @@ func SolveP2() string {
 	intz.PPrint2D(finBea)
 	a := int64(finBea[0][0] - gOffset[0])
 	b := int64(finBea[0][1] - gOffset[1])
-	fmt.Printf("fnbea : %v,%v\n", a, b)
-	fmt.Printf("gCtr : %v,%v\n", gCtr1, gCtr2)
+	//fmt.Printf("fnbea : %v,%v\n", a, b)
+	//fmt.Printf("gCtr : %v,%v\n", gCtr1, gCtr2)
 	ans := (a)*4000000 + b
 	return fmt.Sprintf("%v", ans)
 }
@@ -96,9 +101,6 @@ func getMarkedCount(rowIdx int, max int) ([]int, bool) {
 	if len(mran) == 2 {
 		//errz.HardAssert(mran[1][0]-mran[0][1] <= 2, "error big gap in merged-range")
 		if mran[1][0]-mran[0][1] == 2 {
-			fmt.Println()
-			intz.PPrint2D(mran)
-			fmt.Println()
 			return []int{mran[0][1] + 1, rowIdx}, true
 		} else {
 			gCtr2++
@@ -225,9 +227,8 @@ func ParseInput(inputFilePath string) {
 	offsetAll([][]int{gBoundBR}, gOffset[0], gOffset[1])
 	//outils.PrettyArray2DInt(gInpSen)
 	//outils.PrettyArray2DInt(gInpBea)
-	fmt.Printf("bounds = tl%v , br%v\n", gBoundTL, gBoundBR)
-	fmt.Printf("offset = %v\n", gOffset)
-
+	//fmt.Printf("bounds = tl%v , br%v\n", gBoundTL, gBoundBR)
+	//fmt.Printf("offset = %v\n", gOffset)
 }
 
 func offsetAll(points [][]int, ox, oy int) {

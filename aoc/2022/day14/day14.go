@@ -6,7 +6,6 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/outils"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
 	"strings"
@@ -125,7 +124,7 @@ func ParseInput(inputFilePath string) {
 	}
 	gBoundTL = []int{minX, 0} // sand dropping from 500,0
 	gBoundBR = []int{maxX, maxY}
-	fmt.Printf("\n\n bounds : tl(%v,%v) br(%v,%v) \n\n", minX, minY, maxX, maxY)
+	//fmt.Printf("\n\n bounds : tl(%v,%v) br(%v,%v) \n\n", minX, minY, maxX, maxY)
 }
 
 func makeGrid(size int) [][]byte {
@@ -155,5 +154,6 @@ func printGrid(grid [][]byte) {
 	fmt.Println()
 	viewTL := []int{gBoundTL[0] - 20, gBoundTL[1]}
 	viewBR := []int{gBoundBR[0] + 20, gBoundBR[1] + 3}
-	outils.PrettyArray2DByte(bytez.Transpose2D(bytez.Extract2D(grid, viewTL, viewBR, '.')))
+	fmt.Println("deprecated")
+	bytez.PPrint2D(bytez.Transpose2D(bytez.Extract2D(grid, viewTL, viewBR, '.')))
 }

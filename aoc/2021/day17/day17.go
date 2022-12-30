@@ -1,13 +1,12 @@
 package day17
 
-import "C"
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/geom"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
-	"log"
 	"math"
 )
 
@@ -70,9 +69,7 @@ func runSimForOneVector(vx, vy int, bounds []*geom.Coord2d) (bool, int) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	tokens := stringz.SplitMulti(lines[0], []string{":", "=", "..", ",", " "})
 	gInput = [][]int{
 		{stringz.AtoiQ(tokens[4], math.MinInt), stringz.AtoiQ(tokens[5], math.MinInt)},
@@ -87,6 +84,6 @@ func parseBounds() []*geom.Coord2d {
 		geom.NewCoord2d(gInput[0][0], gInput[1][1]),
 		geom.NewCoord2d(gInput[0][1], gInput[1][0]),
 	}
-	fmt.Printf("bounds : tl(%v,%v) br(%v,%v)\n", b[0].X, b[0].Y, b[1].X, b[1].Y)
+	//fmt.Printf("bounds : tl(%v,%v) br(%v,%v)\n", b[0].X, b[0].Y, b[1].X, b[1].Y)
 	return b
 }

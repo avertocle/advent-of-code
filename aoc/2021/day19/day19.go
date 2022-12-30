@@ -1,9 +1,9 @@
-package day16
+package day19
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 )
 
 var gInput []string
@@ -28,8 +28,6 @@ func PrintInputMetadata(inputFilePath string) {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = lines
 }

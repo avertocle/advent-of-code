@@ -2,8 +2,8 @@ package day03
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"log"
 )
 
 // gInput : [][]byte : each row contains a line of iutils
@@ -26,7 +26,7 @@ func SolveP2() string {
 	var cItems []byte
 	for i := 0; i < len(gInput)-2; i += 3 {
 		cItems = findCommonItemsInNLists(gInput[i], gInput[i+1], gInput[i+2])
-		fmt.Printf("%v vs %v vs %v = %v\n", string(gInput[i]), string(gInput[i+1]), string(gInput[i+2]), string(cItems))
+		//fmt.Printf("%v vs %v vs %v = %v\n", string(gInput[i]), string(gInput[i+1]), string(gInput[i+2]), string(cItems))
 		pSum += getItemPriority(cItems[0])
 	}
 	return fmt.Sprintf("%v", pSum)
@@ -81,9 +81,7 @@ func listToMap(list []byte) map[byte]int {
 
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
-	if err != nil {
-		log.Fatalf("iutils error | %v", err)
-	}
+	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = iutils.ExtractByte2DFromString1D(lines, " ", nil, 0)
 }
 
