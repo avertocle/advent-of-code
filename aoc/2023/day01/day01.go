@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/outils"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ func SolveP2() string {
 		x = findFirstNumberP2(gInput[i])
 		y = findLastNumberP2(gInput[i])
 		ans += x*10 + y
-		fmt.Println(gInput[i], x, y, x*10+y)
+		outils.Println(gInput[i], x, y, x*10+y)
 	}
 	return fmt.Sprintf("%v", ans)
 }
