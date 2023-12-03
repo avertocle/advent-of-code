@@ -1,5 +1,5 @@
 /*
-- some funcs recieve error as an arg to be chainable, bad design but looks cool
+- some func(s) receive error as an arg to be chainable, bad design but looks cool
 - no error handling unless absolutely required
 #competitive-programming #in-that-zone
 */

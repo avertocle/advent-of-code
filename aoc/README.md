@@ -6,7 +6,7 @@
 # run from <>/contests/aoc
 mkdir 2023
 cd 2023
-for i in $(seq -f "%02g" 1 2)
+for i in $(seq -f "%02g" 1 25)
 do
   echo "creating day$i"
   mkdir day$i

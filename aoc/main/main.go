@@ -6,22 +6,25 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2022/day18"
+	prob "github.com/avertocle/contests/aoc/2023/day01"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"os"
 	"path"
 	"strings"
 )
 
-const dirPath = "../2022/day18"
+const dirPath = "../2023/day01"
 
 func main() {
+	args := os.Args
+	fmt.Println(args)
 	displayPrettyHeader()
 	inputFileNames, err := iutils.GetInputFileList(dirPath)
 	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dirPath, err)
 
-	//inputFileNames = []string{"input_small.txt"}
+	//inputFileNames = []string{"input_small_02.txt"}
 	//inputFileNames = []string{"input_final.txt"}
 
 	var ansP1, ansP2 string
@@ -37,7 +40,7 @@ func main() {
 
 func runForOneInputFile(inputFilePath string) (string, string) {
 	prob.ParseInput(inputFilePath)
-	ansP1 := prob.SolveP1()
+	ansP1 := "0" //prob.SolveP1()
 	//fmt.Println("P1 Done")
 	ansP2 := prob.SolveP2()
 	//fmt.Println("P2 Done")

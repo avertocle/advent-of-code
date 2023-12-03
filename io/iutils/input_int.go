@@ -1,5 +1,5 @@
 /*
-- some funcs recieve error as an arg to be chainable, bad design but looks cool
+- some func(s) receive error as an arg to be chainable, bad design but looks cool
 - no error handling unless absolutely required
 #competitive-programming #in-that-zone
 */
@@ -7,7 +7,6 @@
 package iutils
 
 import (
-	"fmt"
 	"github.com/avertocle/contests/io/stringz"
 	"strconv"
 	"strings"
@@ -51,7 +50,7 @@ func ExtractInt1DFromString0D(line string, sep string, defaultVal int) []int {
 	for i, t := range tokens {
 		ans[i], err = strconv.Atoi(t)
 		if err != nil {
-			fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", t, err, defaultVal)
+			//fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", t, err, defaultVal)
 			ans[i] = defaultVal
 		}
 	}
