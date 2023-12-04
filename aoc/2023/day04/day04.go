@@ -13,34 +13,60 @@ var gInput [][][]int
 
 func SolveP1() string {
 	ans := 0
-	for _, card := range gInput {
-		cwNums := intz.Intersect1D(card[0], card[1])
-		cwNums = intz.Filter1D(cwNums, func(arr []int, i int) bool {
-			return arr[i] != -1
-		})
-		//fmt.Println(calcPointsP1(cwNums), cwNums)
-		ans += calcPointsP1(cwNums)
+	for i, _ := range gInput {
+		cwNumsCount := findCWNumCount(i)
+		ans += calcPointsP1(cwNumsCount)
 	}
+
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	cwNumsCounts := intz.Init1D(len(gInput), 0)
+	for i, _ := range gInput {
+		cwNumsCounts[i] = findCWNumCount(i)
+	}
+	cardArr := intz.Init1D(len(gInput), 0)
+	for i, _ := range gInput {
+		processP2(i, cardArr, cwNumsCounts)
+	}
+	ans := intz.Sum1D(cardArr)
 	return fmt.Sprintf("%v", ans)
 }
 
 /***** Common Functions *****/
 
-func calcPointsP1(arr []int) int {
-	if len(arr) == 0 {
-		return 0
-	}
-	return int(math.Pow(2, float64(len(arr)-1)))
+func findCWNumCount(cardIdx int) int {
+	cwNums := intz.Intersect1D(gInput[cardIdx][0], gInput[cardIdx][1])
+	cwNumCount := intz.Reduce1D(cwNums, 0, func(ans int, arr []int, i int) int {
+		if arr[i] != -1 {
+			return ans + 1
+		} else {
+			return ans
+		}
+	})
+	return cwNumCount
 }
 
 /***** P1 Functions *****/
 
+func calcPointsP1(cwNumsCount int) int {
+	if cwNumsCount == 0 {
+		return 0
+	}
+	return int(math.Pow(2, float64(cwNumsCount-1)))
+}
+
 /***** P2 Functions *****/
+
+// 1 2 4 8 14 1
+// 1 4 8 16 0 0
+func processP2(idx int, ans []int, cwNumsCounts []int) {
+	ans[idx] += 1
+	for i := 1; i <= cwNumsCounts[idx]; i++ {
+		processP2(idx+i, ans, cwNumsCounts)
+	}
+}
 
 /***** Input *****/
 
@@ -51,7 +77,6 @@ func ParseInput(inputFilePath string) {
 	for i, line := range lines {
 		b, c := parseLine(line)
 		gInput[i] = [][]int{b, c}
-		fmt.Println(b, c)
 	}
 }
 

@@ -53,19 +53,31 @@ func FindMid1D(arr []int) int {
 }
 
 func Sum1D(arr []int) int {
-	return Reduce1D(arr, func(ans int, i1d []int, i int) int {
+	return Reduce1DBuggy(arr, func(ans int, i1d []int, i int) int {
 		return ans + i1d[i]
 	})
 }
 
 func Mul1D(arr []int) int {
-	return Reduce1D(arr, func(ans int, arr []int, i int) int {
+	return Reduce1DBuggy(arr, func(ans int, arr []int, i int) int {
 		return ans * arr[i]
 	})
 }
 
 // f : (ans, arr, i) => ans
-func Reduce1D(arr []int, f func(int, []int, int) int) int {
+func Reduce1D(arr []int, initVal int, f func(int, []int, int) int) int {
+	if len(arr) == 0 {
+		return initVal
+	}
+	ans := initVal
+	for i := 0; i < len(arr); i++ {
+		ans = f(ans, arr, i)
+	}
+	return ans
+}
+
+// f : (ans, arr, i) => ans
+func Reduce1DBuggy(arr []int, f func(int, []int, int) int) int {
 	if len(arr) == 0 {
 		return 0
 	}
