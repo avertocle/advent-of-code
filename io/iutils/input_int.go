@@ -7,6 +7,7 @@
 package iutils
 
 import (
+	"fmt"
 	"github.com/avertocle/contests/io/stringz"
 	"strconv"
 	"strings"
@@ -48,9 +49,9 @@ func ExtractInt1DFromString0D(line string, sep string, defaultVal int) []int {
 	tokens := strings.Split(line, sep)
 	ans := make([]int, len(tokens))
 	for i, t := range tokens {
-		ans[i], err = strconv.Atoi(t)
+		ans[i], err = strconv.Atoi(strings.TrimSpace(t))
 		if err != nil {
-			//fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", t, err, defaultVal)
+			fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", t, err, defaultVal)
 			ans[i] = defaultVal
 		}
 	}

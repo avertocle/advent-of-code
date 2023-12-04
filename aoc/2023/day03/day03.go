@@ -87,7 +87,7 @@ func SolveP2() string {
 		if len(parts) != 2 {
 			continue
 		}
-		fmt.Printf("%v.", len(parts))
+		//fmt.Printf("%v.", len(parts))
 		prod := 1
 		for _, part := range parts {
 			prod *= part.val

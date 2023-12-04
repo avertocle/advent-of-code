@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day03"
+	prob "github.com/avertocle/contests/aoc/2023/day04"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-const dirPath = "../2023/day03"
+const dirPath = "../2023/day04"
 
 func main() {
 	args := os.Args
@@ -40,10 +40,9 @@ func main() {
 
 func runForOneInputFile(inputFilePath string) (string, string) {
 	prob.ParseInput(inputFilePath)
-	ansP1 := prob.SolveP1()
-	//fmt.Println("P1 Done")
-	ansP2 := prob.SolveP2()
-	//fmt.Println("P2 Done")
+	ansP1, ansP2 := "0", "0"
+	ansP1 = prob.SolveP1()
+	ansP2 = prob.SolveP2()
 	return ansP1, ansP2
 }
 
@@ -53,13 +52,11 @@ func displayPrettyHeader() {
 	displayPrettyHorLine()
 	fmt.Println(clr.Str(fmt.Sprintf("Solving %v", dirPath), clr.Green))
 	fmt.Println()
-	fmt.Println(clr.Str("<<< prog logs start >>>", clr.Yellow))
-	fmt.Println()
+	//fmt.Println(clr.Str("<<< prog logs start >>>", clr.Yellow))
+	//fmt.Println()
 }
 
 func displayPrettyResult(ifName, ansP1, ansP2 string) {
-	fmt.Println()
-	fmt.Println(clr.Str("<<< prog logs end >>>", clr.Yellow))
 	fmt.Println()
 	displayPrettyHorLine()
 	fmt.Printf("%v : ansP1 = %v : ans-P2 = %v\n",

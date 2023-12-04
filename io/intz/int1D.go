@@ -82,3 +82,32 @@ func Map1D(arr []int, f func([]int, int) int) {
 		arr[0] = f(arr, i)
 	}
 }
+
+func Filter1D(arr []int, f func([]int, int) bool) []int {
+	ans := make([]int, 0)
+	for i := 0; i < len(arr); i++ {
+		if f(arr, i) {
+			ans = append(ans, arr[i])
+		}
+	}
+	return ans
+}
+
+func Intersect1D(a, b []int) []int {
+	ans := make([]int, 0)
+	for _, x := range a {
+		if Contains1D(b, x) {
+			ans = append(ans, x)
+		}
+	}
+	return ans
+}
+
+func Contains1D(arr []int, v int) bool {
+	for _, x := range arr {
+		if x == v {
+			return true
+		}
+	}
+	return false
+}
