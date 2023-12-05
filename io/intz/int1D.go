@@ -36,15 +36,15 @@ func FindMax1D(arr []int) (int, int) {
 }
 
 func FindMin1D(arr []int) (int, int) {
-	max := arr[0]
+	min := arr[0]
 	pos := 0
 	for i, x := range arr {
-		if x < max {
-			max = x
+		if x < min {
+			min = x
 			pos = i
 		}
 	}
-	return max, pos
+	return min, pos
 }
 
 func FindMid1D(arr []int) int {
