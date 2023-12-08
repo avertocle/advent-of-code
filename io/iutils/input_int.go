@@ -36,7 +36,9 @@ func ExtractInt1DFromString1D(lines []string, sep string, col int, defaultVal in
 	for i, line := range lines {
 		tokens = strings.Split(line, sep)
 		ans[i] = defaultVal
-		if col < len(tokens) {
+		if col == -1 {
+			ans[i] = stringz.AtoiQ(line, defaultVal)
+		} else if col < len(tokens) {
 			ans[i] = stringz.AtoiQ(tokens[col], defaultVal)
 		}
 	}

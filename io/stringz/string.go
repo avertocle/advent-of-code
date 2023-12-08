@@ -27,3 +27,23 @@ func SplitMulti(s string, seps []string) []string {
 	}
 	return tokens
 }
+
+func SplitMultiTrimSpace(s string, seps []string) []string {
+	tokens := []string{s}
+	var temp []string
+	for _, sep := range seps {
+		temp = []string{}
+		for _, t := range tokens {
+			t = strings.TrimSpace(t)
+			for _, t2 := range strings.Split(t, sep) {
+				t2 = strings.TrimSpace(t2)
+				if len(t2) > 0 {
+					temp = append(temp, t2)
+				}
+			}
+		}
+		tokens = temp
+		//fmt.Printf("tokens = %v\n", strings.Join(tokens, "|"))
+	}
+	return tokens
+}

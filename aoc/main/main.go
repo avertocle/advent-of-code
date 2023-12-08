@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day05"
+	prob "github.com/avertocle/contests/aoc/2023/day06"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-const dirPath = "../2023/day05"
+const dirPath = "../2023/day06"
 
 func main() {
 	args := os.Args
