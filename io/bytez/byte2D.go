@@ -28,6 +28,18 @@ func CountInSection2D(arr [][]byte, boundTl, boundBr []int, v byte) int {
 	})
 }
 
+func Find2D(grid [][]byte, v byte) [][]int {
+	ans := make([][]int, 0)
+	for i, row := range grid {
+		for j, cell := range row {
+			if cell == v {
+				ans = append(ans, []int{i, j})
+			}
+		}
+	}
+	return ans
+}
+
 func Count2D(grid [][]byte, v byte) int {
 	return CountIf2D(grid, func(b byte, i int, j int) bool {
 		return b == v
