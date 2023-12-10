@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-const DirPath = "../2023/day07"
-
 var gInput map[string]int
 var gInputHands []string
+
+const DirPath = "../2023/day07"
 
 const (
 	FiveOfAKind = iota

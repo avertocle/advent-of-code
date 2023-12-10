@@ -6,6 +6,7 @@ import (
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
 	"strings"
+	"time"
 )
 
 var gInputPath []byte
@@ -37,6 +38,8 @@ func SolveP2() string {
 	ans := 0
 	nodeMap := makeMapP1()
 	snodeVals := findStartNodes()
+	endNodeMap := getEndNodeMap()
+	t0 := time.Now().UnixMilli()
 	for pathCtr := 0; ; pathCtr++ {
 		if pathCtr == len(gInputPath) {
 			pathCtr = 0
@@ -48,13 +51,15 @@ func SolveP2() string {
 			} else {
 				snodeVals[i] = nodeMap[snodeVals[i]][1]
 			}
-			if isEndNode(snodeVals[i]) {
+			if endNodeMap[snodeVals[i]] == true {
 				enodeCtr++
 			}
 		}
 		ans++
-		if ans%10000000 == 0 {
-			fmt.Printf("%v->", ans)
+		if enodeCtr >= 3 {
+			t := time.Now().UnixMilli() - t0
+			fmt.Println(t, snodeVals, enodeCtr, ans)
+			//break
 		}
 		if enodeCtr == len(snodeVals) {
 			break
@@ -71,6 +76,16 @@ func findStartNodes() []string {
 		}
 	}
 	return startNodes
+}
+
+func getEndNodeMap() map[string]bool {
+	endNodeMap := make(map[string]bool)
+	for _, node := range gInputNodes {
+		if strings.HasSuffix(node[0], "Z") {
+			endNodeMap[node[0]] = true
+		}
+	}
+	return endNodeMap
 }
 
 func isEndNode(node string) bool {

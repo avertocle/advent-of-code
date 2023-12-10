@@ -10,6 +10,8 @@ import (
 
 var gInput [][]byte
 
+const DirPath = "../2023/day03"
+
 func SolveP1() string {
 	ans := 0
 	// gInput is padded with 1x '.' layer

@@ -10,6 +10,8 @@ import (
 
 var gInput []string
 
+const DirPath = "../2023/day01"
+
 func SolveP1() string {
 	ans := 0
 	x, y := 0, 0

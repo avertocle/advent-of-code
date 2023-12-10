@@ -17,6 +17,10 @@ func Init2D(rows, cols int, b byte) [][]byte {
 	return ans
 }
 
+func Copy2D(source [][]byte) [][]byte {
+	return Extract2D(source, []int{0, 0}, []int{len(source) - 1, len(source[0]) - 1}, 0)
+}
+
 func CountInSection2D(arr [][]byte, boundTl, boundBr []int, v byte) int {
 	return CountIf2D(arr, func(b byte, i int, j int) bool {
 		if i >= boundTl[0] && i <= boundBr[0] &&

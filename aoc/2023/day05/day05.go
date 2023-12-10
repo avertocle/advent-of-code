@@ -12,6 +12,8 @@ var gInputSeedsP1 []int
 var gInputSeedsP2 []int
 var gInputMaps []*resMap
 
+const DirPath = "../2023/day05"
+
 func SolveP1() string {
 	ans := 0
 	minLocation := math.MaxInt

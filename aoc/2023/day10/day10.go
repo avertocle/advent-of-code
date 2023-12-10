@@ -18,7 +18,7 @@ func SolveP1() string {
 	pathLen := 0
 	for ci != start[0] || cj != start[1] {
 		shape := gInput[ci][cj]
-		fmt.Printf("%v.", string(shape))
+		//fmt.Printf("%v.", string(shape))
 		ni, nj := getNextPos(pi, pj, ci, cj, shape)
 		pi, pj = ci, cj
 		ci, cj = ni, nj
@@ -29,7 +29,29 @@ func SolveP1() string {
 }
 
 func SolveP2() string {
-	ans := "0"
+	visualMap := bytez.Copy2D(gInput)
+	start := bytez.Find2D(gInput, 'S')[0]
+	pi, pj := start[0], start[1]
+	ci, cj := start[0]+1, start[1] // choose manually by eyeballing / diff for input
+	pathLen := 0
+	for ci != start[0] || cj != start[1] {
+		visualMap[ci][cj] = 'x'
+		shape := gInput[ci][cj]
+		//fmt.Printf("%v.", string(shape))
+		ni, nj := getNextPos(pi, pj, ci, cj, shape)
+		pi, pj = ci, cj
+		ci, cj = ni, nj
+		pathLen++
+	}
+	ans := (pathLen + 1) / 2
+	for i, row := range visualMap {
+		for j, cell := range row {
+			if cell != 'x' && cell != '.' {
+				visualMap[i][j] = ' '
+			}
+		}
+	}
+	bytez.PPrint2D(visualMap)
 	return fmt.Sprintf("%v", ans)
 }
 

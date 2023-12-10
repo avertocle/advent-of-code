@@ -10,9 +10,10 @@ import (
 
 var gInputTimeP1 []int
 var gInputDistP1 []int
-
 var gInputTimeP2 int
 var gInputDistP2 int
+
+const DirPath = "../2023/day06"
 
 func SolveP1() string {
 	ans := 1

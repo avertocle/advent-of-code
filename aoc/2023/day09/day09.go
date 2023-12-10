@@ -15,19 +15,23 @@ const DirPath = "../2023/day09"
 func SolveP1() string {
 	ans := 0
 	for _, history := range gInput {
-		ans += extrapolate(history)
+		ans += extrapolateP1(history)
 	}
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	ans := 0
+	for _, history := range gInput {
+		ans += extrapolateP2(history)
+	}
 	return fmt.Sprintf("%v", ans)
 }
 
 /***** Common Functions *****/
 
-func extrapolate(arr []int) int {
+/***** P1 Functions *****/
+func extrapolateP1(arr []int) int {
 	lastElemItr := make([]int, 0)
 	lastElemItr = append(lastElemItr, arr[len(arr)-1])
 	for tempArrSum := -1; tempArrSum != 0; {
@@ -39,19 +43,34 @@ func extrapolate(arr []int) int {
 		tempArrSum = intz.Sum1D(tempArr)
 		arr = tempArr
 	}
-	fmt.Println(lastElemItr)
 	evalue := 0
-	for _, v := range lastElemItr {
-		evalue += v
+	for i := len(lastElemItr) - 1; i >= 0; i-- {
+		evalue += lastElemItr[i]
+	}
+	return evalue
+}
+
+/***** P2 Functions *****/
+func extrapolateP2(arr []int) int {
+	firstElemItr := make([]int, 0)
+	firstElemItr = append(firstElemItr, arr[0])
+	for tempArrSum := -1; tempArrSum != 0; {
+		tempArr := make([]int, 0)
+		for i := 0; i < len(arr)-1; i++ {
+			tempArr = append(tempArr, arr[i+1]-arr[i])
+		}
+		firstElemItr = append(firstElemItr, tempArr[0])
+		tempArrSum = intz.Sum1D(tempArr)
+		arr = tempArr
+	}
+	evalue := 0
+	for i := len(firstElemItr) - 1; i >= 0; i-- {
+		evalue = firstElemItr[i] - evalue
 	}
 
 	return evalue
 
 }
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
 
 /***** Input *****/
 

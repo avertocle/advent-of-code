@@ -10,6 +10,8 @@ import (
 
 var gInput map[int][]*cubeCx
 
+const DirPath = "../2023/day01"
+
 func SolveP1() string {
 	ans := 0
 	refGame := newCubeCx(12, 13, 14)

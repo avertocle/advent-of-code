@@ -11,6 +11,8 @@ import (
 
 var gInput [][][]int
 
+const DirPath = "../2023/day04"
+
 func SolveP1() string {
 	ans := 0
 	for i, _ := range gInput {
