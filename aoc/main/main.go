@@ -25,7 +25,7 @@ func main() {
 	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dirPath, err)
 
 	//inputFileNames = []string{"input_small_02.txt"}
-	inputFileNames = []string{"input_final.txt"}
+	//inputFileNames = []string{"input_final.txt"}
 
 	var ansP1, ansP2 string
 	var ifPath string
