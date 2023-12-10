@@ -1,12 +1,12 @@
 /*
 Generic main.go for all aoc packages
-Just change the import and dirPath
+Just change the import
 */
 package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day06"
+	prob "github.com/avertocle/contests/aoc/2023/day07"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-const dirPath = "../2023/day06"
+const dirPath = prob.DirPath
 
 func main() {
 	args := os.Args

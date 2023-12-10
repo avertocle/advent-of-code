@@ -6,6 +6,8 @@ import (
 	"github.com/avertocle/contests/io/iutils"
 )
 
+const DirPath = "../20XX/dayXX"
+
 var gInput []string
 
 func SolveP1() string {
