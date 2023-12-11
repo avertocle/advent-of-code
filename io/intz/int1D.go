@@ -64,6 +64,16 @@ func Mul1D(arr []int) int {
 	})
 }
 
+func CountLesser1D(arr []int, v int) int {
+	ctr := 0
+	for i := 0; i < len(arr); i++ {
+		if arr[i] < v {
+			ctr++
+		}
+	}
+	return ctr
+}
+
 // f : (ans, arr, i) => ans
 func Reduce1D(arr []int, initVal int, f func(int, []int, int) int) int {
 	if len(arr) == 0 {
