@@ -8,6 +8,8 @@ import (
 
 var gInput []string
 
+const DirPath = "../2023/day12"
+
 func SolveP1() string {
 	ans := "0"
 	return fmt.Sprintf("%v", ans)

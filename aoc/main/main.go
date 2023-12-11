@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day11"
+	prob "github.com/avertocle/contests/aoc/2023/day07"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -59,7 +59,7 @@ func displayPrettyHeader() {
 func displayPrettyResult(ifName, ansP1, ansP2 string) {
 	fmt.Println()
 	displayPrettyHorLine()
-	fmt.Printf("%v : ansP1 = %v : ans-P2 = %v\n",
+	fmt.Printf("%v : ans-P1 = %v : ans-P2 = %v\n",
 		clr.Str(ifName, clr.Yellow),
 		clr.Str(ansP1, clr.Green),
 		clr.Str(ansP2, clr.Green))

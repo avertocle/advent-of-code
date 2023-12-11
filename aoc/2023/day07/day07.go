@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -25,18 +26,120 @@ const (
 
 func SolveP1() string {
 	ans := 0
-	cardStrengthMap := makeCardMapP1()
-	sortHands(gInputHands, cardStrengthMap)
+	cardStrengthMap := makeCardStrengthMapP1()
+	calcHandType := calcHandTypeP1
+	sortHands(gInputHands, cardStrengthMap, calcHandType)
 	ans = calcTotalWinnings(gInputHands)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
 	ans := 0
-	cardStrengthMap := makeCardMapP2()
-	sortHands(gInputHands, cardStrengthMap)
+	cardStrengthMap := makeCardStrengthMapP2()
+	calcHandType := calcHandTypeP2
+	sortHands(gInputHands, cardStrengthMap, calcHandType)
 	ans = calcTotalWinnings(gInputHands)
 	return fmt.Sprintf("%v", ans)
+}
+
+/***** P1 Functions *****/
+
+func makeCardStrengthMapP1() map[byte]int {
+	cMap := make(map[byte]int)
+	for i := 2; i < 10; i++ {
+		cMap['0'+byte(i)] = i
+	}
+	cMap['T'] = 10
+	cMap['J'] = 11
+	cMap['Q'] = 12
+	cMap['K'] = 13
+	cMap['A'] = 14
+	return cMap
+}
+func calcHandTypeP1(hand string) int {
+	handKey, _ := getHandKeyAndJCount(hand)
+	switch handKey {
+	case "5":
+		return FiveOfAKind
+	case "14":
+		return FourOfAKind
+	case "23":
+		return FullHouse
+	case "113":
+		return ThreeOfAKind
+	case "122":
+		return TwoPair
+	case "1112":
+		return OnePair
+	case "11111":
+		return HighCard
+	}
+	errz.HardAssert(false, "invalid hand(%v) handKey(%v)", hand, handKey)
+	return -1
+}
+
+/***** P2 Functions *****/
+
+func calcHandTypeP2(hand string) int {
+	handKey, jcount := getHandKeyAndJCount(hand)
+	handKey = fmt.Sprintf("%v-%v", handKey, jcount)
+	switch handKey {
+	case "5-0", "5-5", "14-1", "14-4":
+		return FiveOfAKind
+	case "14-0":
+		return FourOfAKind
+	case "23-0":
+		return FullHouse
+	case "23-2", "23-3":
+		return FiveOfAKind
+	case "113-0":
+		return ThreeOfAKind
+	case "113-1", "113-3":
+		return FourOfAKind
+	case "122-0":
+		return TwoPair
+	case "122-1":
+		return FullHouse
+	case "122-2":
+		return FourOfAKind
+	case "1112-0":
+		return OnePair
+	case "1112-1", "1112-2":
+		return ThreeOfAKind
+	case "11111-0":
+		return HighCard
+	case "11111-1":
+		return OnePair
+	}
+	errz.HardAssert(false, "invalid hand(%v) cardKey(%v) handKey(%v)", hand, handKey)
+	return -2
+}
+
+func makeCardStrengthMapP2() map[byte]int {
+	cMap := makeCardStrengthMapP1()
+	cMap['J'] = 1
+	return cMap
+}
+
+func getHandKeyAndJCount(h string) (string, int) {
+	cMap := makeCharCountMap([]byte(h))
+	vals := make([]int, 0)
+	for _, v := range cMap {
+		vals = append(vals, v)
+	}
+
+	// handKey = string card-counts in ascending order
+	sort.Ints(vals)
+	key := ""
+	for _, v := range vals {
+		key += fmt.Sprintf("%v", v)
+	}
+
+	jcount := 0
+	if v, ok := cMap['J']; ok {
+		jcount = v
+	}
+	return key, jcount
 }
 
 /***** Common Functions *****/
@@ -45,25 +148,26 @@ func calcTotalWinnings(sortedHands []string) int {
 	w := 0
 	for i, h := range sortedHands {
 		v := gInput[h]
-		fmt.Println(v, i+1)
+		//fmt.Println(v, i+1, sortedHands[i])
 		w += v * (i + 1)
 	}
 	return w
 }
 
-func sortHands(hands []string, cardStrengthMap map[byte]int) {
+func sortHands(hands []string, cardStrengthMap map[byte]int, calcHandType func(string) int) {
 	for i := 0; i < len(hands); i++ {
 		for j := i + 1; j < len(hands); j++ {
-			if compareHands(hands[i], hands[j], cardStrengthMap) > 0 {
+			if compareHands(hands[i], hands[j], cardStrengthMap, calcHandType) > 0 {
 				hands[i], hands[j] = hands[j], hands[i]
 			}
 		}
 	}
 }
 
-func compareHands(h1, h2 string, cardStrengthMap map[byte]int) int {
+func compareHands(h1, h2 string, cardStrengthMap map[byte]int, calcHandType func(string) int) int {
 	h1Type := calcHandType(h1)
 	h2Type := calcHandType(h2)
+	//fmt.Println(h1, h2, h1Type, h2Type)
 	if h1Type > h2Type {
 		return -1
 	} else if h1Type < h2Type {
@@ -83,36 +187,6 @@ func compareHands(h1, h2 string, cardStrengthMap map[byte]int) int {
 	}
 	errz.HardAssert(false, "invalid hands | [%v], [%v]", h1, h2)
 	return 0
-	//return compareHandsSameType(h1, h2, h1Type, cardStrengthMap)
-}
-
-func calcHandType(h string) int {
-	cMap := makeCharCountMap([]byte(h))
-	if len(cMap) == 1 {
-		return FiveOfAKind
-	} else if len(cMap) == 2 {
-		for _, v := range cMap {
-			if v == 4 {
-				return FourOfAKind
-			} else if v == 3 {
-				return FullHouse
-			}
-		}
-	} else if len(cMap) == 3 {
-		for _, v := range cMap {
-			if v == 3 {
-				return ThreeOfAKind
-			} else if v == 2 {
-				return TwoPair
-			}
-		}
-	} else if len(cMap) == 4 {
-		return OnePair
-	} else {
-		return HighCard
-	}
-	errz.HardAssert(false, "invalid hand | %v, cmap(%v)", h, len(cMap))
-	return -1
 }
 
 func makeCharCountMap(bh []byte) map[byte]int {
@@ -125,10 +199,6 @@ func makeCharCountMap(bh []byte) map[byte]int {
 	}
 	return cMap
 }
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
 
 /***** Input *****/
 
@@ -144,23 +214,4 @@ func ParseInput(inputFilePath string) {
 	}
 	//fmt.Println(gInputHands)
 	//fmt.Println(gInput)
-}
-
-func makeCardMapP1() map[byte]int {
-	cMap := make(map[byte]int)
-	for i := 2; i < 10; i++ {
-		cMap['0'+byte(i)] = i
-	}
-	cMap['T'] = 10
-	cMap['J'] = 11
-	cMap['Q'] = 12
-	cMap['K'] = 13
-	cMap['A'] = 14
-	return cMap
-}
-
-func makeCardMapP2() map[byte]int {
-	cMap := makeCardMapP1()
-	cMap['J'] = 1
-	return cMap
 }
