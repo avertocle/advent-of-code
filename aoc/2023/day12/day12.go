@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"strings"
 )
 
-var gInput []string
+var gInputPatterns []string
+var gInputCounts [][]int
 
 const DirPath = "../2023/day12"
 
@@ -31,5 +33,13 @@ func SolveP2() string {
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	errz.HardAssert(err == nil, "iutils error | %v", err)
-	gInput = lines
+	gInputPatterns = make([]string, len(lines))
+	gInputCounts = make([][]int, len(lines))
+	for i, line := range lines {
+		tokens := strings.Fields(line)
+		gInputPatterns[i] = tokens[0]
+		gInputCounts[i] = iutils.ExtractInt1DFromString0D(tokens[1], ",", -1)
+	}
+	fmt.Println(gInputPatterns)
+	fmt.Println(gInputCounts)
 }

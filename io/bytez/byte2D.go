@@ -107,6 +107,24 @@ func Transpose2D(arr [][]byte) [][]byte {
 	return ans
 }
 
+func RotateClockwise2D(arr [][]byte) [][]byte {
+	if len(arr) == 0 || len(arr[0]) == 0 {
+		return arr
+	}
+
+	numRows, numCols := len(arr), len(arr[0])
+	rotated := make([][]byte, numCols)
+
+	for i := range rotated {
+		rotated[i] = make([]byte, numRows)
+		for j := range arr {
+			rotated[i][j] = arr[numRows-j-1][i]
+		}
+	}
+
+	return rotated
+}
+
 /*
 FindBounds2D
 returns top-left and bottom-right bounds of the array

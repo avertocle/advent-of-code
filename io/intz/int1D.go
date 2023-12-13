@@ -24,27 +24,27 @@ func FindByVal1D(arr []int, v int) []int {
 }
 
 func FindMax1D(arr []int) (int, int) {
-	max := arr[0]
+	maxx := arr[0]
 	pos := 0
 	for i, x := range arr {
-		if x > max {
-			max = x
+		if x > maxx {
+			maxx = x
 			pos = i
 		}
 	}
-	return max, pos
+	return maxx, pos
 }
 
 func FindMin1D(arr []int) (int, int) {
-	min := arr[0]
+	minn := arr[0]
 	pos := 0
 	for i, x := range arr {
-		if x < min {
-			min = x
+		if x < minn {
+			minn = x
 			pos = i
 		}
 	}
-	return min, pos
+	return minn, pos
 }
 
 func FindMid1D(arr []int) int {
@@ -98,10 +98,9 @@ func Reduce1DBuggy(arr []int, f func(int, []int, int) int) int {
 	return ans
 }
 
-// f : (ans, arr, i) => ans
 func Map1D(arr []int, f func([]int, int) int) {
 	for i := 0; i < len(arr); i++ {
-		arr[0] = f(arr, i)
+		arr[i] = f(arr, i)
 	}
 }
 
