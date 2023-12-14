@@ -85,15 +85,19 @@ func FindNestedMatch(arr []byte, endByte byte) int {
 }
 
 func Count1D(arr []byte, v byte) int {
-	return CountIf1D(arr, func(b byte, i int) bool {
-		return b == v
-	})
+	count := 0
+	for _, b := range arr {
+		if b == v {
+			count++
+		}
+	}
+	return count
 }
 
-func CountIf1D(arr []byte, f func(byte, int) bool) int {
+func CountIf1D(arr []byte, f func(byte) bool) int {
 	count := 0
-	for i, b := range arr {
-		if f(b, i) {
+	for _, b := range arr {
+		if f(b) {
 			count++
 		}
 	}

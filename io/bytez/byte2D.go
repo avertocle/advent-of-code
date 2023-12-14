@@ -17,6 +17,22 @@ func Init2D(rows, cols int, b byte) [][]byte {
 	return ans
 }
 
+func Compare2D(a, b [][]byte) int {
+	if len(a) != len(b) || len(a[0]) != len(b[0]) {
+		return -1
+	}
+	diffElemCount := 0
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < len(a[0]); j++ {
+			if a[i][j] != b[i][j] {
+				diffElemCount++
+				return diffElemCount
+			}
+		}
+	}
+	return diffElemCount
+}
+
 func Copy2D(source [][]byte) [][]byte {
 	return Extract2D(source, []int{0, 0}, []int{len(source) - 1, len(source[0]) - 1}, 0)
 }
