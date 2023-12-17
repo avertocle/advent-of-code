@@ -1,6 +1,8 @@
 package intz
 
-import "sort"
+import (
+	"sort"
+)
 
 func Init1D(size, val int) []int {
 	ans := make([]int, size)
@@ -10,6 +12,14 @@ func Init1D(size, val int) []int {
 	Map1D(ans, func(arr []int, i int) int {
 		return val
 	})
+	return ans
+}
+
+func Repeat1D(arr []int, count int) []int {
+	ans := make([]int, len(arr)*count)
+	for i, _ := range ans {
+		ans[i] = arr[i%len(arr)]
+	}
 	return ans
 }
 
@@ -131,4 +141,17 @@ func Contains1D(arr []int, v int) bool {
 		}
 	}
 	return false
+}
+
+func Compare1D(a, b []int) int {
+	if len(a) != len(b) {
+		return -1
+	}
+	diffCount := 0
+	for i, x := range a {
+		if x != b[i] {
+			diffCount++
+		}
+	}
+	return diffCount
 }

@@ -26,7 +26,6 @@ func Compare2D(a, b [][]byte) int {
 		for j := 0; j < len(a[0]); j++ {
 			if a[i][j] != b[i][j] {
 				diffElemCount++
-				return diffElemCount
 			}
 		}
 	}

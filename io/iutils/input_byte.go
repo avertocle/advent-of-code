@@ -67,6 +67,9 @@ ExtractByte1DFromString0D extracts []byte consisting of one char from token
 "abc,de,fgh" ; col=2 ; defaultVal=0 ==> [c,0,h]
 */
 func ExtractByte1DFromString0D(line string, sep string, col int, defaultVal byte) []byte {
+	if col == -1 {
+		return []byte(line)
+	}
 	tokens := strings.Split(line, sep)
 	ans := make([]byte, len(tokens))
 	for i, t := range tokens {

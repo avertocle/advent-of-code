@@ -12,6 +12,14 @@ func Init1D(size int, b byte) []byte {
 	return ans
 }
 
+func Repeat1D(arr []byte, count int) []byte {
+	ans := make([]byte, len(arr)*count)
+	for i, _ := range ans {
+		ans[i] = arr[i%len(arr)]
+	}
+	return ans
+}
+
 func FindSubseq1D(arr, pat []byte) []int {
 	lenA := len(arr)
 	lenP := len(pat)
@@ -61,6 +69,16 @@ func FindFirst(arr []byte, b byte) int {
 		}
 	}
 	return -1
+}
+
+func FindAll(arr []byte, b byte) []int {
+	ans := make([]int, 0)
+	for i, c := range arr {
+		if c == b {
+			ans = append(ans, i)
+		}
+	}
+	return ans
 }
 
 /*
