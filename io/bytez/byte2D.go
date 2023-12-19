@@ -163,6 +163,20 @@ func FindBounds2D(arr [][]byte, empty byte) ([]int, []int) {
 	return []int{tli, tlj}, []int{bri, brj}
 }
 
+/*
+fill the grid from all 4 sides till it finds the stopChar
+*/
+func floodFill(ground [][]byte, fillByte, stopByte byte) {
+	for i := 0; i < len(ground); i++ {
+
+	}
+
+}
+
+func IsValidIndex(arr [][]byte, i, j int) bool {
+	return i >= 0 && i < len(arr) && j >= 0 && j < len(arr[0])
+}
+
 func PPrint2D(arr [][]byte) {
 	fmt.Println()
 	for _, row := range arr {
