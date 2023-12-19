@@ -1,5 +1,7 @@
 package mathz
 
+import "github.com/avertocle/contests/io/intz"
+
 func GCD(a, b int) int {
 	for b != 0 {
 		t := b
@@ -17,6 +19,14 @@ func LCMArr(arr []int) int {
 	ans := arr[0]
 	for i := 1; i < len(arr); i++ {
 		ans = LCM(ans, arr[i])
+	}
+	return ans
+}
+
+func GCDArr(arr []int) int {
+	ans := 1
+	for i := 1; i < len(arr); i++ {
+		ans = intz.Min(ans, GCD(ans, arr[i]))
 	}
 	return ans
 }

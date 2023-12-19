@@ -7,7 +7,7 @@ import (
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"math"
-	"strings"
+	"strconv"
 )
 
 var gInputDirec []byte
@@ -17,23 +17,62 @@ var gInputColor []string
 const DirPath = "../2023/day18"
 
 func SolveP1() string {
-	ans := 0
-	ground := digHole()
-	fmt.Println(len(ground), len(ground[0]))
-	floodFill(ground, []int{0, 0})
-	//floodFillV2(ground)
-	bytez.PPrint2D(ground)
-	ans += bytez.Count2D(ground, '#')
-	ans += bytez.Count2D(ground, '.')
+	//ans := 0
+	//ground := digHole()
+	//floodFill(ground, []int{0, 0})
+	//ans += bytez.Count2D(ground, '#')
+	//ans += bytez.Count2D(ground, '.')
+	//return fmt.Sprintf("%v", ans)
+	ans := int64(0)
+	holeVertices := digHoleV2()
+	fmt.Println(holeVertices)
+	fmt.Println(len(holeVertices))
+	area := findPolygonArea(holeVertices)
+	circ := int64(findPolygonCircumference(holeVertices))
+	verts := int64(len(holeVertices))
+	fmt.Println(area, circ, verts)
+	ans = area + circ/2 + 1
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	ans := int64(0)
+	// 0 means R, 1 means D, 2 means L, and 3 means U.
+	dirInts := []byte{'R', 'D', 'L', 'U'}
+	for i, c := range gInputColor {
+		x, _ := strconv.ParseInt(string([]byte(c)[2:7]), 16, 32)
+		gInputDist[i] = int(x)
+		gInputDirec[i] = dirInts[[]byte(c)[7]-'0']
+		//fmt.Printf("%v %v %v\n", string([]byte(c)[2:7]), gInputDist[i], string(gInputDirec[i]))
+	}
+	holeVertices := digHoleV2()
+	fmt.Println(holeVertices)
+	fmt.Println(len(holeVertices))
+	area := findPolygonArea(holeVertices)
+	circ := int64(findPolygonCircumference(holeVertices))
+	verts := int64(len(holeVertices))
+	fmt.Println(area, circ, verts)
+	ans = area + circ/2 + 1
 	return fmt.Sprintf("%v", ans)
 }
 
 /***** Common Functions *****/
+
+func digHoleV2() [][]int {
+	spos := []int{0, 0}
+	holeVertices := [][]int{spos}
+	l, r, u, d := math.MaxInt, math.MinInt, math.MaxInt, math.MinInt
+	for i := 0; i < len(gInputDirec); i++ {
+		spos = tracePathV2(spos, gInputDist[i], gInputDirec[i])
+		holeVertices = append(holeVertices, spos)
+		l, r, u, d = intz.Min(l, spos[1]), intz.Max(r, spos[1]), intz.Min(u, spos[0]), intz.Max(d, spos[0])
+	}
+	for i := 0; i < len(holeVertices); i++ {
+		holeVertices[i][0] -= u
+		holeVertices[i][1] -= l
+	}
+	return holeVertices
+}
 
 func digHole() [][]byte {
 	l, r, u, d := calcGridDimensions()
@@ -44,10 +83,38 @@ func digHole() [][]byte {
 		spos = tracePath(ground, spos, gInputDist[i], gInputDirec[i])
 		l, r, u, d = intz.Min(l, spos[1]), intz.Max(r, spos[1]), intz.Min(u, spos[0]), intz.Max(d, spos[0])
 	}
-	fmt.Println(l, r, u, d)
 	ground = bytez.Extract2D(ground, []int{u, l}, []int{d, r}, 'o')
 	ground = bytez.Pad2D(ground, len(ground), len(ground[0]), 1, '.')
 	return ground
+}
+func findPolygonArea(vertices [][]int) int64 {
+	//Let 'vertices' be an array of N pairs (x,y), indexed from 0
+	//Let 'area' = 0.0
+	//for i = 0 to N-1, do
+	//Let j = (i+1) mod N
+	//Let area = area + vertices[i].x * vertices[j].y
+	//Let area = area - vertices[i].y * vertices[j].x
+	//end for
+	//	Return 'area'
+	area := int64(0)
+	for i := 0; i < len(vertices)-1; i++ {
+		j := i + 1
+		area += int64(vertices[i][1])*int64(vertices[j][0]) - int64(vertices[i][0])*int64(vertices[j][1])
+	}
+	return area / 2
+}
+
+func findPolygonCircumference(vertices [][]int) int {
+	circumference := 0
+	for i := 0; i < len(vertices)-1; i++ {
+		j := (i + 1) % (len(vertices) - 1)
+		if vertices[i][0] == vertices[j][0] {
+			circumference += intz.Abs(vertices[i][1] - vertices[j][1])
+		} else {
+			circumference += intz.Abs(vertices[i][0] - vertices[j][0])
+		}
+	}
+	return circumference
 }
 
 func floodFill(ground [][]byte, cpos []int) {
@@ -67,23 +134,37 @@ func floodFill(ground [][]byte, cpos []int) {
 	}
 }
 
-func floodFillV2(ground [][]byte) {
-	for i := 0; i < len(ground); i++ {
-		for j := 0; j < len(ground[0]) && ground[i][j] == '.'; j++ {
-			ground[i][j] = 'x'
-		}
-		for j := len(ground[0]) - 1; j >= 0 && ground[i][j] == '.'; j-- {
-			ground[i][j] = 'x'
-		}
+//
+//func floodFillV2(holeVertices [][]int, cpos []int) {
+//	ground[cpos[0]][cpos[1]] = 'x'
+//	npos := [][]int{
+//		{cpos[0] - 1, cpos[1]},
+//		{cpos[0] + 1, cpos[1]},
+//		{cpos[0], cpos[1] - 1},
+//		{cpos[0], cpos[1] + 1},
+//	}
+//	for _, np := range npos {
+//		if bytez.IsValidIndex(ground, np[0], np[1]) {
+//			if ground[np[0]][np[1]] == '.' {
+//				floodFill(ground, np)
+//			}
+//		}
+//	}
+//}
+
+func tracePathV2(spos []int, dist int, direc byte) []int {
+	switch direc {
+	case 'L':
+		return []int{spos[0], spos[1] - dist}
+	case 'R':
+		return []int{spos[0], spos[1] + dist}
+	case 'U':
+		return []int{spos[0] - dist, spos[1]}
+	case 'D':
+		return []int{spos[0] + dist, spos[1]}
 	}
-	for jj := 0; jj < len(ground[0]); jj++ {
-		for ii := 0; ii < len(ground) && (ground[ii][jj] == '.' || ground[ii][jj] == 'x'); ii++ {
-			ground[ii][jj] = 'x'
-		}
-		for ii := len(ground) - 1; ii >= 0 && (ground[ii][jj] == '.' || ground[ii][jj] == 'x'); ii-- {
-			ground[ii][jj] = 'x'
-		}
-	}
+	errz.HardAssert(false, "Invalid direction | %v,%v,%v", spos, dist, direc)
+	return []int{-1, -1}
 }
 
 func tracePath(ground [][]byte, spos []int, dist int, direc byte) []int {
@@ -157,12 +238,7 @@ func calcGridDimensions() (int, int, int, int) {
 func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	errz.HardAssert(err == nil, "iutils error | %v", err)
-	gInputDirec, gInputDist, gInputColor = make([]byte, 0), make([]int, 0), make([]string, 0)
-	for _, line := range lines {
-		t := strings.Fields(line)
-		gInputDirec = append(gInputDirec, []byte(t[0])[0])
-		gInputDist = append(gInputDist, int([]byte(t[1])[0]-'0'))
-		gInputColor = append(gInputColor, t[2])
-	}
-	fmt.Println(gInputDist)
+	gInputDirec = iutils.ExtractByte1DFromString1D(lines, " ", 0, 0)
+	gInputDist = iutils.ExtractInt1DFromString1D(lines, " ", 1, -1)
+	gInputColor = iutils.ExtractString1DFromString1D(lines, " ", 2, "")
 }
