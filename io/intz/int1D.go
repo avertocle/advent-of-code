@@ -155,3 +155,14 @@ func Compare1D(a, b []int) int {
 	}
 	return diffCount
 }
+
+func FindLoop1D(arr []int) (int, int) {
+	for i := 0; i < len(arr); i++ {
+		for j := 0; j < i; j++ {
+			if arr[i] == arr[j] {
+				return j, i
+			}
+		}
+	}
+	return -1, -1
+}
