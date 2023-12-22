@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day17"
+	prob "github.com/avertocle/contests/aoc/2023/day19"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -15,58 +15,86 @@ import (
 	"strings"
 )
 
-const dirPath = prob.DirPath
-
 func main() {
+	dirPath := prob.DirPath
 	args := os.Args
-	fmt.Println(args)
-	displayPrettyHeader()
-	inputFileNames, err := iutils.GetInputFileList(dirPath)
-	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dirPath, err)
+	displayPrettyHeader(dirPath, args)
+	problems := makeProblems(dirPath, args)
+	runAll(problems)
+	displayResults(problems)
+}
 
-	inputFileNames = []string{"input_small.txt"}
-	//inputFileNames = []string{"input_final.txt"}
-
-	var ansP1, ansP2 string
-	var ifPath string
-	for _, ifName := range inputFileNames {
-		ifPath = path.Join(dirPath, ifName)
-		ansP1, ansP2 = runForOneInputFile(ifPath)
-		displayPrettyResult(ifName, ansP1, ansP2)
+func displayResults(problems []*problem) {
+	m := make(map[string]map[int]*problem)
+	for _, p := range problems {
+		if _, ok := m[p.fname]; !ok {
+			m[p.fname] = make(map[int]*problem)
+		}
+		m[p.fname][p.part] = p
 	}
+	for ifName, parts := range m {
+		p1, p2 := parts[1], parts[2]
+		displayPrettyResult(ifName, p1.ans, p2.ans)
+	}
+}
+
+func runAll(problems []*problem) {
+	for _, p := range problems {
+		prob.ParseInput(p.inputFilePath())
+		if p.part == 1 {
+			p.ans = prob.SolveP1()
+		} else if p.part == 2 {
+			p.ans = prob.SolveP2()
+		} else {
+			errz.HardAssert(false, "invalid part : %v", p.part)
+		}
+	}
+}
+
+func makeProblems(dpath string, args []string) []*problem {
+	inputFileNames, err := iutils.GetInputFileList(dpath)
+	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dpath, err)
+	problems := make([]*problem, 0)
+	//inputFileNames = []string{"input_small.txt"}
+	for _, fname := range inputFileNames {
+		problems = append(problems, newProblem(dpath, fname, 1, "na"))
+		problems = append(problems, newProblem(dpath, fname, 2, "na"))
+	}
+	return problems
+}
+
+/***** Interfaces *****/
+
+type problem struct {
+	dpath string
+	fname string
+	part  int
+	ans   string
+}
+
+func newProblem(dirPath, inputFile string, part int, ans string) *problem {
+	return &problem{dpath: dirPath, fname: inputFile, part: part, ans: ans}
+}
+
+func (p *problem) inputFilePath() string {
+	return path.Join(p.dpath, p.fname)
 }
 
 /***** Display Functions *****/
 
-func runForOneInputFile(inputFilePath string) (string, string) {
-	prob.ParseInput(inputFilePath)
-	ansP1 := prob.SolveP1()
-	prob.ParseInput(inputFilePath)
-	ansP2 := prob.SolveP2()
-	return ansP1, ansP2
-}
-
-func displayPrettyHeader() {
-	fmt.Println()
-	fmt.Println()
-	displayPrettyHorLine()
-	fmt.Println(clr.Str(fmt.Sprintf("Solving %v", dirPath), clr.Green))
-	fmt.Println()
-	//fmt.Println(clr.Str("<<< prog logs start >>>", clr.Yellow))
-	//fmt.Println()
+func displayPrettyHeader(dirPath string, args []string) {
+	line := clr.Str(fmt.Sprintf("Solving %v | %v", dirPath, args[1:]), clr.Green)
+	fmt.Printf("\n%v\n%v\n\n", horLine(), line)
 }
 
 func displayPrettyResult(ifName, ansP1, ansP2 string) {
-	fmt.Println()
-	displayPrettyHorLine()
-	fmt.Printf("%v : ans-P1 = %v : ans-P2 = %v\n",
+	line := fmt.Sprintf("%v : ans-P1 = %v : ans-P2 = %v",
 		clr.Str(ifName, clr.Yellow),
 		clr.Str(ansP1, clr.Green),
 		clr.Str(ansP2, clr.Green))
-	displayPrettyHorLine()
-	fmt.Println()
+	fmt.Printf("\n%v\n%v\n%v\n\n", horLine(), line, horLine())
 }
 
-func displayPrettyHorLine() {
-	fmt.Println(clr.Str(strings.Repeat("~-", 30)+"~", clr.Yellow))
+func horLine() string {
+	return clr.Str(strings.Repeat("~-", 30)+"~", clr.Yellow)
 }

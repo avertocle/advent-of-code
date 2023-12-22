@@ -22,3 +22,8 @@ func Int(i int, color string) string {
 	s := fmt.Sprintf("%v", i)
 	return Str(s, color)
 }
+
+func Gen(i interface{}, color string) string {
+	s := fmt.Sprintf("%v", i)
+	return Str(s, color)
+}

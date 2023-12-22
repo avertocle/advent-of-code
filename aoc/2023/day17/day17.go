@@ -22,11 +22,11 @@ const (
 
 func SolveP1() string {
 	ans := 0
-	ps := newState(len(gInput), len(gInput[0]), 4, 4)
-	startNode := ps.getNode(0, 0, 0, 0)
-	ps.setCost(startNode, 0)
-	goDijkstra(gInput, startNode, ps)
-	ans, _ = intz.Min2D(ps.heatLossMap[len(gInput)-1][len(gInput[0])-1])
+	//ps := newState(len(gInput), len(gInput[0]), 4, 4, 0, 3)
+	//startNode := ps.getNode(0, 0, 0, 0)
+	//ps.setCost(startNode, 0)
+	//goDijkstra(gInput, startNode, ps)
+	//ans = ps.getEndNodeMinCost()
 	return fmt.Sprintf("%v", ans)
 
 	//printHM(currState.heatLossMap)
@@ -37,7 +37,12 @@ func SolveP1() string {
 }
 
 func SolveP2() string {
-	ans := "0"
+	ans := 0
+	ps := newState(len(gInput), len(gInput[0]), 4, 11, 4, 10)
+	startNode := ps.getNode(0, 0, 0, 0)
+	ps.setCost(startNode, 0)
+	goDijkstra(gInput, startNode, ps)
+	ans = ps.getEndNodeMinCost()
 	return fmt.Sprintf("%v", ans)
 }
 
@@ -45,38 +50,37 @@ func SolveP2() string {
 
 /***** P1 Functions *****/
 
-func goDijkstra(ground [][]int, cn *node, cs *state) {
-	nbrs := getValidNeighbours(ground, cn, cs)
+func goDijkstra(ground [][]int, cn *node, ps *state) {
+	if cn == nil {
+		return
+	}
+	nbrs := getValidNeighbours(ground, cn, ps)
 	for _, nb := range nbrs {
 		h := ground[nb.i][nb.j]
-		costCn := cs.getCost(cn)
-		costNb := cs.getCost(nb)
+		costCn := ps.getCost(cn)
+		costNb := ps.getCost(nb)
 		c := 0
 		if costCn == math.MaxInt {
 			c = costNb
 		} else {
 			c = intz.Min(costCn+h, costNb)
 		}
-		cs.setCost(nb, c)
+		ps.setCost(nb, c)
 	}
-	cs.visit(cn)
-	delete(cs.unvisited, cn.keyStr())
-	//fmt.Println(cs.unvisited)
-	nn := getNextNode(cs, nbrs)
-	if nn != nil {
-		goDijkstra(ground, nn, cs)
-	}
+	ps.visit(cn)
+	nn := getNextNode(nbrs, ps)
+	goDijkstra(ground, nn, ps)
 }
 
-func getNextNode(cs *state, nbrs []*node) *node {
+func getNextNode(nbrs []*node, ps *state) *node {
 	for _, n := range nbrs {
-		if !cs.isVisited(n) {
-			cs.unvisited[n.keyStr()] = n
+		if !ps.isVisited(n) {
+			ps.unvisited[n.keyStr()] = n
 		}
 	}
 	nn, nnCost := (*node)(nil), math.MaxInt
-	for _, n := range cs.unvisited {
-		c := cs.getCost(n)
+	for _, n := range ps.unvisited {
+		c := ps.getCost(n)
 		if c < nnCost {
 			nn = n
 			nnCost = c
@@ -85,44 +89,52 @@ func getNextNode(cs *state, nbrs []*node) *node {
 	return nn
 }
 
-func getValidNeighbours(ground [][]int, cn *node, cs *state) []*node {
+func getValidNeighbours(ground [][]int, cn *node, ps *state) []*node {
 	switch cn.v {
 	case U:
 		return makeNodes(ground, [][]int{
-			{cn.i - 1, cn.j, U, cn.d + 1},
-			{cn.i, cn.j - 1, L, 1},
-			{cn.i, cn.j + 1, R, 1},
-		}, cs)
+			{cn.i - 1, cn.j, U, cn.d + 1, cn.d, 0},
+			{cn.i, cn.j - 1, L, 1, cn.d, 1},
+			{cn.i, cn.j + 1, R, 1, cn.d, 1},
+		}, ps)
 	case D:
 		return makeNodes(ground, [][]int{
-			{cn.i + 1, cn.j, D, cn.d + 1},
-			{cn.i, cn.j - 1, L, 1},
-			{cn.i, cn.j + 1, R, 1},
-		}, cs)
+			{cn.i + 1, cn.j, D, cn.d + 1, cn.d, 0},
+			{cn.i, cn.j - 1, L, 1, cn.d, 1},
+			{cn.i, cn.j + 1, R, 1, cn.d, 1},
+		}, ps)
 	case L:
 		return makeNodes(ground, [][]int{
-			{cn.i, cn.j - 1, L, cn.d + 1},
-			{cn.i - 1, cn.j, U, 1},
-			{cn.i + 1, cn.j, D, 1},
-		}, cs)
+			{cn.i, cn.j - 1, L, cn.d + 1, cn.d, 0},
+			{cn.i - 1, cn.j, U, 1, cn.d, 1},
+			{cn.i + 1, cn.j, D, 1, cn.d, 1},
+		}, ps)
 	case R:
 		return makeNodes(ground, [][]int{
-			{cn.i, cn.j + 1, R, cn.d + 1},
-			{cn.i - 1, cn.j, U, 1},
-			{cn.i + 1, cn.j, D, 1},
-		}, cs)
+			{cn.i, cn.j + 1, R, cn.d + 1, cn.d, 0},
+			{cn.i - 1, cn.j, U, 1, cn.d, 1},
+			{cn.i + 1, cn.j, D, 1, cn.d, 1},
+		}, ps)
 	}
 	errz.HardAssert(false, "invalid direction : %v", cn.v)
 	return make([]*node, 0)
 }
 
-func makeNodes(ground [][]int, indexes [][]int, cs *state) []*node {
+func makeNodes(ground [][]int, indexes [][]int, ps *state) []*node {
 	nodes := make([]*node, 0)
 	for _, idx := range indexes {
-		if idx[0] >= 0 && idx[0] < len(ground) && idx[1] >= 0 && idx[1] < len(ground[0]) && idx[3] < 4 {
-			n := cs.getNode(idx[0], idx[1], idx[2], idx[3])
-			nodes = append(nodes, n)
+		if idx[0] < 0 || idx[0] >= len(ground) || idx[1] < 0 || idx[1] >= len(ground[0]) {
+			continue
 		}
+		if idx[3] > ps.maxTurnDist {
+			continue
+		}
+		if idx[5] == 1 && idx[4] > 0 && idx[4] < ps.minTurnDist {
+			continue
+		}
+		n := ps.getNode(idx[0], idx[1], idx[2], idx[3])
+		errz.HardAssert(n != nil, "invalid node : %v", idx)
+		nodes = append(nodes, n)
 	}
 	return nodes
 }
@@ -166,10 +178,13 @@ type state struct {
 	nodeMap     map[string]*node
 	visited     map[string]bool
 	unvisited   map[string]*node
+	minTurnDist int
+	maxTurnDist int
 }
 
 func (s *state) visit(n *node) {
 	s.visited[n.keyStr()] = true
+	delete(s.unvisited, n.keyStr())
 }
 
 func (s *state) isVisited(n *node) bool {
@@ -194,12 +209,14 @@ func (s *state) getEndNodeMinCost() int {
 	return c
 }
 
-func newState(d1, d2, d3, d4 int) *state {
+func newState(d1, d2, d3, d4, mitd, matd int) *state {
 	s := &state{}
-	s.heatLossMap = intz.Init4D(len(gInput), len(gInput[0]), 4, 4, math.MaxInt)
+	s.heatLossMap = intz.Init4D(len(gInput), len(gInput[0]), d3, d4, math.MaxInt)
 	s.nodeMap = make(map[string]*node)
 	s.visited = make(map[string]bool)
 	s.unvisited = make(map[string]*node)
+	s.minTurnDist = mitd
+	s.maxTurnDist = matd
 	for i := 0; i < d1; i++ {
 		for j := 0; j < d2; j++ {
 			for v := 0; v < d3; v++ {
