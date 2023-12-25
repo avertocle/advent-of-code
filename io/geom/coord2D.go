@@ -2,6 +2,7 @@ package geom
 
 import "fmt"
 
+// Coord2d deprecated : use Coord2D
 type Coord2d struct {
 	X int
 	Y int
