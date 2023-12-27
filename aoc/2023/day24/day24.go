@@ -40,9 +40,9 @@ func SolveP1() string {
 			}
 		}
 	}
-	geom.PPrintCoord2D(intersects)
-	fmt.Println()
-	geom.PPrintCoord2D(intersectsIn)
+	//geom.PPrintCoord2D(intersects)
+	//fmt.Println()
+	//geom.PPrintCoord2D(intersectsIn)
 
 	ans = len(intersectsIn)
 	return fmt.Sprintf("%v", ans)

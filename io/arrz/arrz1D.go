@@ -20,3 +20,13 @@ func PPrint1D[T cmz.PrimitivePlus](arr []T, withIndex bool) {
 	}
 	fmt.Println()
 }
+
+func PPrint2D[T cmz.PrimitivePlus](arr [][]T) {
+	for _, row := range arr {
+		for _, cell := range row {
+			fmt.Printf("(%v) | ", clr.Gen(cell, clr.Cyan))
+		}
+		fmt.Println()
+	}
+	fmt.Println()
+}
