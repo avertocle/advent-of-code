@@ -17,6 +17,25 @@ func Init2D(rows, cols int, b byte) [][]byte {
 	return ans
 }
 
+func Compare2D(a, b [][]byte) int {
+	if len(a) != len(b) || len(a[0]) != len(b[0]) {
+		return -1
+	}
+	diffElemCount := 0
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < len(a[0]); j++ {
+			if a[i][j] != b[i][j] {
+				diffElemCount++
+			}
+		}
+	}
+	return diffElemCount
+}
+
+func Copy2D(source [][]byte) [][]byte {
+	return Extract2D(source, []int{0, 0}, []int{len(source) - 1, len(source[0]) - 1}, 0)
+}
+
 func CountInSection2D(arr [][]byte, boundTl, boundBr []int, v byte) int {
 	return CountIf2D(arr, func(b byte, i int, j int) bool {
 		if i >= boundTl[0] && i <= boundBr[0] &&
@@ -26,6 +45,18 @@ func CountInSection2D(arr [][]byte, boundTl, boundBr []int, v byte) int {
 			return false
 		}
 	})
+}
+
+func Find2D(grid [][]byte, v byte) [][]int {
+	ans := make([][]int, 0)
+	for i, row := range grid {
+		for j, cell := range row {
+			if cell == v {
+				ans = append(ans, []int{i, j})
+			}
+		}
+	}
+	return ans
 }
 
 func Count2D(grid [][]byte, v byte) int {
@@ -91,6 +122,24 @@ func Transpose2D(arr [][]byte) [][]byte {
 	return ans
 }
 
+func RotateClockwise2D(arr [][]byte) [][]byte {
+	if len(arr) == 0 || len(arr[0]) == 0 {
+		return arr
+	}
+
+	numRows, numCols := len(arr), len(arr[0])
+	rotated := make([][]byte, numCols)
+
+	for i := range rotated {
+		rotated[i] = make([]byte, numRows)
+		for j := range arr {
+			rotated[i][j] = arr[numRows-j-1][i]
+		}
+	}
+
+	return rotated
+}
+
 /*
 FindBounds2D
 returns top-left and bottom-right bounds of the array
@@ -112,6 +161,20 @@ func FindBounds2D(arr [][]byte, empty byte) ([]int, []int) {
 		}
 	}
 	return []int{tli, tlj}, []int{bri, brj}
+}
+
+/*
+fill the grid from all 4 sides till it finds the stopChar
+*/
+func floodFill(ground [][]byte, fillByte, stopByte byte) {
+	for i := 0; i < len(ground); i++ {
+
+	}
+
+}
+
+func IsValidIndex(arr [][]byte, i, j int) bool {
+	return i >= 0 && i < len(arr) && j >= 0 && j < len(arr[0])
 }
 
 func PPrint2D(arr [][]byte) {

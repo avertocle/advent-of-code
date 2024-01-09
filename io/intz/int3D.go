@@ -16,6 +16,23 @@ func Init3D(d1, d2, d3, val int) [][][]int {
 	return ans
 }
 
+func Init4D(d1, d2, d3, d4, val int) [][][][]int {
+	ans := make([][][][]int, d1)
+	for i := 0; i < d1; i++ {
+		ans[i] = make([][][]int, d2)
+		for j := 0; j < d2; j++ {
+			ans[i][j] = make([][]int, d3)
+			for k := 0; k < d3; k++ {
+				ans[i][j][k] = make([]int, d4)
+				for l := 0; l < d4; l++ {
+					ans[i][j][k][l] = val
+				}
+			}
+		}
+	}
+	return ans
+}
+
 func Count3d(arr3d [][][]int, val int) int {
 	ctr := 0
 	for _, arr2d := range arr3d {

@@ -6,23 +6,25 @@ import (
 	"github.com/avertocle/contests/io/iutils"
 )
 
+const DirPath = "../20XX/dayXX"
+
 var gInput []string
 
 func SolveP1() string {
-	ans := "0"
+	ans := 0
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := "0"
+	ans := 0
 	return fmt.Sprintf("%v", ans)
 }
-
-/***** Common Functions *****/
 
 /***** P1 Functions *****/
 
 /***** P2 Functions *****/
+
+/***** Common Functions *****/
 
 /***** Input *****/
 

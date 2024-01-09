@@ -16,6 +16,20 @@ func Init2D(rows, cols, val int) [][]int {
 	return ans
 }
 
+func Min2D(arr [][]int) (int, []int) {
+	minn := arr[0][0]
+	pos := []int{0, 0}
+	for i, row := range arr {
+		for j, cell := range row {
+			if cell < minn {
+				minn = cell
+				pos = []int{i, j}
+			}
+		}
+	}
+	return minn, pos
+}
+
 func PPrint2D(arr [][]int) {
 	for _, row := range arr {
 		for _, cell := range row {

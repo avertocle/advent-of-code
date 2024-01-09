@@ -12,6 +12,14 @@ func Init1D(size int, b byte) []byte {
 	return ans
 }
 
+func Repeat1D(arr []byte, count int) []byte {
+	ans := make([]byte, len(arr)*count)
+	for i, _ := range ans {
+		ans[i] = arr[i%len(arr)]
+	}
+	return ans
+}
+
 func FindSubseq1D(arr, pat []byte) []int {
 	lenA := len(arr)
 	lenP := len(pat)
@@ -63,6 +71,16 @@ func FindFirst(arr []byte, b byte) int {
 	return -1
 }
 
+func FindAll(arr []byte, b byte) []int {
+	ans := make([]int, 0)
+	for i, c := range arr {
+		if c == b {
+			ans = append(ans, i)
+		}
+	}
+	return ans
+}
+
 /*
 FindNestedMatch
 arr[0] must be the start char
@@ -85,15 +103,19 @@ func FindNestedMatch(arr []byte, endByte byte) int {
 }
 
 func Count1D(arr []byte, v byte) int {
-	return CountIf1D(arr, func(b byte, i int) bool {
-		return b == v
-	})
+	count := 0
+	for _, b := range arr {
+		if b == v {
+			count++
+		}
+	}
+	return count
 }
 
-func CountIf1D(arr []byte, f func(byte, int) bool) int {
+func CountIf1D(arr []byte, f func(byte) bool) int {
 	count := 0
-	for i, b := range arr {
-		if f(b, i) {
+	for _, b := range arr {
+		if f(b) {
 			count++
 		}
 	}

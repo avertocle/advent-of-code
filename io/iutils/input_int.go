@@ -1,5 +1,5 @@
 /*
-- some funcs recieve error as an arg to be chainable, bad design but looks cool
+- some func(s) receive error as an arg to be chainable, bad design but looks cool
 - no error handling unless absolutely required
 #competitive-programming #in-that-zone
 */
@@ -36,7 +36,9 @@ func ExtractInt1DFromString1D(lines []string, sep string, col int, defaultVal in
 	for i, line := range lines {
 		tokens = strings.Split(line, sep)
 		ans[i] = defaultVal
-		if col < len(tokens) {
+		if col == -1 {
+			ans[i] = stringz.AtoiQ(line, defaultVal)
+		} else if col < len(tokens) {
 			ans[i] = stringz.AtoiQ(tokens[col], defaultVal)
 		}
 	}
@@ -49,9 +51,9 @@ func ExtractInt1DFromString0D(line string, sep string, defaultVal int) []int {
 	tokens := strings.Split(line, sep)
 	ans := make([]int, len(tokens))
 	for i, t := range tokens {
-		ans[i], err = strconv.Atoi(t)
+		ans[i], err = strconv.Atoi(strings.TrimSpace(t))
 		if err != nil {
-			fmt.Printf("strconv.Atoi failed for (%v) | err = %v | using default (%v) \n", t, err, defaultVal)
+			fmt.Printf("strconv.Atoi failed for line(%v) char(%v) | err = %v | using default (%v) \n", line, t, err, defaultVal)
 			ans[i] = defaultVal
 		}
 	}
