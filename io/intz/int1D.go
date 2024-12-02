@@ -166,3 +166,7 @@ func FindLoop1D(arr []int) (int, int) {
 	}
 	return -1, -1
 }
+
+func RemoveElement1D(arr []int, index int) []int {
+	return append(append([]int{}, arr[:index]...), arr[index+1:]...)
+}
