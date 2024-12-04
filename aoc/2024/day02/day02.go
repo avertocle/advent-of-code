@@ -31,12 +31,9 @@ func SolveP2() string {
 	return fmt.Sprintf("%v", ans)
 }
 
-func isSafe(arr []int) bool {
-	if isAllIncreasingWithGap(arr) || isAllDecreasingWithGap(arr) {
-		return true
-	}
-	return false
-}
+/***** P1 Functions *****/
+
+/***** P2 Functions *****/
 
 func isSafeWithLevelRemoval(arr []int) bool {
 	for i := 0; i < len(arr); i++ {
@@ -44,6 +41,15 @@ func isSafeWithLevelRemoval(arr []int) bool {
 		if isSafe(remArray) {
 			return true
 		}
+	}
+	return false
+}
+
+/***** Common Functions *****/
+
+func isSafe(arr []int) bool {
+	if isAllIncreasingWithGap(arr) || isAllDecreasingWithGap(arr) {
+		return true
 	}
 	return false
 }
@@ -65,12 +71,6 @@ func isAllDecreasingWithGap(arr []int) bool {
 	}
 	return true
 }
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
-
-/***** Common Functions *****/
 
 /***** Input *****/
 

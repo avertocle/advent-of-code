@@ -58,6 +58,10 @@ func SolveP2() string {
 	return fmt.Sprintf("%v", ans)
 }
 
+/***** P1 Functions *****/
+
+/***** P2 Functions *****/
+
 func findLastBeforeMe(expIdx []int, arr [][]int) []int {
 	for i := len(arr) - 1; i >= 0; i-- {
 		if arr[i][1]-1 < expIdx[0] { // slice [a:b] is from index 'a' to 'b-1'
@@ -67,17 +71,13 @@ func findLastBeforeMe(expIdx []int, arr [][]int) []int {
 	return nil
 }
 
+/***** Common Functions *****/
+
 func evaluate(s string) int {
 	tokens := stringz.SplitMulti(s, []string{"(", ",", ")"})
 	result := stringz.AtoiQ(tokens[1], 0) * stringz.AtoiQ(tokens[2], 0)
 	return result
 }
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
-
-/***** Common Functions *****/
 
 /***** Input *****/
 
