@@ -34,8 +34,8 @@ func SolveP2() string {
 /***** Common Functions *****/
 
 func changeCubeState(cube [][][]int, offset []int, bounds [][]int, beg, end *geom.Coord3d, val int) {
-	beg.Trim(bounds).Move(offset)
-	end.Trim(bounds).Move(offset)
+	beg.Trim(bounds).MoveBy(offset)
+	end.Trim(bounds).MoveBy(offset)
 	_ = intz.SetSub3D(cube,
 		[]int{beg.X, end.X},
 		[]int{beg.Y, end.Y},
