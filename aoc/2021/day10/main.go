@@ -62,7 +62,7 @@ func problem2(input [][]byte) (int, int) {
 	}
 	fmt.Printf("syn-errors : %q\n", errors)
 	fmt.Printf("auto-comp-scores :%v\n", autoCompScores)
-	return errorScore, intz.FindMid1D(autoCompScores)
+	return errorScore, intz.FindSortedMid1D(autoCompScores)
 }
 
 func isOpeningBrace(b byte) bool {

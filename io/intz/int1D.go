@@ -1,7 +1,7 @@
 package intz
 
 import (
-	"sort"
+	"slices"
 )
 
 func Init1D(size, val int) []int {
@@ -58,8 +58,18 @@ func FindMin1D(arr []int) (int, int) {
 }
 
 func FindMid1D(arr []int) int {
-	sort.Ints(arr)
 	return arr[len(arr)/2]
+}
+
+func CopyAndSort1D(arr []int) []int {
+	sortedArr := make([]int, len(arr))
+	copy(sortedArr, arr)
+	slices.Sort(sortedArr)
+	return sortedArr
+}
+
+func FindSortedMid1D(arr []int) int {
+	return FindMid1D(CopyAndSort1D(arr))
 }
 
 func Sum1D(arr []int) int {

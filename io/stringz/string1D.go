@@ -24,3 +24,7 @@ func Find1D(arr []string, str string) []int {
 	}
 	return ans
 }
+
+func FindEmpty1D(arr []string) []int {
+	return Find1D(arr, "")
+}
