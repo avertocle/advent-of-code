@@ -9,5 +9,11 @@ type Number interface {
 }
 
 type PrimitivePlus interface {
-	int | byte | bool | string
+	int | int64 | byte | bool | string
 }
+
+type MapIIB map[int]map[int]bool
+
+type MapIB map[int]bool
+
+type MapVisited map[string]bool

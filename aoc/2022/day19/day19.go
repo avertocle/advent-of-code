@@ -32,10 +32,10 @@ func ParseInput(inputFilePath string) {
 	for i, l := range lines {
 		t = stringz.SplitMulti(l, []string{" ", ":", "."})
 		gInput[i] = [][]int{
-			{stringz.AtoiQ(t[7], -1), 0, 0, 0},
-			{stringz.AtoiQ(t[14], -1), 0, 0, 0},
-			{stringz.AtoiQ(t[21], -1), stringz.AtoiQ(t[24], -1), 0, 0},
-			{stringz.AtoiQ(t[31], -1), 0, stringz.AtoiQ(t[34], -1), 0},
+			{stringz.AtoI(t[7], -1), 0, 0, 0},
+			{stringz.AtoI(t[14], -1), 0, 0, 0},
+			{stringz.AtoI(t[21], -1), stringz.AtoI(t[24], -1), 0, 0},
+			{stringz.AtoI(t[31], -1), 0, stringz.AtoI(t[34], -1), 0},
 		}
 	}
 	intz.PPrint3D(gInput)

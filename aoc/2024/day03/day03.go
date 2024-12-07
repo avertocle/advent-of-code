@@ -75,7 +75,7 @@ func findLastBeforeMe(expIdx []int, arr [][]int) []int {
 
 func evaluate(s string) int {
 	tokens := stringz.SplitMulti(s, []string{"(", ",", ")"})
-	result := stringz.AtoiQ(tokens[1], 0) * stringz.AtoiQ(tokens[2], 0)
+	result := stringz.AtoI(tokens[1], 0) * stringz.AtoI(tokens[2], 0)
 	return result
 }
 

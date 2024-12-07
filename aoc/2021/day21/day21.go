@@ -42,7 +42,7 @@ func SolveP2() string {
 
 /***** Common Functions *****/
 
-//return final-pos and final-die-val
+// return final-pos and final-die-val
 func playOneTurn(pos, dval, drolls, dvalMax, posMax int) (int, int) {
 	dValTot := 0
 	for i := 0; i < drolls; i++ {
@@ -60,8 +60,8 @@ func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = []int{
-		stringz.AtoiQ(strings.Fields(lines[0])[4], -1),
-		stringz.AtoiQ(strings.Fields(lines[1])[4], -1),
+		stringz.AtoI(strings.Fields(lines[0])[4], -1),
+		stringz.AtoI(strings.Fields(lines[1])[4], -1),
 	}
 	//fmt.Printf("start pos %v\n", gInput)
 }

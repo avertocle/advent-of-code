@@ -205,14 +205,14 @@ func ParseInput(inputFilePath string) {
 	var tokens []string
 	for i := 0; i < len(lines); i++ {
 		tokens = stringz.SplitMulti(lines[i], []string{" ", "=", ":", ","})
-		px = stringz.AtoiQ(tokens[3], math.MinInt)
-		py = stringz.AtoiQ(tokens[6], math.MinInt)
+		px = stringz.AtoI(tokens[3], math.MinInt)
+		py = stringz.AtoI(tokens[6], math.MinInt)
 		maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
 		minX, minY = intz.Min(minX, px), intz.Min(minY, py)
 		gInpSen[i] = []int{px, py}
 
-		px = stringz.AtoiQ(tokens[13], math.MinInt)
-		py = stringz.AtoiQ(tokens[16], math.MinInt)
+		px = stringz.AtoI(tokens[13], math.MinInt)
+		py = stringz.AtoI(tokens[16], math.MinInt)
 		maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
 		minX, minY = intz.Min(minX, px), intz.Min(minY, py)
 		gInpBea[i] = []int{px, py}

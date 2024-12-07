@@ -251,7 +251,7 @@ func parsePath(line string) {
 		j := i
 		for ; j < len(path) && path[j] != 'L' && path[j] != 'R'; j++ {
 		}
-		step[0] = stringz.AtoiQ(string(path[i:j]), -1)
+		step[0] = stringz.AtoI(string(path[i:j]), -1)
 		if j < len(path) {
 			if path[j] == 'L' {
 				step[1] = 2

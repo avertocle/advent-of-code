@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-//added a . at end of all lines in input file because ide removes trailing space
+// added a . at end of all lines in input file because ide removes trailing space
 var gInpPiles [][]string
 var gInpMoves [][]int
 
@@ -116,8 +116,8 @@ func parsePileLine(l string) []string {
 
 func parseMovesLine(l string) []int {
 	tokens := strings.Split(l, " ")
-	ans := []int{stringz.AtoiQ(tokens[1], -1),
-		stringz.AtoiQ(tokens[3], -1),
-		stringz.AtoiQ(tokens[5], -1)}
+	ans := []int{stringz.AtoI(tokens[1], -1),
+		stringz.AtoI(tokens[3], -1),
+		stringz.AtoI(tokens[5], -1)}
 	return ans
 }

@@ -148,7 +148,7 @@ func (j *job) str() string {
 func newJob(val string, tokens []string) *job {
 	if len(tokens) == 0 {
 		return &job{
-			val:    int64(stringz.AtoiQ(val, math.MaxInt)),
+			val:    int64(stringz.AtoI(val, math.MaxInt)),
 			res:    0,
 			deps:   nil,
 			ops:    nil,

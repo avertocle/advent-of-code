@@ -125,7 +125,7 @@ func ParseInput(inputFilePath string) {
 	var adjMap map[string]int
 	for i := 0; i < len(lines); i++ {
 		tokens = stringz.SplitMulti(lines[i], []string{" ", "=", ";", ","})
-		rate = stringz.AtoiQ(tokens[5], math.MinInt)
+		rate = stringz.AtoI(tokens[5], math.MinInt)
 		v = tokens[1]
 		adjMap = make(map[string]int)
 		for j := 11; j < len(tokens); j += 2 {

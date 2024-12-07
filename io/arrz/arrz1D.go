@@ -30,3 +30,19 @@ func PPrint2D[T cmz.PrimitivePlus](arr [][]T) {
 	}
 	fmt.Println()
 }
+
+func Join1D[T cmz.PrimitivePlus](arrays ...[]T) []T {
+	ans := make([]T, 0)
+	for _, arr := range arrays {
+		ans = append(ans, arr...)
+	}
+	return ans
+}
+
+func Upscale1D[T interface{}](arr []T) [][]T {
+	ans := make([][]T, len(arr))
+	for i, x := range arr {
+		ans[i] = []T{x}
+	}
+	return ans
+}

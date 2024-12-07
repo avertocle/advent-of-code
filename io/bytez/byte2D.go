@@ -181,7 +181,7 @@ func PPrint2D(arr [][]byte) {
 	fmt.Println()
 	for _, row := range arr {
 		for _, c := range row {
-			fmt.Printf("%v", string(c))
+			fmt.Printf("%v ", string(c))
 		}
 		fmt.Println()
 	}

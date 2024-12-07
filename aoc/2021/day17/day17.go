@@ -72,8 +72,8 @@ func ParseInput(inputFilePath string) {
 	errz.HardAssert(err == nil, "iutils error | %v", err)
 	tokens := stringz.SplitMulti(lines[0], []string{":", "=", "..", ",", " "})
 	gInput = [][]int{
-		{stringz.AtoiQ(tokens[4], math.MinInt), stringz.AtoiQ(tokens[5], math.MinInt)},
-		{stringz.AtoiQ(tokens[8], math.MinInt), stringz.AtoiQ(tokens[9], math.MinInt)},
+		{stringz.AtoI(tokens[4], math.MinInt), stringz.AtoI(tokens[5], math.MinInt)},
+		{stringz.AtoI(tokens[8], math.MinInt), stringz.AtoI(tokens[9], math.MinInt)},
 	}
 	//fmt.Printf("%v\n", strings.Join(tokens, "|"))
 	//outils.PrettyArray2DInt(gInput)

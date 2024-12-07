@@ -113,7 +113,7 @@ func toKey(x, y int) string {
 
 func fromKey(k string) (int, int) {
 	t := strings.Split(k, ",")
-	return stringz.AtoiQ(t[0], -1), stringz.AtoiQ(t[1], -1)
+	return stringz.AtoI(t[0], -1), stringz.AtoI(t[1], -1)
 }
 
 func printTroute(m map[string]int) {

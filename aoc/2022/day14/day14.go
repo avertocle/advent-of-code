@@ -114,8 +114,8 @@ func ParseInput(inputFilePath string) {
 		tokens = strings.Fields(l)
 		points = make([][]int, 0)
 		for j := 0; j < len(tokens); j += 2 {
-			px = stringz.AtoiQ(strings.Split(tokens[j], ",")[0], -1)
-			py = stringz.AtoiQ(strings.Split(tokens[j], ",")[1], -1)
+			px = stringz.AtoI(strings.Split(tokens[j], ",")[0], -1)
+			py = stringz.AtoI(strings.Split(tokens[j], ",")[1], -1)
 			maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
 			minX, minY = intz.Min(minX, px), intz.Min(minY, py)
 			points = append(points, []int{px, py})

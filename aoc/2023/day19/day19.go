@@ -91,10 +91,10 @@ type part struct {
 func newPart(line string) *part {
 	t := stringz.SplitMulti(line, []string{",", "=", "{", "}"})
 	p := &part{m: make(map[string]int)}
-	p.m["x"] = stringz.AtoiQ(t[2], -1)
-	p.m["m"] = stringz.AtoiQ(t[4], -1)
-	p.m["a"] = stringz.AtoiQ(t[6], -1)
-	p.m["s"] = stringz.AtoiQ(t[8], -1)
+	p.m["x"] = stringz.AtoI(t[2], -1)
+	p.m["m"] = stringz.AtoI(t[4], -1)
+	p.m["a"] = stringz.AtoI(t[6], -1)
+	p.m["s"] = stringz.AtoI(t[8], -1)
 	return p
 }
 
@@ -156,9 +156,9 @@ func newRule(line string) *rule {
 	if strings.Contains(line, ":") {
 		t := stringz.SplitMulti(line, []string{">", "<", ":"})
 		if strings.Contains(line, ">") {
-			return &rule{op: t[0], cm: stringz.AtoiQ(t[1], -1), rf: gt, re: t[2]}
+			return &rule{op: t[0], cm: stringz.AtoI(t[1], -1), rf: gt, re: t[2]}
 		} else if strings.Contains(line, "<") {
-			return &rule{op: t[0], cm: stringz.AtoiQ(t[1], -1), rf: lt, re: t[2]}
+			return &rule{op: t[0], cm: stringz.AtoI(t[1], -1), rf: lt, re: t[2]}
 		}
 		errz.HardAssert(false, "invalid rule : %v", line)
 		return nil

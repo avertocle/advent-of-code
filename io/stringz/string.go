@@ -5,9 +5,18 @@ import (
 	"strings"
 )
 
-func AtoiQ(s string, defVal int) int {
+func AtoI(s string, defVal int) int {
 	s = strings.TrimSpace(s)
 	i, e := strconv.Atoi(s)
+	if e != nil {
+		i = defVal
+	}
+	return i
+}
+
+func AtoI64(s string, defVal int64) int64 {
+	s = strings.TrimSpace(s)
+	i, e := strconv.ParseInt(s, 10, 64)
 	if e != nil {
 		i = defVal
 	}
