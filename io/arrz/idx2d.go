@@ -1,12 +1,15 @@
 package arrz
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/avertocle/contests/io/iutils"
+)
 
 type Idx2D struct {
 	I, J int
 }
 
-func NewIdxP2D(i, j int) *Idx2D {
+func NewIdx2D(i, j int) *Idx2D {
 	return &Idx2D{I: i, J: j}
 }
 
@@ -15,9 +18,9 @@ func (o *Idx2D) Str() string {
 }
 
 func (o *Idx2D) Neighbours(includeDiag bool) []*Idx2D {
-	n := []*Idx2D{NewIdxP2D(o.I-1, o.J), NewIdxP2D(o.I+1, o.J), NewIdxP2D(o.I, o.J-1), NewIdxP2D(o.I, o.J+1)}
+	n := []*Idx2D{NewIdx2D(o.I-1, o.J), NewIdx2D(o.I+1, o.J), NewIdx2D(o.I, o.J-1), NewIdx2D(o.I, o.J+1)}
 	if includeDiag {
-		n = append(n, NewIdxP2D(o.I-1, o.J-1), NewIdxP2D(o.I-1, o.J+1), NewIdxP2D(o.I+1, o.J-1), NewIdxP2D(o.I+1, o.J+1))
+		n = append(n, NewIdx2D(o.I-1, o.J-1), NewIdx2D(o.I-1, o.J+1), NewIdx2D(o.I+1, o.J-1), NewIdx2D(o.I+1, o.J+1))
 	}
 	return n
 }
@@ -26,28 +29,17 @@ func (o *Idx2D) ToKey() string {
 	return fmt.Sprintf("%v-%v", o.I, o.J)
 }
 
+func NewIdx2DFromKey(key string) *Idx2D {
+	x := iutils.ExtractInt1DFromString0D(key, "-", -1)
+	return NewIdx2D(x[0], x[1])
+}
+
 func (o *Idx2D) IsEqual(o1 *Idx2D) bool {
 	return o1 != nil && (o.I == o1.I && o.J == o1.J)
 }
 
 func (o *Idx2D) Clone() *Idx2D {
-	return NewIdxP2D(o.I, o.J)
-}
-
-func (o *Idx2D) North() *Idx2D {
-	return NewIdxP2D(o.I-1, o.J)
-}
-
-func (o *Idx2D) South() *Idx2D {
-	return NewIdxP2D(o.I+1, o.J)
-}
-
-func (o *Idx2D) East() *Idx2D {
-	return NewIdxP2D(o.I, o.J+1)
-}
-
-func (o *Idx2D) West() *Idx2D {
-	return NewIdxP2D(o.I, o.J-1)
+	return NewIdx2D(o.I, o.J)
 }
 
 func Idx2DListToStr(idxs []*Idx2D) string {
