@@ -3,8 +3,8 @@ package day21
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 	"strings"
 )
@@ -46,10 +46,10 @@ func SolveP2() string {
 func playOneTurn(pos, dval, drolls, dvalMax, posMax int) (int, int) {
 	dValTot := 0
 	for i := 0; i < drolls; i++ {
-		dval = intz.IncBounded(dval, 1, dvalMax)
+		dval = numz.IncBounded(dval, 1, dvalMax)
 		dValTot += dval
 	}
-	pos = intz.IncBounded(pos, dValTot, posMax)
+	pos = numz.IncBounded(pos, dValTot, posMax)
 	//fmt.Printf("drolls(%v) dval(%v), pos(%v) \n", drolls, dValTot, pos)
 	return pos, dval
 }

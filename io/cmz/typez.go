@@ -5,7 +5,7 @@ type Primitive interface {
 }
 
 type Number interface {
-	int | int64 | float64
+	int | int64 | float32 | float64
 }
 
 type PrimitivePlus interface {

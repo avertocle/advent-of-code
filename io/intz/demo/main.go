@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/intz"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 	"time"
 )
@@ -25,7 +25,7 @@ func benchmark01(maxDigits int64) {
 func demoIncBounded() {
 	x := 0
 	for i := 0; i < 100; i++ {
-		x = intz.IncBounded(x, 21, 10)
+		x = numz.IncBounded(x, 21, 10)
 		fmt.Printf("%v-", x)
 	}
 }

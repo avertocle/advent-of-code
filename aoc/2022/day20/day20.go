@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/ds/ll/cdll"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -40,7 +40,7 @@ func mixAllNTimes(idxs []*cdll.Node, mixN int) {
 
 func mixOnePoint(idx int, inpIdxs []*cdll.Node) {
 	cn := inpIdxs[idx]
-	dis := intz.Abs(cn.V) % (len(gInput) - 1)
+	dis := numz.Abs(cn.V) % (len(gInput) - 1)
 	if dis == 0 {
 		return
 	}

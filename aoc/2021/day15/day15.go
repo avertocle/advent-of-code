@@ -6,6 +6,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -64,7 +65,7 @@ func traverse(shortPaths [][]int, vis [][]int) int {
 		nbrs := getUnvisitedNbrs(x, y)
 		for _, n := range nbrs {
 			nx, ny := n[0], n[1]
-			shortPaths[nx][ny] = intz.Min(shortPaths[nx][ny], shortPaths[x][y]+riskAt(nx, ny))
+			shortPaths[nx][ny] = numz.Min(shortPaths[nx][ny], shortPaths[x][y]+riskAt(nx, ny))
 		}
 		vis[x][y] = 1
 		curr = findClosestUnvisitedVertex(shortPaths, vis)

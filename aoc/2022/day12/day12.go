@@ -6,6 +6,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -38,7 +39,7 @@ func findSPathFrom(starts [][]int) int {
 		spaths[sv[0]][sv[1]] = 0
 		findSPath(sv, gEnd, spaths, visited)
 		p = spaths[gEnd[0]][gEnd[1]]
-		minP = intz.Min(minP, p)
+		minP = numz.Min(minP, p)
 		//fmt.Printf("%03d : s = (%v,%v) path = %v\n", i, sv[0], sv[1], p)
 	}
 	return minP
@@ -54,7 +55,7 @@ func findSPath(sv, ev []int, spaths [][]int, visited [][]bool) {
 	nbrs := getVisitableNbrs(sv)
 	for _, n := range nbrs {
 		if !visited[n[0]][n[1]] {
-			spaths[n[0]][n[1]] = intz.Min(spaths[n[0]][n[1]], 1+spaths[sv[0]][sv[1]])
+			spaths[n[0]][n[1]] = numz.Min(spaths[n[0]][n[1]], 1+spaths[sv[0]][sv[1]])
 		}
 	}
 	sv = findClosestVertex(spaths, visited)

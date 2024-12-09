@@ -1,11 +1,12 @@
-package intz
+package numz
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/cmz"
 	"math"
 )
 
-func Max(x, y int) int {
+func Max[T cmz.Number](x, y T) T {
 	if x >= y {
 		return x
 	} else {
@@ -13,7 +14,7 @@ func Max(x, y int) int {
 	}
 }
 
-func Min(x, y int) int {
+func Min[T cmz.Number](x, y T) T {
 	if x <= y {
 		return x
 	} else {
@@ -21,7 +22,7 @@ func Min(x, y int) int {
 	}
 }
 
-func Abs(x int) int {
+func Abs[T cmz.Number](x T) T {
 	if x >= 0 {
 		return x
 	} else {
@@ -29,11 +30,11 @@ func Abs(x int) int {
 	}
 }
 
-func IsBounded(x, s, e int) bool {
+func IsBounded[T cmz.Number](x, s, e T) bool {
 	return x >= s && x <= e
 }
 
-func Trim(c int, x []int) int {
+func Trim[T cmz.Number](c T, x []T) T {
 	if IsBounded(c, x[0], x[1]) {
 		return c
 	} else if c < x[0] {
@@ -45,7 +46,7 @@ func Trim(c int, x []int) int {
 	return math.MaxInt
 }
 
-func Pow(x, n int) int64 {
+func Pow[T cmz.Number](x, n T) int64 {
 	return int64(math.Pow(float64(x), float64(n)))
 }
 
@@ -53,7 +54,7 @@ func Pow(x, n int) int64 {
 IncBounded
 returns x incremented and rotated (if) to be between 1 & max
 */
-func IncBounded(x, inc, max int) int {
+func IncBounded[T int | int64](x, inc, max T) T {
 	inc %= max
 	x += inc
 	if x > max {

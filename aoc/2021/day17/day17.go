@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/geom"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
 )
@@ -38,7 +38,7 @@ func runSim(bounds []*geom.Coord2d) (int, int) {
 		for vy := vyMin; vy <= vyMax; vy++ {
 			didHit, h = runSimForOneVector(vx, vy, bounds)
 			//fmt.Printf("%v,%v = %v hmax@%v\n", vx, vy, didHit, h)
-			hmax = intz.Max(h, hmax)
+			hmax = numz.Max(h, hmax)
 			if didHit {
 				vCtr++
 			}
@@ -55,9 +55,9 @@ func runSimForOneVector(vx, vy int, bounds []*geom.Coord2d) (bool, int) {
 		//fmt.Printf("path = pos(%v,%v) v(%v,%v)\n", c.X, c.Y, vx, vy)
 		c.X += vx
 		c.Y += vy
-		vx = intz.Max(0, vx-1)
+		vx = numz.Max(0, vx-1)
 		vy -= 1
-		hmax = intz.Max(c.Y, hmax)
+		hmax = numz.Max(c.Y, hmax)
 		if c.IsInside(bounds[0], bounds[1]) {
 			return true, hmax
 		}

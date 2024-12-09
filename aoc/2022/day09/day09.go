@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
 	"strings"
@@ -96,8 +96,8 @@ func nextTPos(tx, ty, hx, hy int) (int, int) {
 }
 
 func areHTtouching(hx, hy, tx, ty int) bool {
-	dx := intz.Abs(hx - tx)
-	dy := intz.Abs(hy - ty)
+	dx := numz.Abs(hx - tx)
+	dy := numz.Abs(hy - ty)
 	if (dx == 0 && dy <= 1) ||
 		(dy == 0 && dx <= 1) ||
 		(dx == 1 && dy == 1) {

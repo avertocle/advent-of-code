@@ -6,6 +6,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -56,8 +57,8 @@ func getExpandedGalaxies(refUni [][]byte, galaxies [][]int, units int) [][]int {
 		emptyRowsAbove := intz.CountLesser1D(emptyRows, galaxy[0])
 		emptyColsLeft := intz.CountLesser1D(emptyCols, galaxy[1])
 		expGalaxies = append(expGalaxies, []int{
-			galaxy[0] + intz.Max(emptyRowsAbove*(units-1), 0),
-			galaxy[1] + intz.Max(emptyColsLeft*(units-1), 0),
+			galaxy[0] + numz.Max(emptyRowsAbove*(units-1), 0),
+			galaxy[1] + numz.Max(emptyColsLeft*(units-1), 0),
 		})
 		//fmt.Println(galaxy, emptyRowsAbove, emptyColsLeft, expGalaxies[len(expGalaxies)-1])
 	}

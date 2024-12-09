@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 )
 
@@ -98,7 +98,7 @@ func ParseInput(inputFilePath string) {
 	gEquations = iutils.ExtractInt642DFromString1D(eqStr, " ", nil, -1)
 	gSlotCount = 0
 	for _, eq := range gEquations {
-		gSlotCount = intz.Max(gSlotCount, len(eq)-1)
+		gSlotCount = numz.Max(gSlotCount, len(eq)-1)
 	}
 	//fmt.Println(gSlotCount)
 	//fmt.Println(eqStr)

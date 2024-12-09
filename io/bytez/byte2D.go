@@ -2,7 +2,7 @@ package bytez
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/intz"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -153,10 +153,10 @@ func FindBounds2D(arr [][]byte, empty byte) ([]int, []int) {
 	for i := 0; i < rlen; i++ {
 		for j := 0; j < clen; j++ {
 			if arr[i][j] != empty {
-				tli = intz.Min(tli, i)
-				tlj = intz.Min(tlj, j)
-				bri = intz.Max(bri, i)
-				brj = intz.Max(brj, j)
+				tli = numz.Min(tli, i)
+				tlj = numz.Min(tlj, j)
+				bri = numz.Max(bri, i)
+				brj = numz.Max(brj, j)
 			}
 		}
 	}

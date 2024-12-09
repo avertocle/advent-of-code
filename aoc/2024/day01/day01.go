@@ -3,8 +3,8 @@ package day01
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"slices"
 )
 
@@ -23,7 +23,7 @@ func SolveP1() string {
 	slices.Sort(sorted1)
 	slices.Sort(sorted2)
 	for i := 0; i < len(sorted1); i++ {
-		ans += intz.Abs(sorted1[i] - sorted2[i])
+		ans += numz.Abs(sorted1[i] - sorted2[i])
 	}
 	return fmt.Sprintf("%v", ans)
 }
