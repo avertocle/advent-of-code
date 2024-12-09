@@ -2,8 +2,8 @@ package day02
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 )
 
@@ -37,7 +37,7 @@ func SolveP2() string {
 
 func isSafeWithLevelRemoval(arr []int) bool {
 	for i := 0; i < len(arr); i++ {
-		remArray := intz.RemoveElement1D(arr, i)
+		remArray := arrz.RemoveElement1D(arr, i)
 		if isSafe(remArray) {
 			return true
 		}
@@ -78,5 +78,4 @@ func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = iutils.ExtractInt2DFromString1D(lines, " ", nil, -1)
-	intz.PPrint2D(gInput)
 }

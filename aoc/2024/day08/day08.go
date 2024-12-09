@@ -2,7 +2,7 @@ package day08
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/geom"
 	"github.com/avertocle/contests/io/iutils"
@@ -18,22 +18,22 @@ type AntLocMap = map[byte][]*Ant
 func SolveP1() string {
 	ans := 0
 	antMap := makeAntMap()
-	markerGrid := bytez.Init2D(len(gInput), len(gInput[0]), '.')
+	markerGrid := arrz.Init2D(len(gInput), len(gInput[0]), byte('.'))
 	for _, ants := range antMap {
 		markAntiNodesForOneAntType(markerGrid, ants, findAntiNodesP1)
 	}
-	ans = bytez.Count2D(markerGrid, '#')
+	ans = arrz.Count2D(markerGrid, '#')
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
 	ans := 0
 	antMap := makeAntMap()
-	markerGrid := bytez.Init2D(len(gInput), len(gInput[0]), '.')
+	markerGrid := arrz.Init2D(len(gInput), len(gInput[0]), byte('.'))
 	for _, ants := range antMap {
 		markAntiNodesForOneAntType(markerGrid, ants, findAntiNodesP2)
 	}
-	ans = bytez.Count2D(markerGrid, '#')
+	ans = arrz.Count2D(markerGrid, '#')
 	return fmt.Sprintf("%v", ans)
 }
 

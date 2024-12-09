@@ -6,6 +6,35 @@ import (
 	"github.com/avertocle/contests/io/cmz"
 )
 
+func Count2D[T cmz.PrimitivePlus](grid [][]T, v T) int {
+	return CountIf2D(grid, func(b T, i int, j int) bool {
+		return b == v
+	})
+}
+
+func CountIf2D[T any](arr [][]T, f func(T, int, int) bool) int {
+	count := 0
+	for i, row := range arr {
+		for j, cell := range row {
+			if f(cell, i, j) {
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func Init2D[T any](rows, cols int, b T) [][]T {
+	ans := make([][]T, rows)
+	for i := 0; i < rows; i++ {
+		ans[i] = make([]T, cols)
+		for j, _ := range ans[i] {
+			ans[i][j] = b
+		}
+	}
+	return ans
+}
+
 func Unique2D[T cmz.Primitive](arr [][]T) [][]T {
 	lookup := make(map[string]bool)
 	ans := make([][]T, 0)

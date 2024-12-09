@@ -1,6 +1,7 @@
 package intz
 
 import (
+	"github.com/avertocle/contests/io/arrz"
 	"slices"
 )
 
@@ -19,17 +20,6 @@ func Repeat1D(arr []int, count int) []int {
 	ans := make([]int, len(arr)*count)
 	for i, _ := range ans {
 		ans[i] = arr[i%len(arr)]
-	}
-	return ans
-}
-
-// FindByVal1D returns all indexes of a value in a 1D array
-func FindByVal1D(arr []int, v int) []int {
-	ans := make([]int, 0)
-	for i, x := range arr {
-		if x == v {
-			ans = append(ans, i)
-		}
 	}
 	return ans
 }
@@ -58,10 +48,6 @@ func FindMin1D(arr []int) (int, int) {
 	return minn, pos
 }
 
-func FindMid1D(arr []int) int {
-	return arr[len(arr)/2]
-}
-
 func CopyAndSort1D(arr []int) []int {
 	sortedArr := make([]int, len(arr))
 	copy(sortedArr, arr)
@@ -70,7 +56,7 @@ func CopyAndSort1D(arr []int) []int {
 }
 
 func FindSortedMid1D(arr []int) int {
-	return FindMid1D(CopyAndSort1D(arr))
+	return arrz.FindMid1D(CopyAndSort1D(arr))
 }
 
 func Sum1D(arr []int) int {
@@ -176,8 +162,4 @@ func FindLoop1D(arr []int) (int, int) {
 		}
 	}
 	return -1, -1
-}
-
-func RemoveElement1D(arr []int, index int) []int {
-	return append(append([]int{}, arr[:index]...), arr[index+1:]...)
 }

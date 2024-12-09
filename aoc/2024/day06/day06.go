@@ -2,7 +2,7 @@ package day06
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/bytez"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 )
@@ -56,7 +56,7 @@ func SolveP2() string {
 
 func initStuff() ([]int, map[string]bool, bool, bool) {
 	// guard is an array of 3 elements : [row, col, direction]
-	guard := append(bytez.Find2D(gInput, '^')[0], 'u')
+	guard := append(arrz.Find2D(gInput, '^')[0], 'u')
 	return guard, make(map[string]bool), false, false
 }
 

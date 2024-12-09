@@ -2,8 +2,8 @@ package day05
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
 	"slices"
@@ -17,7 +17,7 @@ func SolveP1() string {
 	ans := 0
 	for _, page := range gInputPages {
 		if checkAllRules(page) {
-			ans += intz.FindMid1D(page)
+			ans += arrz.FindMid1D(page)
 		}
 	}
 	return fmt.Sprintf("%v", ans)
@@ -28,7 +28,7 @@ func SolveP2() string {
 	for _, page := range gInputPages {
 		if !checkAllRules(page) {
 			newPage := sortPageByRuleSet(page)
-			ans += intz.FindMid1D(newPage)
+			ans += arrz.FindMid1D(newPage)
 		}
 	}
 	return fmt.Sprintf("%v", ans)
@@ -56,8 +56,8 @@ func sortPageByRuleSet(page []int) []int {
 
 func checkAllRules(page []int) bool {
 	for _, rule := range gInputRules {
-		s := intz.FindByVal1D(page, rule[0])
-		e := intz.FindByVal1D(page, rule[1])
+		s := arrz.FindByVal1D(page, rule[0], nil, len(page))
+		e := arrz.FindByVal1D(page, rule[1], nil, len(page))
 		if len(s) >= 1 && len(e) >= 1 && s[0] > e[0] {
 			return false
 		}

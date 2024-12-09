@@ -10,6 +10,14 @@ func Key1D[T cmz.Primitive](keys []T) string {
 	return fmt.Sprintf("%v", keys)
 }
 
+func RemoveElement1D[T any](arr []T, index int) []T {
+	return append(append([]T{}, arr[:index]...), arr[index+1:]...)
+}
+
+func FindMid1D[T any](arr []T) T {
+	return arr[len(arr)/2]
+}
+
 func PPrint1D[T cmz.PrimitivePlus](arr []T, withIndex bool) {
 	for i, cell := range arr {
 		if withIndex {
