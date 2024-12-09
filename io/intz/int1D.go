@@ -23,6 +23,7 @@ func Repeat1D(arr []int, count int) []int {
 	return ans
 }
 
+// FindByVal1D returns all indexes of a value in a 1D array
 func FindByVal1D(arr []int, v int) []int {
 	ans := make([]int, 0)
 	for i, x := range arr {

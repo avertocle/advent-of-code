@@ -1,6 +1,8 @@
 package arrz
 
 import (
+	"fmt"
+	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/cmz"
 )
 
@@ -36,4 +38,14 @@ func getElementAt2D[T cmz.Primitive](grid [][]T, index []int, isInfinite bool) T
 		j = index[1] % len(grid[0])
 	}
 	return grid[i][j]
+}
+
+func PPrint2D[T cmz.PrimitivePlus](arr [][]T) {
+	for _, row := range arr {
+		for _, cell := range row {
+			fmt.Printf("(%v) | ", clr.Gen(cell, clr.Cyan))
+		}
+		fmt.Println()
+	}
+	fmt.Println()
 }
