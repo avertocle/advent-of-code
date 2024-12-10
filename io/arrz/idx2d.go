@@ -25,6 +25,10 @@ func (o *Idx2D) Neighbours(includeDiag bool) []*Idx2D {
 	return n
 }
 
+func (o *Idx2D) IsInBounds(rows, cols int) bool {
+	return o.I >= 0 && o.I < rows && o.J >= 0 && o.J < cols
+}
+
 func (o *Idx2D) ToKey() string {
 	return fmt.Sprintf("%v-%v", o.I, o.J)
 }
