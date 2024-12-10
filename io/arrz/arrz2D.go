@@ -6,6 +6,17 @@ import (
 	"github.com/avertocle/contests/io/cmz"
 )
 
+func Copy2D[T any](source [][]T) [][]T {
+	var def T
+	ans := Init2D(len(source), len(source[0]), def)
+	for i := 0; i < len(source); i++ {
+		for j := 0; j < len(source[0]); j++ {
+			ans[i][j] = source[i][j]
+		}
+	}
+	return ans
+}
+
 func Count2D[T cmz.PrimitivePlus](grid [][]T, v T) int {
 	return CountIf2D(grid, func(b T, i int, j int) bool {
 		return b == v

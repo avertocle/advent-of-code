@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2024/day10"
+	prob "github.com/avertocle/contests/aoc/2023/day10"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -61,6 +61,7 @@ func makeProblems(dpath string, args []string) []*problem {
 	//inputFileNames = []string{"input_final.txt"}
 	//inputFileNames = []string{"input_small.txt"}
 	//inputFileNames = []string{"input_small_01.txt"}
+	//inputFileNames = []string{"input_small_03.txt"}
 	//inputFileNames = []string{"input_small_02.txt"}
 	for _, fname := range inputFileNames {
 		problems = append(problems, newProblem(dpath, fname, 1, "na"))
