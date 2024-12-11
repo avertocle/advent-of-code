@@ -40,3 +40,11 @@ func (m *MMIntInt) Size() int {
 func makeKey(k1, k2 int) string {
 	return fmt.Sprintf("%v-%v", k1, k2)
 }
+
+func (m *MMIntInt) PPrint() {
+	for k, v := range m.mapp {
+		fmt.Printf("[%v : %v]\n"+
+			"", k, v)
+	}
+	fmt.Println()
+}
