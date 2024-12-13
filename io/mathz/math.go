@@ -13,6 +13,15 @@ func GCD(a, b int) int {
 	return a
 }
 
+func GCD64(a, b int64) int64 {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
 func LCM(a, b int) int {
 	return int((int64(a) * int64(b)) / int64(GCD(a, b)))
 }
