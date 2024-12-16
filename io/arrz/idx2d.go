@@ -9,8 +9,8 @@ type Idx2D[T int | int64] struct {
 	I, J T
 }
 
-func NewIdx2D[T int | int64](i, j T) *Idx2D[T] {
-	return &Idx2D[T]{I: i, J: j}
+func NewIdx2D[T int | int64](arr ...T) *Idx2D[T] {
+	return &Idx2D[T]{I: arr[0], J: arr[1]}
 }
 
 func (o *Idx2D[T]) Str() string {

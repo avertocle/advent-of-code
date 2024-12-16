@@ -83,7 +83,7 @@ func getElementAt2D[T cmz.Primitive](grid [][]T, index []int, isInfinite bool) T
 func PPrint2D[T cmz.PrimitivePlus](arr [][]T) {
 	for _, row := range arr {
 		for _, cell := range row {
-			fmt.Printf("(%v) | ", clr.Gen(cell, clr.Cyan))
+			fmt.Printf("%v | ", clr.Gen(cell, clr.Cyan))
 		}
 		fmt.Println()
 	}
