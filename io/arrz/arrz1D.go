@@ -29,6 +29,14 @@ func PPrint1D[T cmz.PrimitivePlus](arr []T, withIndex bool) {
 	fmt.Println()
 }
 
+func ToStr1D[T any](arr []T, sep string) string {
+	ans := ""
+	for _, cell := range arr {
+		ans += fmt.Sprintf("%v%v", sep, cell)
+	}
+	return ans[1:]
+}
+
 func Join1D[T cmz.PrimitivePlus](arrays ...[]T) []T {
 	ans := make([]T, 0)
 	for _, arr := range arrays {
