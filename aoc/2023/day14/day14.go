@@ -33,12 +33,12 @@ func SolveP2() string {
 		//	fmt.Printf("%v.", i)
 		//}
 		doOneCycle(grid)
-		//bytez.PPrint2D(grid)
+		//arrz.PPrint2D(grid)
 		if historyIndex = matchInHistory(grid, history); historyIndex != -1 {
 			resetPoint = i + 1
 			resetLen = resetPoint - historyIndex
 			initialCut = historyIndex
-			bytez.PPrint2D(grid)
+			arrz.PPrint2D(grid)
 			break
 		} else {
 			history = append(history, bytez.Copy2D(grid))

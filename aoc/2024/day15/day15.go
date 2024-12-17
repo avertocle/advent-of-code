@@ -24,14 +24,14 @@ func SolveP1() string {
 	ans := 0
 	grid := arrz.Copy2D(gInput)
 	curr := arrz.NewIdx2D[int](bytez.Find2D(grid, '@')[0]...)
-	//bytez.PPrint2D(grid)
+	//arrz.PPrint2D(grid)
 	//fmt.Println()
 	for i := 0; i < len(gPath); i++ {
 		grid[curr.I][curr.J] = Space
 		moveRobot(grid, curr, gPath[i])
 		grid[curr.I][curr.J] = Robot
 		//fmt.Println(string(gPath[i]))
-		//bytez.PPrint2D(grid)
+		//arrz.PPrint2D(grid)
 		//fmt.Println()
 	}
 	ans = calcGpsSum(grid)

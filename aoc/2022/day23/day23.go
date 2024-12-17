@@ -2,6 +2,7 @@ package day23
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -139,7 +140,7 @@ func debug_markBoundsAndShow(ground [][]byte) {
 	//ground[boundsTl[0]][boundsBr[1]] = '*'
 	//ground[boundsBr[0]][boundsTl[1]] = '*'
 	//ground[boundsBr[0]][boundsBr[1]] = '*'
-	bytez.PPrint2D(bytez.Extract2D(ground, boundsTl, boundsBr, '$'))
+	arrz.PPrint2D(bytez.Extract2D(ground, boundsTl, boundsBr, '$'))
 }
 
 /***** DS *****/

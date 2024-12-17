@@ -39,7 +39,7 @@ func hikeSim(c *arrz.Idx2D, visited cmz.MapVisited, pathLen int, maxPathLen *int
 			//		grid[ij.I][ij.J] = '*'
 			//	}
 			//}
-			//bytez.PPrint2D(grid)
+			//arrz.PPrint2D(grid)
 		}
 	} else {
 		nextIdxs := findNextVisitableIndexesP2(c, visited)

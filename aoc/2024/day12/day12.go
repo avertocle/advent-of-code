@@ -113,7 +113,7 @@ func countCorners(gridOrig [][]byte) int {
 			}
 		}
 	}
-	//bytez.PPrint2D(grid)
+	//arrz.PPrint2D(grid)
 	//fmt.Println("points", points)
 	for _, p := range points {
 		i, j := p[0], p[1]

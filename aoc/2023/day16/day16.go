@@ -50,7 +50,7 @@ func SolveP2() string {
 }
 func calcEnergizedTileCount(startLight []int) int {
 	markedGrid := traceLightPathP1(startLight)
-	//bytez.PPrint2D(markedGrid)
+	//arrz.PPrint2D(markedGrid)
 	return bytez.Count2D(markedGrid, 'X')
 }
 
