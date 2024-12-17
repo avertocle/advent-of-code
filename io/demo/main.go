@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/rangez"
@@ -49,12 +50,12 @@ func demoPad() {
 	}
 
 	fmt.Println("deprecated")
-	bytez.PPrint2D(arr)
+	arrz.PPrint2D(arr)
 	fmt.Println()
 
 	ans := bytez.Pad2D(arr, 10, 10, 10, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 }
 
@@ -66,47 +67,47 @@ func demoExtract() {
 		}
 	}
 	fmt.Println("deprecated")
-	bytez.PPrint2D(arr)
+	arrz.PPrint2D(arr)
 	fmt.Println()
 
 	ans := bytez.ExtractSq2D(arr, []int{0, 0}, 3, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{1, 1}, 3, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 3, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{9, 9}, 3, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 6, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 2, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 1, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 	ans = bytez.ExtractSq2D(arr, []int{3, 3}, 0, '.')
 	fmt.Println("deprecated")
-	bytez.PPrint2D(ans)
+	arrz.PPrint2D(ans)
 	fmt.Println()
 
 }

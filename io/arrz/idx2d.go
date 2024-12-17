@@ -3,6 +3,7 @@ package arrz
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 )
 
 type Idx2D[T int | int64] struct {
@@ -36,6 +37,11 @@ func (o *Idx2D[T]) ToKey() string {
 func (o *Idx2D[T]) MoveBy(i, j T) {
 	o.I += i
 	o.J += j
+}
+
+func (o *Idx2D[T]) MoveBounded(i, j, minI, minJ, maxI, maxJ T) {
+	o.I = numz.IncBoundedV2(o.I, i, minI, maxI)
+	o.J = numz.IncBoundedV2(o.J, j, minJ, maxJ)
 }
 
 func NewIdx2DFromKey[T int | int64](key string) *Idx2D[T] {

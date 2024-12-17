@@ -3,6 +3,7 @@ package numz
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/cmz"
+	"github.com/avertocle/contests/io/errz"
 	"math"
 )
 
@@ -52,6 +53,7 @@ func Pow[T cmz.Number](x, n T) int64 {
 
 /*
 IncBounded
+@deprecated as it does not handle negative increments use IncBoundedV2 instead
 returns x incremented and rotated (if) to be between 1 & max
 */
 func IncBounded[T int | int64](x, inc, max T) T {
@@ -60,5 +62,22 @@ func IncBounded[T int | int64](x, inc, max T) T {
 	if x > max {
 		x = x - max
 	}
+	return x
+}
+
+func IncBoundedV2[T int | int64](x, inc, min, max T) T {
+	errz.SoftAssert(x >= min && x <= max, "IncBoundedV2 : input outside bounds : %v + %v [%v to %v]", x, inc, min, max)
+	xo := x
+	bSize := max - min + 1
+	inc = (Abs(inc) % bSize) * (inc / Abs(inc)) // reduce inc keeping the sign
+	x += inc
+	if x < min {
+		x = max - (min - x) + 1
+	}
+	if x > max {
+		x = min + (x - max) - 1
+	}
+	errz.HardAssert(x >= min && x <= max, "IncBoundedV2 : output outside bounds : %v + %v [%v to %v] = %v", xo, inc, min, max, x)
+	//fmt.Printf("IncBoundedV2 : %v + %v [%v to %v] = %v\n", xo, inc, min, max, x)
 	return x
 }

@@ -80,10 +80,14 @@ func getElementAt2D[T cmz.Primitive](grid [][]T, index []int, isInfinite bool) T
 	return grid[i][j]
 }
 
-func PPrint2D[T cmz.PrimitivePlus](arr [][]T) {
+func PPrint2D[T any](arr [][]T) {
 	for _, row := range arr {
 		for _, cell := range row {
-			fmt.Printf("%v | ", clr.Gen(cell, clr.Cyan))
+			val := any(cell)
+			if _, ok := val.(byte); ok {
+				val = fmt.Sprintf("%c", val)
+			}
+			fmt.Printf("%v", clr.Gen(val, clr.Cyan))
 		}
 		fmt.Println()
 	}

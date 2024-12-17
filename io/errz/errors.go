@@ -7,7 +7,8 @@ import (
 
 func SoftAssert(condition bool, format string, a ...any) {
 	if !condition {
-		fmt.Printf(format, a)
+		fmt.Printf(format, a...)
+		fmt.Println()
 	}
 }
 
