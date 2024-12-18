@@ -71,13 +71,28 @@ func Find2D[T cmz.Primitive](grid [][]T, target T) [][]int {
 	return ans
 }
 
-func getElementAt2D[T cmz.Primitive](grid [][]T, index []int, isInfinite bool) T {
+func GetElementAt2D[T cmz.Primitive](grid [][]T, index []int, isInfinite bool) T {
 	i, j := index[0], index[1]
 	if isInfinite {
 		i = index[0] % len(grid)
 		j = index[1] % len(grid[0])
 	}
 	return grid[i][j]
+}
+
+func MarkOnNewGrid2D[T any](points []*Idx2D[int], dims *Idx2D[int], defaultVal, marker T, print bool) [][]T {
+	grid := Init2D(dims.I, dims.J, defaultVal)
+	MarkOnGrid2D(grid, points, marker)
+	if print {
+		PPrint2D(grid)
+	}
+	return grid
+}
+
+func MarkOnGrid2D[T any](grid [][]T, points []*Idx2D[int], marker T) {
+	for _, x := range points {
+		grid[x.I][x.J] = marker
+	}
 }
 
 func PPrint2D[T any](arr [][]T) {
@@ -87,7 +102,7 @@ func PPrint2D[T any](arr [][]T) {
 			if _, ok := val.(byte); ok {
 				val = fmt.Sprintf("%c", val)
 			}
-			fmt.Printf("%v", clr.Gen(val, clr.Cyan))
+			fmt.Printf("%v ", clr.Gen(val, clr.Cyan))
 		}
 		fmt.Println()
 	}
