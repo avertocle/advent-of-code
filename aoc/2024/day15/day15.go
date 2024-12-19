@@ -33,7 +33,6 @@ func SolveP1() string {
 	for i := 0; i < len(gPath); i++ {
 		curr = findRobot(grid)
 		moveRobotP1(grid, curr, gPath[i])
-		//arrz.PPrint2D(grid)
 	}
 	ans = calcGpsSum(grid)
 	return fmt.Sprintf("%v", ans)
@@ -46,6 +45,7 @@ func SolveP2() string {
 	for i := 0; i < len(gPath); i++ {
 		fmt.Println("\n--------------------\n")
 		arrz.PPrint2D(grid)
+		fmt.Println("Next move: ", string(gPath[i]))
 		curr = findRobot(grid)
 		moveRobotP2(grid, curr, gPath[i])
 	}
@@ -111,9 +111,9 @@ func makeGridP2() [][]byte {
 func moveRobotP2(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
 	switch dir {
 	case 'v':
-		moveGenericP2(grid, curr, findBoxesBottom)
+		moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findBoxesBottom)
 	case '^':
-		moveGenericP2(grid, curr, findBoxesTop)
+		moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findBoxesTop)
 	case '<':
 		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
 	case '>':
@@ -146,39 +146,72 @@ func isPartOfBox(grid [][]byte, c *idx) bool {
 	return grid[c.I][c.J] == Box2S || grid[c.I][c.J] == Box2E
 }
 
-func moveGenericP2(grid [][]byte, c *idx, getNext func([][]byte, *idx) []*idx) (bool, bool) {
-	canMove, canMoveAsBox := false, false
-	isBoxPart := isPartOfBox(grid, c)
-	nbs := getNext(grid, c)
+func moveVerticalP2(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) bool {
+	isBox := len(cs) == 2
+	if !isBox {
+		c := cs[0]
+		nbs := getNext(grid, c)
+		canMove, isBlockedByBox := checkMobility(grid, nbs)
+		if canMove {
+			grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
+			grid[c.I][c.J] = Space
+			return true
+		} else if isBlockedByBox {
+			didNbrMove := moveVerticalP2(grid, nbs, getNext)
+			if didNbrMove {
+				moveVerticalP2(grid, cs, getNext)
+				return true
+			}
+		}
+	} else {
+		c1, c2 := cs[0], cs[1]
+		nbs1, nbs2 := getNext(grid, c1), getNext(grid, c2)
+		canMove1, isBlockedByBox1 := checkMobility(grid, nbs1)
+		canMove2, isBlockedByBox2 := checkMobility(grid, nbs2)
+		if canMove1 && canMove2 {
+			grid[nbs1[0].I][nbs1[0].J] = grid[c1.I][c1.J]
+			grid[c1.I][c1.J] = Space
+			grid[nbs2[0].I][nbs2[0].J] = grid[c2.I][c2.J]
+			grid[c2.I][c2.J] = Space
+			return true
+		} else if isBlockedByBox1 && isBlockedByBox2 {
+			didNbrMove1 := moveVerticalP2(grid, nbs1, getNext)
+			didNbrMove2 := moveVerticalP2(grid, nbs2, getNext)
+			if didNbrMove1 && didNbrMove2 {
+				moveVerticalP2(grid, cs, getNext)
+				return true
+			}
+		} else if isBlockedByBox1 {
+			didNbrMove := moveVerticalP2(grid, nbs1, getNext)
+			if didNbrMove {
+				moveVerticalP2(grid, cs, getNext)
+				return true
+			}
+		} else if isBlockedByBox2 {
+			didNbrMove := moveVerticalP2(grid, nbs2, getNext)
+			if didNbrMove {
+				moveVerticalP2(grid, cs, getNext)
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func checkMobility(grid [][]byte, nbs []*idx) (bool, bool) {
+	canMove, isBlockedByBox := false, false
 	if len(nbs) == 1 {
-		c1 := nbs[0]
-		if grid[c1.I][c1.J] == Wall {
+		isBlockedByBox = false
+		n := nbs[0]
+		if grid[n.I][n.J] == Wall {
 			canMove = false
-		} else if grid[c1.I][c1.J] == Space {
+		} else if grid[n.I][n.J] == Space {
 			canMove = true
 		}
 	} else {
-		canMove1, canMoveAsBox1 := moveGenericP2(grid, nbs[0], getNext)
-		canMove2, canMoveAsBox2 := moveGenericP2(grid, nbs[1], getNext)
-		canMove = canMove1 && canMove2
-		canMoveAsBox = canMoveAsBox1 && canMoveAsBox2
+		isBlockedByBox = true
 	}
-
-	fmt.Println(c.Str(), "canMove", canMove, "canMoveAsBox", canMoveAsBox, "isBoxPart", isBoxPart)
-
-	if canMove && !isBoxPart {
-		grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
-		grid[c.I][c.J] = Space
-		return true, true
-	} else if canMoveAsBox && isBoxPart {
-		grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
-		grid[c.I][c.J] = Space
-		grid[nbs[1].I][nbs[1].J] = Space
-		grid[c.I][c.J] = Space
-		return true, true
-	} else {
-		return false, true
-	}
+	return canMove, isBlockedByBox
 }
 
 /***** Common Functions *****/
@@ -192,6 +225,9 @@ func calcGpsSum(grid [][]byte) int {
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[0]); j++ {
 			if grid[i][j] == Box {
+				sum += i*100 + j
+			}
+			if grid[i][j] == Box2S {
 				sum += i*100 + j
 			}
 		}

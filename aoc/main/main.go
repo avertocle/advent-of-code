@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2024/day19"
+	prob "github.com/avertocle/contests/aoc/2024/day15"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
@@ -59,7 +59,7 @@ func makeProblems(dpath string, args []string) []*problem {
 	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dpath, err)
 	problems := make([]*problem, 0)
 	//inputFileNames = []string{"input_small.txt"}
-	//inputFileNames = []string{"input_small_01.txt"}
+	inputFileNames = []string{"input_small_01.txt"}
 	//inputFileNames = []string{"input_small_02.txt"}
 	//inputFileNames = []string{"input_small_03.txt"}
 	//inputFileNames = []string{"input_small_04.txt"}
