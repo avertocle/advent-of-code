@@ -39,6 +39,16 @@ func (g *Graph) AddVertex(vid string, vval int, adjWeightMap map[string]int) {
 	g.addVtoAdMat(vid, adjWeightMap)
 }
 
+func (g *Graph) FindVertexesByValue(v int) []string {
+	nodeIds := make([]string, 0)
+	for vid, val := range g.VMap {
+		if val == v {
+			nodeIds = append(nodeIds, vid)
+		}
+	}
+	return nodeIds
+}
+
 func (g *Graph) addVtoAdList(v string, adjWeightMap map[string]int) {
 	currAdj, ok := g.AdList[v]
 	if !ok {
@@ -60,7 +70,7 @@ func (g *Graph) addVtoAdMat(v string, adjWeightMap map[string]int) {
 
 func (g *Graph) PrintAdList() {
 	for v, adj := range g.AdList {
-		fmt.Printf("%v (%v) => %v\n", v, g.VMap[v], mapToStr(adj))
+		fmt.Printf("%v (%q) : %v => %v\n", v, g.VMap[v], len(adj), g.MapToStr(adj))
 	}
 }
 
@@ -93,10 +103,10 @@ func (g *Graph) PrintAdMat() {
 	stringz.PPrint2D(mat)
 }
 
-func mapToStr(m map[string]int) string {
+func (g *Graph) MapToStr(m map[string]int) string {
 	s := ""
-	for k, v := range m {
-		s += fmt.Sprintf("%v(%v) ", k, v)
+	for k, _ := range m {
+		s += fmt.Sprintf("%v(%q) ", k, g.VMap[k])
 	}
 	return s
 }
