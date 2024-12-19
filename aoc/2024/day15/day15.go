@@ -15,27 +15,176 @@ const DirPath = "../2024/day15"
 var gInput [][]byte
 var gPath []byte
 
-const Box = 'O'
-const Wall = '#'
-const Space = '.'
-const Robot = '@'
+const Box = byte('O')
+const Wall = byte('#')
+const Space = byte('.')
+const Robot = byte('@')
+const Box2S = byte('[')
+const Box2E = byte(']')
+
+type idx = arrz.Idx2D[int]
+type funcNext = func(*idx) *idx
 
 func SolveP1() string {
 	ans := 0
 	grid := arrz.Copy2D(gInput)
-	curr := arrz.NewIdx2D[int](bytez.Find2D(grid, '@')[0]...)
+	curr := findRobot(grid)
 	//arrz.PPrint2D(grid)
-	//fmt.Println()
 	for i := 0; i < len(gPath); i++ {
-		grid[curr.I][curr.J] = Space
-		moveRobot(grid, curr, gPath[i])
-		grid[curr.I][curr.J] = Robot
-		//fmt.Println(string(gPath[i]))
+		curr = findRobot(grid)
+		moveRobotP1(grid, curr, gPath[i])
 		//arrz.PPrint2D(grid)
-		//fmt.Println()
 	}
 	ans = calcGpsSum(grid)
 	return fmt.Sprintf("%v", ans)
+}
+
+func SolveP2() string {
+	ans := 0
+	grid := makeGridP2()
+	curr := findRobot(grid)
+	for i := 0; i < len(gPath); i++ {
+		fmt.Println("\n--------------------\n")
+		arrz.PPrint2D(grid)
+		curr = findRobot(grid)
+		moveRobotP2(grid, curr, gPath[i])
+	}
+	arrz.PPrint2D(grid)
+	ans = calcGpsSum(grid)
+	return fmt.Sprintf("%v", ans)
+}
+
+/***** P1 Functions *****/
+
+func moveRobotP1(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
+	switch dir {
+	case 'v':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I+1, x.J) })
+	case '^':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I-1, x.J) })
+	case '<':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
+	case '>':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J+1) })
+	}
+}
+
+func moveGenericP1(grid [][]byte, c *idx, getNext func(*idx) *idx) bool {
+	canMove := false
+	c1 := getNext(c)
+	if grid[c1.I][c1.J] == Wall {
+		canMove = false
+	} else if grid[c1.I][c1.J] == Space {
+		canMove = true
+	} else {
+		canMove = moveGenericP1(grid, c1, getNext)
+	}
+
+	if canMove {
+		grid[c1.I][c1.J] = grid[c.I][c.J]
+		grid[c.I][c.J] = Space
+	}
+	return canMove
+}
+
+/***** P2 Functions *****/
+
+func makeGridP2() [][]byte {
+	r, c := len(gInput), len(gInput[0])*2
+	grid := arrz.Init2D(r, c, Space)
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j += 2 {
+			grid[i][j] = gInput[i][j/2]
+			if grid[i][j] == Wall || grid[i][j] == Space {
+				grid[i][j+1] = grid[i][j]
+			} else if grid[i][j] == Robot {
+				grid[i][j+1] = Space
+			} else {
+				grid[i][j] = Box2S
+				grid[i][j+1] = Box2E
+			}
+		}
+	}
+	return grid
+}
+
+func moveRobotP2(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
+	switch dir {
+	case 'v':
+		moveGenericP2(grid, curr, findBoxesBottom)
+	case '^':
+		moveGenericP2(grid, curr, findBoxesTop)
+	case '<':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
+	case '>':
+		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J+1) })
+	}
+}
+
+func findBoxesTop(grid [][]byte, c *idx) []*idx {
+	if grid[c.I-1][c.J] == Box2S {
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J+1)}
+	} else if grid[c.I-1][c.J] == Box2E {
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J-1)}
+	} else {
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J)}
+	}
+}
+
+func findBoxesBottom(grid [][]byte, c *idx) []*idx {
+	if grid[c.I+1][c.J] == Box2S {
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J+1)}
+	} else if grid[c.I+1][c.J] == Box2E {
+		// make sure to return the same J point first, the ordering is used later
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J-1)}
+	} else {
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J)}
+	}
+}
+
+func isPartOfBox(grid [][]byte, c *idx) bool {
+	return grid[c.I][c.J] == Box2S || grid[c.I][c.J] == Box2E
+}
+
+func moveGenericP2(grid [][]byte, c *idx, getNext func([][]byte, *idx) []*idx) (bool, bool) {
+	canMove, canMoveAsBox := false, false
+	isBoxPart := isPartOfBox(grid, c)
+	nbs := getNext(grid, c)
+	if len(nbs) == 1 {
+		c1 := nbs[0]
+		if grid[c1.I][c1.J] == Wall {
+			canMove = false
+		} else if grid[c1.I][c1.J] == Space {
+			canMove = true
+		}
+	} else {
+		canMove1, canMoveAsBox1 := moveGenericP2(grid, nbs[0], getNext)
+		canMove2, canMoveAsBox2 := moveGenericP2(grid, nbs[1], getNext)
+		canMove = canMove1 && canMove2
+		canMoveAsBox = canMoveAsBox1 && canMoveAsBox2
+	}
+
+	fmt.Println(c.Str(), "canMove", canMove, "canMoveAsBox", canMoveAsBox, "isBoxPart", isBoxPart)
+
+	if canMove && !isBoxPart {
+		grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
+		grid[c.I][c.J] = Space
+		return true, true
+	} else if canMoveAsBox && isBoxPart {
+		grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
+		grid[c.I][c.J] = Space
+		grid[nbs[1].I][nbs[1].J] = Space
+		grid[c.I][c.J] = Space
+		return true, true
+	} else {
+		return false, true
+	}
+}
+
+/***** Common Functions *****/
+
+func findRobot(grid [][]byte) *idx {
+	return arrz.NewIdx2D[int](bytez.Find2D(grid, '@')[0]...)
 }
 
 func calcGpsSum(grid [][]byte) int {
@@ -49,133 +198,6 @@ func calcGpsSum(grid [][]byte) int {
 	}
 	return sum
 }
-
-func moveRobot(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
-	switch dir {
-	case 'v':
-		moveDown(grid, curr)
-	case '^':
-		moveUp(grid, curr)
-	case '<':
-		moveLeft(grid, curr)
-	case '>':
-		moveRight(grid, curr)
-	}
-}
-
-func moveRight(grid [][]byte, c *arrz.Idx2D[int]) {
-	if grid[c.I][c.J+1] == Wall {
-		return
-	} else if grid[c.I][c.J+1] == Space {
-		c.MoveBy(0, 1)
-		return
-	}
-
-	nextSpace := c.J + 1
-	for ; nextSpace < len(grid[0]) && grid[c.I][nextSpace] == Box; nextSpace++ {
-	}
-	fmt.Println(c, nextSpace, string(grid[c.I][c.J]), string(grid[c.I][nextSpace]))
-	if grid[c.I][nextSpace] == Space {
-		grid[c.I][c.J] = Space
-		grid[c.I][nextSpace] = Box
-		c.MoveBy(0, 1)
-	}
-}
-
-func moveLeft(grid [][]byte, c *arrz.Idx2D[int]) {
-	if grid[c.I][c.J-1] == Wall {
-		return
-	} else if grid[c.I][c.J-1] == Space {
-		c.MoveBy(0, -1)
-		return
-	}
-
-	nextSpace := c.J - 1
-	for ; nextSpace >= 0 && grid[c.I][nextSpace] == Box; nextSpace-- {
-	}
-	fmt.Println(c, nextSpace, string(grid[c.I][c.J]), string(grid[c.I][nextSpace]))
-	if grid[c.I][nextSpace] == Space {
-		grid[c.I][c.J] = Space
-		grid[c.I][nextSpace] = Box
-		c.MoveBy(0, -1)
-	}
-}
-
-func moveUp(grid [][]byte, c *arrz.Idx2D[int]) {
-	if grid[c.I-1][c.J] == Wall {
-		return
-	} else if grid[c.I-1][c.J] == Space {
-		c.MoveBy(-1, 0)
-		return
-	}
-
-	nextSpace := c.I - 1
-	for ; nextSpace >= 0 && grid[nextSpace][c.J] == Box; nextSpace-- {
-	}
-	fmt.Println(c, nextSpace, string(grid[c.I][c.J]), string(grid[nextSpace][c.J]))
-	if grid[nextSpace][c.J] == Space {
-		grid[c.I][c.J] = Space
-		grid[nextSpace][c.J] = Box
-		c.MoveBy(-1, 0)
-	}
-}
-
-func moveDown(grid [][]byte, c *arrz.Idx2D[int]) {
-	if grid[c.I+1][c.J] == Wall {
-		return
-	} else if grid[c.I+1][c.J] == Space {
-		c.MoveBy(1, 0)
-		return
-	}
-
-	nextSpace := c.I + 1
-	for ; nextSpace < len(grid) && grid[nextSpace][c.J] == Box; nextSpace++ {
-	}
-	fmt.Println(c, nextSpace, string(grid[c.I][c.J]), string(grid[nextSpace][c.J]))
-	if grid[nextSpace][c.J] == Space {
-		grid[c.I][c.J] = Space
-		grid[nextSpace][c.J] = Box
-		c.MoveBy(1, 0)
-	}
-}
-
-//func moveDown(grid [][]byte, c *arrz.Idx2D[int], moveCount int) *arrz.Idx2D[int] {
-//	if grid[c.I+1][c.J] == 'O' {
-//		c.MoveBy(1, 0)
-//		return c
-//	}
-//	nextWall := -1
-//	blocksFound := 0
-//	for i := c.I; i < len(grid); i++ {
-//		if grid[i][c.J] == 'O' {
-//			blocksFound++
-//		} else if grid[i][c.J] == '#' {
-//			nextWall = i
-//			break
-//		}
-//	}
-//	errz.HardAssert(blocksFound > 0, "at lease one  block should be there")
-//	for i := c.I; i >= nextWall; i++ {
-//		if i < nextWall-blocksFound {
-//			grid[i][c.J] = '.'
-//		} else {
-//			grid[i][c.J] = 'O'
-//		}
-//	}
-//	c.MoveBy(blocksFound, 0)
-//	return c
-//}
-
-func SolveP2() string {
-	ans := 0
-	return fmt.Sprintf("%v", ans)
-}
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
-
-/***** Common Functions *****/
 
 /***** Input *****/
 
