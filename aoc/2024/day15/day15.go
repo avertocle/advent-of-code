@@ -25,30 +25,37 @@ const Box2E = byte(']')
 type idx = arrz.Idx2D[int]
 type funcNext = func(*idx) *idx
 
+// old debug 334 next move ^
+// old debug 4699 next move v
+// 1475511 too high
+
 func SolveP1() string {
 	ans := 0
-	grid := arrz.Copy2D(gInput)
-	curr := findRobot(grid)
-	//arrz.PPrint2D(grid)
-	for i := 0; i < len(gPath); i++ {
-		curr = findRobot(grid)
-		moveRobotP1(grid, curr, gPath[i])
-	}
-	ans = calcGpsSum(grid)
+	//grid := arrz.Copy2D(gInput)
+	//curr := findRobot(grid)
+	////arrz.PPrint2D(grid)
+	//for i := 0; i < len(gPath); i++ {
+	//	curr = findRobot(grid)
+	//	moveRobotP1(grid, curr, gPath[i])
+	//}
+	//ans = calcGpsSum(grid)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
 	ans := 0
 	grid := makeGridP2()
+	//	grid := arrz.Copy2D(gInput)
+	//fmt.Println("Grid: ", arrz.Count2D(grid, Wall), arrz.Count2D(grid, Space), arrz.Count2D(grid, Box), arrz.Count2D(grid, Box2S), arrz.Count2D(grid, Box2E), calcGpsSum(grid))
 	curr := findRobot(grid)
 	for i := 0; i < len(gPath); i++ {
 		fmt.Println("\n--------------------\n")
 		arrz.PPrint2D(grid)
-		fmt.Println("Next move: ", string(gPath[i]))
+		fmt.Println("Next move: ", string(gPath[i]), " | ", i)
 		curr = findRobot(grid)
 		moveRobotP2(grid, curr, gPath[i])
 	}
+	//fmt.Println("Grid: ", arrz.Count2D(grid, Wall), arrz.Count2D(grid, Space), arrz.Count2D(grid, Box), arrz.Count2D(grid, Box2S), arrz.Count2D(grid, Box2E))
 	arrz.PPrint2D(grid)
 	ans = calcGpsSum(grid)
 	return fmt.Sprintf("%v", ans)
@@ -125,7 +132,7 @@ func findBoxesTop(grid [][]byte, c *idx) []*idx {
 	if grid[c.I-1][c.J] == Box2S {
 		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J+1)}
 	} else if grid[c.I-1][c.J] == Box2E {
-		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J-1)}
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J-1), arrz.NewIdx2D[int](c.I-1, c.J)}
 	} else {
 		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J)}
 	}
@@ -136,7 +143,7 @@ func findBoxesBottom(grid [][]byte, c *idx) []*idx {
 		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J+1)}
 	} else if grid[c.I+1][c.J] == Box2E {
 		// make sure to return the same J point first, the ordering is used later
-		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J-1)}
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J-1), arrz.NewIdx2D[int](c.I+1, c.J)}
 	} else {
 		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J)}
 	}
@@ -146,72 +153,67 @@ func isPartOfBox(grid [][]byte, c *idx) bool {
 	return grid[c.I][c.J] == Box2S || grid[c.I][c.J] == Box2E
 }
 
+func pruneNbs(grid [][]byte, nbs []*idx) []*idx {
+	nbsMap := make(map[string][]*idx)
+	nbsOrder := make([]string, 0)
+	for i := 0; i < len(nbs); i++ {
+		n := nbs[i]
+		if grid[n.I][n.J] == Box2S {
+			key := nbs[i].ToKey() + "-" + nbs[i+1].ToKey()
+			if _, ok := nbsMap[key]; !ok {
+				nbsOrder = append(nbsOrder, key)
+				nbsMap[key] = []*idx{nbs[i], nbs[i+1]}
+			}
+			i++
+		} else {
+			errz.HardAssert(grid[n.I][n.J] != Box2E, "invalid box end : %v : nbs = %v", n.Str(), arrz.Idx2DListToStr(nbs))
+			nbsMap[n.ToKey()] = []*idx{n}
+			nbsOrder = append(nbsOrder, n.ToKey())
+		}
+	}
+	nbs = make([]*idx, 0)
+	for _, key := range nbsOrder {
+		nbs = append(nbs, nbsMap[key]...)
+	}
+	return nbs
+}
+
 func moveVerticalP2(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) bool {
-	isBox := len(cs) == 2
-	if !isBox {
-		c := cs[0]
-		nbs := getNext(grid, c)
-		canMove, isBlockedByBox := checkMobility(grid, nbs)
-		if canMove {
-			grid[nbs[0].I][nbs[0].J] = grid[c.I][c.J]
-			grid[c.I][c.J] = Space
-			return true
-		} else if isBlockedByBox {
-			didNbrMove := moveVerticalP2(grid, nbs, getNext)
-			if didNbrMove {
-				moveVerticalP2(grid, cs, getNext)
-				return true
+	nbs := make([]*idx, 0)
+	for _, c := range cs {
+		nbs = append(nbs, getNext(grid, c)...)
+	}
+	nbs = pruneNbs(grid, nbs)
+	//fmt.Println(" | cs = ", arrz.Idx2DListToStr(cs), "nbs = ", arrz.Idx2DListToStr(nbs))
+	allNbrClear := true
+	for _, n := range nbs {
+		if grid[n.I][n.J] == Wall {
+			return false
+		} else if isPartOfBox(grid, n) {
+			allNbrClear = false
+			break
+		}
+	}
+	if allNbrClear {
+		for i := 0; i < len(nbs); i++ {
+			grid[nbs[i].I][nbs[i].J] = grid[cs[i].I][cs[i].J]
+			grid[cs[i].I][cs[i].J] = Space
+		}
+		return true
+	} else {
+		nbs2 := make([]*idx, 0)
+		for _, n := range nbs {
+			if isPartOfBox(grid, n) {
+				nbs2 = append(nbs2, n)
 			}
 		}
-	} else {
-		c1, c2 := cs[0], cs[1]
-		nbs1, nbs2 := getNext(grid, c1), getNext(grid, c2)
-		canMove1, isBlockedByBox1 := checkMobility(grid, nbs1)
-		canMove2, isBlockedByBox2 := checkMobility(grid, nbs2)
-		if canMove1 && canMove2 {
-			grid[nbs1[0].I][nbs1[0].J] = grid[c1.I][c1.J]
-			grid[c1.I][c1.J] = Space
-			grid[nbs2[0].I][nbs2[0].J] = grid[c2.I][c2.J]
-			grid[c2.I][c2.J] = Space
+		r := moveVerticalP2(grid, nbs2, getNext)
+		if r {
+			moveVerticalP2(grid, cs, getNext)
 			return true
-		} else if isBlockedByBox1 && isBlockedByBox2 {
-			didNbrMove1 := moveVerticalP2(grid, nbs1, getNext)
-			didNbrMove2 := moveVerticalP2(grid, nbs2, getNext)
-			if didNbrMove1 && didNbrMove2 {
-				moveVerticalP2(grid, cs, getNext)
-				return true
-			}
-		} else if isBlockedByBox1 {
-			didNbrMove := moveVerticalP2(grid, nbs1, getNext)
-			if didNbrMove {
-				moveVerticalP2(grid, cs, getNext)
-				return true
-			}
-		} else if isBlockedByBox2 {
-			didNbrMove := moveVerticalP2(grid, nbs2, getNext)
-			if didNbrMove {
-				moveVerticalP2(grid, cs, getNext)
-				return true
-			}
 		}
 	}
 	return false
-}
-
-func checkMobility(grid [][]byte, nbs []*idx) (bool, bool) {
-	canMove, isBlockedByBox := false, false
-	if len(nbs) == 1 {
-		isBlockedByBox = false
-		n := nbs[0]
-		if grid[n.I][n.J] == Wall {
-			canMove = false
-		} else if grid[n.I][n.J] == Space {
-			canMove = true
-		}
-	} else {
-		isBlockedByBox = true
-	}
-	return canMove, isBlockedByBox
 }
 
 /***** Common Functions *****/
@@ -226,8 +228,7 @@ func calcGpsSum(grid [][]byte) int {
 		for j := 0; j < len(grid[0]); j++ {
 			if grid[i][j] == Box {
 				sum += i*100 + j
-			}
-			if grid[i][j] == Box2S {
+			} else if grid[i][j] == Box2S {
 				sum += i*100 + j
 			}
 		}
@@ -243,4 +244,5 @@ func ParseInput(inputFilePath string) {
 	parts := iutils.BreakByEmptyLineString1D(lines)
 	gInput = iutils.ExtractByte2DFromString1D(parts[0], "", nil, 0)
 	gPath = []byte(strings.Join(parts[1], ""))
+	fmt.Println("Input Parsed: ", len(gPath))
 }
