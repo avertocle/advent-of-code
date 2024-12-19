@@ -1,9 +1,9 @@
 r, wr, b, g, bwu, rb, gb, br
 
-brwrr
-bggr
 gbbr
 rrbgbr
+brwrr
+bggr
 ubwu
 bwurrg
 brgr

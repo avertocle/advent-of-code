@@ -12,76 +12,73 @@ const DirPath = "../2024/day19"
 
 var gTowels [][]byte
 var gDesigns [][]byte
+var gGraph *ds.Graph
+var gEndNodes map[string]bool
+
+const StartNodeId = "start"
 
 // 400, 388 too high
+// 1019 too low
+
+/*
+Adding a '*' to the beginning of the design so that graph have a single start node '*'.
+We can hence avoid maintaining a list of start nodes.
+*/
 
 func SolveP1() string {
-	ans := 0
-	graph, startNodes, endNodes := makeGraph()
+	ans := int64(0)
+	memory := make(map[string]int64)
 	for _, design := range gDesigns {
-		found := findDesignInGraph(graph, startNodes, endNodes, design)
-		fmt.Println("===> ", string(design), found)
-		if found {
-			ans++
-		}
+		newDesign := append([]byte{'*'}, design...)
+		found := countTowelArrangements(memory, newDesign, StartNodeId, false)
+		ans += found
 	}
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
-	ans := 0
+	ans := int64(0)
+	memory := make(map[string]int64)
+	for _, design := range gDesigns {
+		newDesign := append([]byte{'*'}, design...)
+		found := countTowelArrangements(memory, newDesign, StartNodeId, true)
+		ans += found
+	}
 	return fmt.Sprintf("%v", ans)
 }
 
-func findDesignInGraph(g *ds.Graph, startNodes, endNodes map[string]bool, design []byte) bool {
-	allNodes := g.FindVertexesByValue(int(design[0]))
-	starts := make([]string, 0)
-	for _, n := range allNodes {
-		if startNodes[n] {
-			starts = append(starts, n)
-		}
+func countTowelArrangements(memory map[string]int64, design []byte, currId string, findAll bool) int64 {
+	if v, ok := memory[fmt.Sprintf("%v-%v", design, currId)]; ok {
+		return v
 	}
-	for _, node := range starts {
-		//fmt.Printf("\n\n--%v %v--\n\n", node, starts)
-		if isDesignInGraph(g, startNodes, endNodes, design, node) {
-			return true
-		}
-	}
-	return false
-}
-
-func isDesignInGraph(g *ds.Graph, startNodes, endNodes map[string]bool, design []byte, currId string) bool {
-	//fmt.Printf("%v | %q vs %v,%q | processing \n", string(design), string(design[0]), currId, g.VMap[currId])
-	if len(design) == 0 {
-		fmt.Println("what the hell")
-		return true
-	}
-	if g.VMap[currId] != int(design[0]) {
-		//fmt.Printf("==> %v | %q vs %v,%q | not matched \n", string(design), string(design[0]), currId, g.VMap[currId])
-		return false
+	errz.HardAssert(len(design) > 0, "design cannot be is empty")
+	if gGraph.VMap[currId] != int(design[0]) {
+		return 0
 	}
 	if len(design) == 1 {
-		if endNodes[currId] {
-			//fmt.Printf("==> %v | %q vs %v,%q | matched end-node \n", string(design), string(design[0]), currId, g.VMap[currId])
-			return true
+		if gEndNodes[currId] {
+			memory[fmt.Sprintf("%v-%v", design, currId)] += 1
+			return 1
 		} else {
-			//fmt.Printf("==> %v | %q vs %v,%q | matched non-end-node \n", string(design), string(design[0]), currId, g.VMap[currId])
-			return false
+			return 0
 		}
 	}
-	nextNodes, _ := g.AdList[currId]
-	//fmt.Printf("==> %v | recur to find %v starting in %v \n", string(design), string(design[1:]), g.MapToStr(nextNodes))
-	for nextId, _ := range nextNodes {
-		if isDesignInGraph(g, startNodes, endNodes, design[1:], nextId) {
-			return true
+	nextNodes, _ := gGraph.AdList[currId]
+	count := int64(0)
+	for nextNodeId, _ := range nextNodes {
+		count += countTowelArrangements(memory, design[1:], nextNodeId, findAll)
+		if !findAll && count > 0 {
+			break
 		}
 	}
-	return false
+	if count > 0 {
+		memory[fmt.Sprintf("%v-%v", design, currId)] += count
+	}
+	return count
 }
 
-func makeGraph() (*ds.Graph, map[string]bool, map[string]bool) {
+func makeGraph() (*ds.Graph, map[string]bool) {
 	g := ds.NewGraph()
-	startNodes := make(map[string]bool)
 	endNodes := make(map[string]bool)
 	for i, row := range gTowels {
 		for j, cell := range row {
@@ -95,18 +92,22 @@ func makeGraph() (*ds.Graph, map[string]bool, map[string]bool) {
 				}
 			}
 			g.AddVertex(vkey, int(cell), awm)
-			if j == 0 {
-				startNodes[vkey] = true
-			}
 			if j == len(row)-1 {
 				endNodes[vkey] = true
 			}
 		}
 	}
+
+	awm := make(map[string]int)
+	for i, _ := range gTowels {
+		awm[fmt.Sprintf("%v-%v", i, 0)] = 1
+	}
+	g.AddVertex(StartNodeId, int('*'), awm)
+
 	//fmt.Println("startNodes = ", startNodes)
 	//fmt.Println("endNodes = ", endNodes)
 	//g.PrintAdList()
-	return g, startNodes, endNodes
+	return g, endNodes
 }
 
 /***** P1 Functions *****/
@@ -123,8 +124,5 @@ func ParseInput(inputFilePath string) {
 	sections := iutils.BreakByEmptyLineString1D(lines)
 	gTowels = iutils.ExtractByte2DFromString1D(stringz.SplitMultiTrimSpace(sections[0][0], []string{","}), "", nil, 0)
 	gDesigns = iutils.ExtractByte2DFromString1D(sections[1], "", nil, 0)
-	//arrz.PPrint2D(gTowels)
-	//fmt.Println(len(gTowels))
-	//fmt.Println(len(gDesigns))
-	//arrz.PPrint2D(gDesigns)
+	gGraph, gEndNodes = makeGraph()
 }
