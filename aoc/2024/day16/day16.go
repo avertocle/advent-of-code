@@ -69,9 +69,9 @@ func findTileCountInAllShortestPaths(grid [][]byte, curr, end *arrz.Idx2DD[int],
 
 func findShortestPath(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][]int, visited, unvisited cmz.MapVisited) {
 	//printDebug(grid, costGrid, visited, curr, end)
-	if len(visited)%1000 == 0 {
-		fmt.Printf("%v/%v -> ", len(visited), len(unvisited))
-	}
+	//if len(visited)%1000 == 0 {
+	//	fmt.Printf("%v/%v -> ", len(visited), len(unvisited))
+	//}
 	if curr.IsEqual(end, true) {
 		return
 	}

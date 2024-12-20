@@ -59,6 +59,19 @@ func Unique2D[T cmz.Primitive](arr [][]T) [][]T {
 	return ans
 }
 
+func Reduce2d[T any, U int | int64](arr [][]T, init U, redFunc func([][]T, U, U) U) U {
+	ans := init
+	for i := 0; i < len(arr); i++ {
+		for j := 0; j < len(arr[0]); j++ {
+			ans += redFunc(arr, U(i), U(j))
+		}
+	}
+	return ans
+}
+
+//func Reduce2d[T any, U any](grid [][]T, f func(U, T) U, init U) U {
+//}
+
 func Find2D[T cmz.Primitive](grid [][]T, target T) [][]int {
 	ans := make([][]int, 0)
 	for i, row := range grid {
@@ -103,7 +116,7 @@ func PPrint2D[T any](arr [][]T) {
 				val = fmt.Sprintf("%c", val)
 			}
 			fmt.Printf("%v", val)
-//			fmt.Printf("%v", clr.Gen(val, clr.Cyan))
+			//			fmt.Printf("%v", clr.Gen(val, clr.Cyan))
 		}
 		fmt.Println()
 	}
