@@ -6,13 +6,14 @@ package main
 
 import (
 	"fmt"
-	prob "github.com/avertocle/contests/aoc/2023/day25"
+	prob "github.com/avertocle/contests/aoc/2024/day15"
 	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"os"
 	"path"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -34,12 +35,13 @@ func displayResults(problems []*problem) {
 	}
 	for ifName, parts := range m {
 		p1, p2 := parts[1], parts[2]
-		displayPrettyResult(ifName, p1.ans, p2.ans)
+		displayPrettyResult(ifName, p1.ans, p2.ans, p1.timeStr, p2.timeStr)
 	}
 }
 
 func runAll(problems []*problem) {
 	for _, p := range problems {
+		tStart := time.Now().UnixMilli()
 		prob.ParseInput(p.inputFilePath())
 		if p.part == 1 {
 			p.ans = prob.SolveP1()
@@ -48,6 +50,7 @@ func runAll(problems []*problem) {
 		} else {
 			errz.HardAssert(false, "invalid part : %v", p.part)
 		}
+		p.timeStr = fmt.Sprintf("%0.2ds", (time.Now().UnixMilli()-tStart)/1000)
 	}
 }
 
@@ -55,7 +58,12 @@ func makeProblems(dpath string, args []string) []*problem {
 	inputFileNames, err := iutils.GetInputFileList(dpath)
 	errz.HardAssert(err == nil, "error fetching input file : dir(%v) | %v", dpath, err)
 	problems := make([]*problem, 0)
-	//inputFileNames = []string{"input_small.txt"}
+	inputFileNames = []string{"input_small.txt"}
+	//inputFileNames = []string{"input_small_01.txt"}
+	//inputFileNames = []string{"input_small_02.txt"}
+	//inputFileNames = []string{"input_small_03.txt"}
+	//inputFileNames = []string{"input_small_04.txt"}
+	//inputFileNames = []string{"input_final.txt"}
 	for _, fname := range inputFileNames {
 		problems = append(problems, newProblem(dpath, fname, 1, "na"))
 		problems = append(problems, newProblem(dpath, fname, 2, "na"))
@@ -66,10 +74,11 @@ func makeProblems(dpath string, args []string) []*problem {
 /***** Interfaces *****/
 
 type problem struct {
-	dpath string
-	fname string
-	part  int
-	ans   string
+	dpath   string
+	fname   string
+	part    int
+	ans     string
+	timeStr string
 }
 
 func newProblem(dirPath, inputFile string, part int, ans string) *problem {
@@ -87,11 +96,13 @@ func displayPrettyHeader(dirPath string, args []string) {
 	fmt.Printf("\n%v\n%v\n\n", horLine(), line)
 }
 
-func displayPrettyResult(ifName, ansP1, ansP2 string) {
-	line := fmt.Sprintf("%v : ans-P1 = %v : ans-P2 = %v",
+func displayPrettyResult(ifName, ansP1, ansP2, timeP1, timeP2 string) {
+	line := fmt.Sprintf("%v : ans-P1 = %v [%v] : ans-P2 = %v [%v]",
 		clr.Str(ifName, clr.Yellow),
 		clr.Str(ansP1, clr.Green),
-		clr.Str(ansP2, clr.Green))
+		timeP1,
+		clr.Str(ansP2, clr.Green),
+		timeP2)
 	fmt.Printf("\n%v\n%v\n%v\n\n", horLine(), line, horLine())
 }
 

@@ -3,8 +3,8 @@ package day21
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 	"strings"
 )
@@ -42,14 +42,14 @@ func SolveP2() string {
 
 /***** Common Functions *****/
 
-//return final-pos and final-die-val
+// return final-pos and final-die-val
 func playOneTurn(pos, dval, drolls, dvalMax, posMax int) (int, int) {
 	dValTot := 0
 	for i := 0; i < drolls; i++ {
-		dval = intz.IncBounded(dval, 1, dvalMax)
+		dval = numz.IncBounded(dval, 1, dvalMax)
 		dValTot += dval
 	}
-	pos = intz.IncBounded(pos, dValTot, posMax)
+	pos = numz.IncBounded(pos, dValTot, posMax)
 	//fmt.Printf("drolls(%v) dval(%v), pos(%v) \n", drolls, dValTot, pos)
 	return pos, dval
 }
@@ -60,8 +60,8 @@ func ParseInput(inputFilePath string) {
 	lines, err := iutils.FromFile(inputFilePath, false)
 	errz.HardAssert(err == nil, "iutils error | %v", err)
 	gInput = []int{
-		stringz.AtoiQ(strings.Fields(lines[0])[4], -1),
-		stringz.AtoiQ(strings.Fields(lines[1])[4], -1),
+		stringz.AtoI(strings.Fields(lines[0])[4], -1),
+		stringz.AtoI(strings.Fields(lines[1])[4], -1),
 	}
 	//fmt.Printf("start pos %v\n", gInput)
 }

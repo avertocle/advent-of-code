@@ -127,13 +127,13 @@ func (this *monkey) s() string {
 }
 
 func newMonkey(lines []string) *monkey {
-	id := stringz.AtoiQ(strings.Split(strings.Fields(lines[0])[1], ":")[0], -1)
+	id := stringz.AtoI(strings.Split(strings.Fields(lines[0])[1], ":")[0], -1)
 
 	items := make([]*item, 0)
 	itemStr := strings.TrimSpace(strings.Split(lines[1], ":")[1])
 	tokens := strings.Split(itemStr, ",")
 	for _, t := range tokens {
-		items = append(items, newItem(stringz.AtoiQ(t, -1)))
+		items = append(items, newItem(stringz.AtoI(t, -1)))
 	}
 
 	op := newOp(strings.TrimSpace(strings.Split(lines[2], "=")[1]))
@@ -168,13 +168,13 @@ func newOp(s string) *op {
 	var f func(int64, int) int64
 	if strings.Compare(tokens[1], "+") == 0 {
 		f = opAddToOld
-		x = stringz.AtoiQ(tokens[2], -1)
+		x = stringz.AtoI(tokens[2], -1)
 	} else if strings.Compare(tokens[1], "*") == 0 {
 		if strings.Compare(tokens[2], "old") == 0 {
 			x = 0
 			f = opSqrOld
 		} else {
-			x = stringz.AtoiQ(tokens[2], -1)
+			x = stringz.AtoI(tokens[2], -1)
 			f = opMulToOld
 		}
 	}
@@ -195,9 +195,9 @@ type tst struct {
 
 func newTest(s []string) *tst {
 	f := isDivBy
-	x := stringz.AtoiQ(strings.Fields(s[0])[3], -1)
-	mkTru := stringz.AtoiQ(strings.Fields(s[1])[5], -1)
-	mkFal := stringz.AtoiQ(strings.Fields(s[2])[5], -1)
+	x := stringz.AtoI(strings.Fields(s[0])[3], -1)
+	mkTru := stringz.AtoI(strings.Fields(s[1])[5], -1)
+	mkFal := stringz.AtoI(strings.Fields(s[2])[5], -1)
 	return &tst{
 		x:     x,
 		f:     f,

@@ -5,6 +5,7 @@ import (
 	"github.com/avertocle/contests/io/boolz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"log"
 )
 
@@ -41,7 +42,7 @@ func SolveP2() string {
 			_, vdis[2] = checkUp(i, j)
 			_, vdis[3] = checkDown(i, j)
 			score = intz.Mul1D(vdis)
-			maxScore = intz.Max(score, maxScore)
+			maxScore = numz.Max(score, maxScore)
 		}
 	}
 	return fmt.Sprintf("%v", maxScore)

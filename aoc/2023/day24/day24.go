@@ -75,7 +75,7 @@ func ParseInput(inputFilePath string) {
 	gInputVel = make([][]int, len(lines))
 	for i, line := range lines {
 		t := stringz.SplitMultiTrimSpace(line, []string{",", " ", "@"})
-		gInputPos[i] = []int{stringz.AtoiQ(t[0], -1), stringz.AtoiQ(t[1], -1), stringz.AtoiQ(t[2], -1)}
-		gInputVel[i] = []int{stringz.AtoiQ(t[3], -1), stringz.AtoiQ(t[4], -1), stringz.AtoiQ(t[5], -1)}
+		gInputPos[i] = []int{stringz.AtoI(t[0], -1), stringz.AtoI(t[1], -1), stringz.AtoI(t[2], -1)}
+		gInputVel[i] = []int{stringz.AtoI(t[3], -1), stringz.AtoI(t[4], -1), stringz.AtoI(t[5], -1)}
 	}
 }

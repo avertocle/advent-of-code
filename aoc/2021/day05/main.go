@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"log"
 	"strconv"
 	"strings"
@@ -66,13 +66,13 @@ func problem2(input []*GeoLine) int {
 }
 
 func markGridHori(grid [][]byte, x1, x2, y int) {
-	for i := intz.Min(x1, x2); i <= intz.Max(x1, x2); i++ {
+	for i := numz.Min(x1, x2); i <= numz.Max(x1, x2); i++ {
 		grid[i][y]++
 	}
 }
 
 func markGridVert(grid [][]byte, y1, y2, x int) {
-	for i := intz.Min(y1, y2); i <= intz.Max(y1, y2); i++ {
+	for i := numz.Min(y1, y2); i <= numz.Max(y1, y2); i++ {
 		grid[x][i]++
 	}
 }
@@ -82,7 +82,7 @@ func markGridDiag(grid [][]byte, x1, y1, x2, y2 int) {
 	m := (y2 - y1) / (x2 - x1)
 	c := (y1 - (m * x1))
 	var x, y int
-	for x = intz.Min(x1, x2); x <= intz.Max(x1, x2); x++ {
+	for x = numz.Min(x1, x2); x <= numz.Max(x1, x2); x++ {
 		y = (m * x) + c
 		grid[x][y]++
 	}
@@ -91,7 +91,7 @@ func markGridDiag(grid [][]byte, x1, y1, x2, y2 int) {
 func getMaxCoord(input []*GeoLine) int {
 	maxCoord := 0
 	for _, gl := range input {
-		maxCoord = intz.Max(maxCoord, intz.Max(intz.Max(gl.x1, gl.x2), intz.Max(gl.x1, gl.x2)))
+		maxCoord = numz.Max(maxCoord, numz.Max(numz.Max(gl.x1, gl.x2), numz.Max(gl.x1, gl.x2)))
 	}
 	return maxCoord
 }

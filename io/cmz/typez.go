@@ -5,9 +5,17 @@ type Primitive interface {
 }
 
 type Number interface {
-	int | int64 | float64
+	int | int64 | float32 | float64
 }
 
 type PrimitivePlus interface {
-	int | byte | bool | string
+	int | int64 | byte | bool | string
 }
+
+type MapIIB map[int]map[int]bool
+
+type MapIB map[int]bool
+
+type MapVisited map[string]bool
+
+type MapCost map[string]int

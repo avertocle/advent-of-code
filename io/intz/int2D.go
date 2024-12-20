@@ -2,7 +2,6 @@ package intz
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/clr"
 )
 
 func Init2D(rows, cols, val int) [][]int {
@@ -33,7 +32,12 @@ func Min2D(arr [][]int) (int, []int) {
 func PPrint2D(arr [][]int) {
 	for _, row := range arr {
 		for _, cell := range row {
-			fmt.Printf("%v ", clr.Int(cell, clr.Cyan))
+			//fmt.Printf("%v ", clr.Int(cell, clr.Cyan))
+			if cell == 0 {
+				fmt.Printf(".. ")
+				continue
+			}
+			fmt.Printf("%02d ", cell)
 		}
 		fmt.Println()
 	}

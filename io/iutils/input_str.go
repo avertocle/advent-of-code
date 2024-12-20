@@ -39,3 +39,18 @@ func ExtractString1DFromString1D(lines []string, sep string, col int, defaultVal
 	}
 	return ans
 }
+
+func BreakByEmptyLineString1D(lines []string) [][]string {
+	ans := make([][]string, 0)
+	temp := make([]string, 0)
+	for _, line := range lines {
+		if len(line) == 0 {
+			ans = append(ans, temp)
+			temp = make([]string, 0)
+			continue
+		}
+		temp = append(temp, line)
+	}
+	ans = append(ans, temp)
+	return ans
+}

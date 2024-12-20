@@ -60,7 +60,7 @@ func ParseInput(inputFilePath string) {
 	gInputDistP1 = iutils.ExtractInt1DFromString1D(
 		stringz.SplitMultiTrimSpace(lines[1], []string{":", " "})[1:], "", -1, -1)
 
-	gInputTimeP2 = stringz.AtoiQ(strings.ReplaceAll(strings.Split(lines[0], ":")[1], " ", ""), -1)
-	gInputDistP2 = stringz.AtoiQ(strings.ReplaceAll(strings.Split(lines[1], ":")[1], " ", ""), -1)
+	gInputTimeP2 = stringz.AtoI(strings.ReplaceAll(strings.Split(lines[0], ":")[1], " ", ""), -1)
+	gInputDistP2 = stringz.AtoI(strings.ReplaceAll(strings.Split(lines[1], ":")[1], " ", ""), -1)
 
 }

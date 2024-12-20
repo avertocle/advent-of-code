@@ -37,9 +37,9 @@ func ExtractInt1DFromString1D(lines []string, sep string, col int, defaultVal in
 		tokens = strings.Split(line, sep)
 		ans[i] = defaultVal
 		if col == -1 {
-			ans[i] = stringz.AtoiQ(line, defaultVal)
+			ans[i] = stringz.AtoI(line, defaultVal)
 		} else if col < len(tokens) {
-			ans[i] = stringz.AtoiQ(tokens[col], defaultVal)
+			ans[i] = stringz.AtoI(tokens[col], defaultVal)
 		}
 	}
 	return ans

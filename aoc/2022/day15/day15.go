@@ -5,6 +5,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/rangez"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
@@ -123,14 +124,14 @@ func getBeaconsInRow(rowIdx int) [][]int {
 
 func trimx(r []int, max int) []int {
 	return []int{
-		intz.Max(gOffset[0], r[0]),
-		intz.Min(gOffset[0]+max, r[1]),
+		numz.Max(gOffset[0], r[0]),
+		numz.Min(gOffset[0]+max, r[1]),
 	}
 }
 
 func getProjectedRange(rowIdx int, sen, bea []int) []int {
 	mdis := calcManDis(sen, bea)
-	xdis := mdis - intz.Abs(sen[1]-rowIdx)
+	xdis := mdis - numz.Abs(sen[1]-rowIdx)
 	if xdis < 0 {
 		return []int{}
 	}
@@ -190,7 +191,7 @@ func getProjectedRange(rowIdx int, sen, bea []int) []int {
 /***** Input *****/
 
 func calcManDis(c1, c2 []int) int {
-	return intz.Abs(c1[0]-c2[0]) + intz.Abs(c1[1]-c2[1])
+	return numz.Abs(c1[0]-c2[0]) + numz.Abs(c1[1]-c2[1])
 }
 
 func ParseInput(inputFilePath string) {
@@ -205,16 +206,16 @@ func ParseInput(inputFilePath string) {
 	var tokens []string
 	for i := 0; i < len(lines); i++ {
 		tokens = stringz.SplitMulti(lines[i], []string{" ", "=", ":", ","})
-		px = stringz.AtoiQ(tokens[3], math.MinInt)
-		py = stringz.AtoiQ(tokens[6], math.MinInt)
-		maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
-		minX, minY = intz.Min(minX, px), intz.Min(minY, py)
+		px = stringz.AtoI(tokens[3], math.MinInt)
+		py = stringz.AtoI(tokens[6], math.MinInt)
+		maxX, maxY = numz.Max(maxX, px), numz.Max(maxY, py)
+		minX, minY = numz.Min(minX, px), numz.Min(minY, py)
 		gInpSen[i] = []int{px, py}
 
-		px = stringz.AtoiQ(tokens[13], math.MinInt)
-		py = stringz.AtoiQ(tokens[16], math.MinInt)
-		maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
-		minX, minY = intz.Min(minX, px), intz.Min(minY, py)
+		px = stringz.AtoI(tokens[13], math.MinInt)
+		py = stringz.AtoI(tokens[16], math.MinInt)
+		maxX, maxY = numz.Max(maxX, px), numz.Max(maxY, py)
+		minX, minY = numz.Min(minX, px), numz.Min(minY, py)
 		gInpBea[i] = []int{px, py}
 	}
 	gBoundTL = []int{minX, minY}

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 	"strconv"
 )
@@ -65,7 +65,7 @@ func digHoleV2() [][]int {
 	for i := 0; i < len(gInputDirec); i++ {
 		spos = tracePathV2(spos, gInputDist[i], gInputDirec[i])
 		holeVertices = append(holeVertices, spos)
-		l, r, u, d = intz.Min(l, spos[1]), intz.Max(r, spos[1]), intz.Min(u, spos[0]), intz.Max(d, spos[0])
+		l, r, u, d = numz.Min(l, spos[1]), numz.Max(r, spos[1]), numz.Min(u, spos[0]), numz.Max(d, spos[0])
 	}
 	for i := 0; i < len(holeVertices); i++ {
 		holeVertices[i][0] -= u
@@ -81,7 +81,7 @@ func digHole() [][]byte {
 	l, r, u, d = math.MaxInt, math.MinInt, math.MaxInt, math.MinInt
 	for i := 0; i < len(gInputDirec); i++ {
 		spos = tracePath(ground, spos, gInputDist[i], gInputDirec[i])
-		l, r, u, d = intz.Min(l, spos[1]), intz.Max(r, spos[1]), intz.Min(u, spos[0]), intz.Max(d, spos[0])
+		l, r, u, d = numz.Min(l, spos[1]), numz.Max(r, spos[1]), numz.Min(u, spos[0]), numz.Max(d, spos[0])
 	}
 	ground = bytez.Extract2D(ground, []int{u, l}, []int{d, r}, 'o')
 	ground = bytez.Pad2D(ground, len(ground), len(ground[0]), 1, '.')
@@ -109,9 +109,9 @@ func findPolygonCircumference(vertices [][]int) int {
 	for i := 0; i < len(vertices)-1; i++ {
 		j := (i + 1) % (len(vertices) - 1)
 		if vertices[i][0] == vertices[j][0] {
-			circumference += intz.Abs(vertices[i][1] - vertices[j][1])
+			circumference += numz.Abs(vertices[i][1] - vertices[j][1])
 		} else {
-			circumference += intz.Abs(vertices[i][0] - vertices[j][0])
+			circumference += numz.Abs(vertices[i][0] - vertices[j][0])
 		}
 	}
 	return circumference

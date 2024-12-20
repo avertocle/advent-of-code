@@ -1,8 +1,19 @@
 package mathz
 
-import "github.com/avertocle/contests/io/intz"
+import (
+	"github.com/avertocle/contests/io/numz"
+)
 
 func GCD(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func GCD64(a, b int64) int64 {
 	for b != 0 {
 		t := b
 		b = a % b
@@ -26,7 +37,7 @@ func LCMArr(arr []int) int {
 func GCDArr(arr []int) int {
 	ans := 1
 	for i := 1; i < len(arr); i++ {
-		ans = intz.Min(ans, GCD(ans, arr[i]))
+		ans = numz.Min(ans, GCD(ans, arr[i]))
 	}
 	return ans
 }

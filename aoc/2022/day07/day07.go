@@ -149,7 +149,7 @@ func extractDname(line string) string {
 
 func parseFile(line string) (string, int) {
 	t := strings.Split(line, " ")
-	return t[1], stringz.AtoiQ(t[0], -1)
+	return t[1], stringz.AtoI(t[0], -1)
 }
 
 func printFileSystem(r *tnode, depth int) {

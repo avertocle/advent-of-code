@@ -1,7 +1,8 @@
 package intz
 
 import (
-	"sort"
+	"github.com/avertocle/contests/io/arrz"
+	"slices"
 )
 
 func Init1D(size, val int) []int {
@@ -19,16 +20,6 @@ func Repeat1D(arr []int, count int) []int {
 	ans := make([]int, len(arr)*count)
 	for i, _ := range ans {
 		ans[i] = arr[i%len(arr)]
-	}
-	return ans
-}
-
-func FindByVal1D(arr []int, v int) []int {
-	ans := make([]int, 0)
-	for i, x := range arr {
-		if x == v {
-			ans = append(ans, i)
-		}
 	}
 	return ans
 }
@@ -57,9 +48,15 @@ func FindMin1D(arr []int) (int, int) {
 	return minn, pos
 }
 
-func FindMid1D(arr []int) int {
-	sort.Ints(arr)
-	return arr[len(arr)/2]
+func CopyAndSort1D(arr []int) []int {
+	sortedArr := make([]int, len(arr))
+	copy(sortedArr, arr)
+	slices.Sort(sortedArr)
+	return sortedArr
+}
+
+func FindSortedMid1D(arr []int) int {
+	return arrz.FindMid1D(CopyAndSort1D(arr))
 }
 
 func Sum1D(arr []int) int {

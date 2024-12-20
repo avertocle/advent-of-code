@@ -5,6 +5,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 
 	"math"
 )
@@ -63,7 +64,7 @@ func goDijkstra(ground [][]int, cn *node, ps *state) {
 		if costCn == math.MaxInt {
 			c = costNb
 		} else {
-			c = intz.Min(costCn+h, costNb)
+			c = numz.Min(costCn+h, costNb)
 		}
 		ps.setCost(nb, c)
 	}

@@ -7,7 +7,7 @@ func Init3D(d1, d2, d3, val int) [][][]int {
 	for i := 0; i < d1; i++ {
 		ans[i] = make([][]int, d2)
 		for j := 0; j < d2; j++ {
-			ans[i][j] = make([]int, d2)
+			ans[i][j] = make([]int, d3)
 			for k := 0; k < d3; k++ {
 				ans[i][j][k] = val
 			}
@@ -45,6 +45,19 @@ func Count3d(arr3d [][][]int, val int) int {
 		}
 	}
 	return ctr
+}
+
+func Min3D(arr [][][]int) (int, []int) {
+	minn := arr[0][0][0]
+	pos := []int{0, 0, 0}
+	for i, arr2D := range arr {
+		min2D, pos2D := Min2D(arr2D)
+		if min2D < minn {
+			minn = min2D
+			pos = []int{i, pos2D[0], pos2D[1]}
+		}
+	}
+	return minn, pos
 }
 
 /*

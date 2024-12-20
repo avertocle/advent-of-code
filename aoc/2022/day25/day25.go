@@ -3,8 +3,8 @@ package day25
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 	"strconv"
 	"strings"
@@ -43,7 +43,7 @@ func ParseInput(inputFilePath string) {
 func b5ToU10(u5 []int) int64 {
 	dec := int64(0)
 	for i, fu := range u5 {
-		dec += int64(fu) * intz.Pow(5, len(u5)-i-1)
+		dec += int64(fu) * numz.Pow(5, len(u5)-i-1)
 	}
 	return dec
 }

@@ -3,6 +3,7 @@ package rangez
 import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
+	"github.com/avertocle/contests/io/numz"
 )
 
 /*
@@ -14,7 +15,7 @@ func Intersec1D(r1, r2 []int) []int {
 	if len(r1) == 0 || len(r2) == 0 {
 		return []int{}
 	}
-	s, e := intz.Max(r1[0], r2[0]), intz.Min(r1[1], r2[1])
+	s, e := numz.Max(r1[0], r2[0]), numz.Min(r1[1], r2[1])
 	if s > e {
 		return []int{}
 	} else {

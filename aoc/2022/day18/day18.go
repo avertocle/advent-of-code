@@ -5,6 +5,7 @@ import (
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"math"
 )
 
@@ -43,11 +44,11 @@ func SolveP2() string {
 /***** Common Functions *****/
 
 func areTouching(c1, c2 []int) bool {
-	if c1[0] == c2[0] && c1[1] == c2[1] && intz.Abs(c1[2]-c2[2]) == 1 {
+	if c1[0] == c2[0] && c1[1] == c2[1] && numz.Abs(c1[2]-c2[2]) == 1 {
 		return true
-	} else if c1[1] == c2[1] && c1[2] == c2[2] && intz.Abs(c1[0]-c2[0]) == 1 {
+	} else if c1[1] == c2[1] && c1[2] == c2[2] && numz.Abs(c1[0]-c2[0]) == 1 {
 		return true
-	} else if c1[2] == c2[2] && c1[0] == c2[0] && intz.Abs(c1[1]-c2[1]) == 1 {
+	} else if c1[2] == c2[2] && c1[0] == c2[0] && numz.Abs(c1[1]-c2[1]) == 1 {
 		return true
 	} else {
 		return false

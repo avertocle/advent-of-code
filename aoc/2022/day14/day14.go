@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/errz"
-	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/numz"
 	"github.com/avertocle/contests/io/stringz"
 	"math"
 	"strings"
@@ -114,10 +114,10 @@ func ParseInput(inputFilePath string) {
 		tokens = strings.Fields(l)
 		points = make([][]int, 0)
 		for j := 0; j < len(tokens); j += 2 {
-			px = stringz.AtoiQ(strings.Split(tokens[j], ",")[0], -1)
-			py = stringz.AtoiQ(strings.Split(tokens[j], ",")[1], -1)
-			maxX, maxY = intz.Max(maxX, px), intz.Max(maxY, py)
-			minX, minY = intz.Min(minX, px), intz.Min(minY, py)
+			px = stringz.AtoI(strings.Split(tokens[j], ",")[0], -1)
+			py = stringz.AtoI(strings.Split(tokens[j], ",")[1], -1)
+			maxX, maxY = numz.Max(maxX, px), numz.Max(maxY, py)
+			minX, minY = numz.Min(minX, px), numz.Min(minY, py)
 			points = append(points, []int{px, py})
 		}
 		gInput[i] = points
@@ -138,10 +138,10 @@ func makeGrid(size int) [][]byte {
 func addRocksToGrid(grid [][]byte, rocks [][]int) {
 	var xs, xe, ys, ye int
 	for i := 0; i < len(rocks)-1; i++ {
-		xs = intz.Min(rocks[i][0], rocks[i+1][0])
-		xe = intz.Max(rocks[i][0], rocks[i+1][0])
-		ys = intz.Min(rocks[i][1], rocks[i+1][1])
-		ye = intz.Max(rocks[i][1], rocks[i+1][1])
+		xs = numz.Min(rocks[i][0], rocks[i+1][0])
+		xe = numz.Max(rocks[i][0], rocks[i+1][0])
+		ys = numz.Min(rocks[i][1], rocks[i+1][1])
+		ye = numz.Max(rocks[i][1], rocks[i+1][1])
 		for x := xs; x <= xe; x++ {
 			for y := ys; y <= ye; y++ {
 				grid[x][y] = cellRock

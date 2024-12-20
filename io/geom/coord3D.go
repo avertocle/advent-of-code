@@ -3,6 +3,7 @@ package geom
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/intz"
+	"github.com/avertocle/contests/io/numz"
 )
 
 /*
@@ -19,7 +20,11 @@ func NewCoord3d(x, y, z int) *Coord3d {
 	return &Coord3d{X: x, Y: y, Z: z}
 }
 
-func (this *Coord3d) Move(vec []int) *Coord3d {
+func NewCoord3dFromVec(v []int) *Coord3d {
+	return &Coord3d{X: v[0], Y: v[1], Z: v[2]}
+}
+
+func (this *Coord3d) MoveBy(vec []int) *Coord3d {
 	this.X += vec[0]
 	this.Y += vec[1]
 	this.Z += vec[2]
@@ -27,9 +32,9 @@ func (this *Coord3d) Move(vec []int) *Coord3d {
 }
 
 func (this *Coord3d) Trim(bounds [][]int) *Coord3d {
-	this.X = intz.Trim(this.X, bounds[0])
-	this.Y = intz.Trim(this.Y, bounds[1])
-	this.Z = intz.Trim(this.Z, bounds[2])
+	this.X = numz.Trim(this.X, bounds[0])
+	this.Y = numz.Trim(this.Y, bounds[1])
+	this.Z = numz.Trim(this.Z, bounds[2])
 	return this
 }
 

@@ -52,7 +52,7 @@ func deconstructLensLabel(step string) (string, int, int) {
 	if strings.HasSuffix(step, "-") {
 		return label, DASH, -1
 	} else if strings.Contains(step, "=") {
-		focLen := stringz.AtoiQ(tokens[1], -1)
+		focLen := stringz.AtoI(tokens[1], -1)
 		return label, EQUAL, focLen
 	}
 	errz.HardAssert(false, "invalid step | %v", step)

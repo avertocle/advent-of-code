@@ -34,8 +34,8 @@ func SolveP2() string {
 /***** Common Functions *****/
 
 func changeCubeState(cube [][][]int, offset []int, bounds [][]int, beg, end *geom.Coord3d, val int) {
-	beg.Trim(bounds).Move(offset)
-	end.Trim(bounds).Move(offset)
+	beg.Trim(bounds).MoveBy(offset)
+	end.Trim(bounds).MoveBy(offset)
 	_ = intz.SetSub3D(cube,
 		[]int{beg.X, end.X},
 		[]int{beg.Y, end.Y},
@@ -65,12 +65,12 @@ func parseInstructions() ([]*geom.Coord3d, []*geom.Coord3d, []int) {
 
 func parseOneInstruction(l string) (*geom.Coord3d, *geom.Coord3d, int) {
 	tokens := stringz.SplitMulti(l, []string{" ", "=", ",", ".."})
-	beg := geom.NewCoord3d(stringz.AtoiQ(tokens[2], math.MinInt),
-		stringz.AtoiQ(tokens[5], math.MinInt),
-		stringz.AtoiQ(tokens[8], math.MinInt))
-	end := geom.NewCoord3d(stringz.AtoiQ(tokens[3], math.MinInt),
-		stringz.AtoiQ(tokens[6], math.MinInt),
-		stringz.AtoiQ(tokens[9], math.MinInt))
+	beg := geom.NewCoord3d(stringz.AtoI(tokens[2], math.MinInt),
+		stringz.AtoI(tokens[5], math.MinInt),
+		stringz.AtoI(tokens[8], math.MinInt))
+	end := geom.NewCoord3d(stringz.AtoI(tokens[3], math.MinInt),
+		stringz.AtoI(tokens[6], math.MinInt),
+		stringz.AtoI(tokens[9], math.MinInt))
 	val := (len(tokens[0]) - 1) % 2 // lols
 	//fmt.Printf("input : (%v) to (%v) to (%v)\n", beg.Str(), end.Str(), val)
 	return beg, end, val

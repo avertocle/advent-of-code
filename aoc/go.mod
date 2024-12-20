@@ -7,7 +7,7 @@ replace github.com/avertocle/contests/io => ../io
 replace github.com/avertocle/contests/metrics => ../metrics
 
 require (
-	github.com/avertocle/contests/io v0.0.0-20221201111210-702fb242532b
-	github.com/avertocle/contests/metrics v0.0.0-20221201111210-702fb242532b
+	github.com/avertocle/contests/io v0.0.0-20240109144709-1894f1e22309
+	github.com/avertocle/contests/metrics v0.0.0-20240109144709-1894f1e22309
 	github.com/emirpasic/gods v1.18.1
 )

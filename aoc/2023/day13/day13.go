@@ -66,7 +66,7 @@ func SolveP2() string {
 			}
 		}
 		if !isFound {
-			//bytez.PPrint2D(pattern)
+			//arrz.PPrint2D(pattern)
 			fmt.Println("no mirror found\n\n", p, mrOrig, mcOrig)
 			//totalMr += mrOrig
 			//totalMc += mcOrig
