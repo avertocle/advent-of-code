@@ -2,7 +2,7 @@ package arrz
 
 import (
 	"fmt"
-	//"github.com/avertocle/contests/io/clr"
+	"github.com/avertocle/contests/io/clr"
 	"github.com/avertocle/contests/io/tpz"
 )
 
@@ -115,8 +115,8 @@ func PPrint2D[T any](arr [][]T) {
 			if _, ok := val.(byte); ok {
 				val = fmt.Sprintf("%c", val)
 			}
-			fmt.Printf("%v", val)
-			//			fmt.Printf("%v", clr.Gen(val, clr.Cyan))
+			//fmt.Printf("%v ", val)
+			fmt.Printf("%v ", clr.Gen(val, clr.Cyan))
 		}
 		fmt.Println()
 	}
