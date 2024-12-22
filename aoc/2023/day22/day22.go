@@ -2,11 +2,11 @@ package day22
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/geom"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 	"strings"
 )
 
@@ -45,7 +45,7 @@ func SolveP2() string {
 
 /***** P1 Functions *****/
 
-func calcCountBricksOnlySupportedBy(id int, allBrickSupportMap cmz.MapIIB) int {
+func calcCountBricksOnlySupportedBy(id int, allBrickSupportMap tpz.MapIIB) int {
 	count := 0
 	for id2, oneBrickSupportMap := range allBrickSupportMap {
 		if id2 == id {
@@ -61,8 +61,8 @@ func calcCountBricksOnlySupportedBy(id int, allBrickSupportMap cmz.MapIIB) int {
 
 /***** P2 Functions *****/
 
-func calcRemovedBricksCascading(id int, allBrickSupportMap cmz.MapIIB) cmz.MapIB {
-	removedBricks := make(cmz.MapIB)
+func calcRemovedBricksCascading(id int, allBrickSupportMap tpz.MapIIB) tpz.Set[int] {
+	removedBricks := make(tpz.Set[int])
 	removedBricks[id] = true
 	for {
 		nextRemovedBricks := getNextRemovedBricks(removedBricks, allBrickSupportMap)
@@ -76,8 +76,8 @@ func calcRemovedBricksCascading(id int, allBrickSupportMap cmz.MapIIB) cmz.MapIB
 	return removedBricks
 }
 
-func getNextRemovedBricks(removedBricks cmz.MapIB, brickSupportMap cmz.MapIIB) cmz.MapIB {
-	nextRemoved := make(cmz.MapIB)
+func getNextRemovedBricks(removedBricks tpz.Set[int], brickSupportMap tpz.MapIIB) tpz.Set[int] {
+	nextRemoved := make(tpz.Set[int])
 	for id, _ := range gInput {
 		allSupportingBricksRemoved := checkAllSupportingBricksRemoved(id, removedBricks, brickSupportMap)
 		if allSupportingBricksRemoved && !removedBricks[id] {
@@ -87,7 +87,7 @@ func getNextRemovedBricks(removedBricks cmz.MapIB, brickSupportMap cmz.MapIIB) c
 	return nextRemoved
 }
 
-func checkAllSupportingBricksRemoved(id int, removedBricks cmz.MapIB, brickSupportMap cmz.MapIIB) bool {
+func checkAllSupportingBricksRemoved(id int, removedBricks tpz.Set[int], brickSupportMap tpz.MapIIB) bool {
 	dependencies := brickSupportMap[id]
 	if len(dependencies) == 0 {
 		return false
@@ -108,8 +108,8 @@ func initStuff() {
 	_ = moveBricksDown()
 }
 
-func makeAllBrickSupportMap() cmz.MapIIB {
-	allBrickSupportMap := make(cmz.MapIIB)
+func makeAllBrickSupportMap() tpz.MapIIB {
+	allBrickSupportMap := make(tpz.MapIIB)
 	for id, b := range gInput {
 		allBrickSupportMap[id], _ = getSupportingBricks(b)
 	}
@@ -117,8 +117,8 @@ func makeAllBrickSupportMap() cmz.MapIIB {
 }
 
 // returns supporting bricks and if the brick is supported at all
-func getSupportingBricks(b *brick) (cmz.MapIB, bool) {
-	supportingBricks := make(cmz.MapIB)
+func getSupportingBricks(b *brick) (tpz.Set[int], bool) {
+	supportingBricks := make(tpz.Set[int])
 	//fmt.Printf("getSupportingBricks : checking brick %v\n", b.str())
 	if b.s.Z == 1 || b.e.Z == 1 {
 		return supportingBricks, true
@@ -172,9 +172,9 @@ func placeAllBricksInSpace() {
 	}
 }
 
-func moveBricksDown() cmz.MapIB {
+func moveBricksDown() tpz.Set[int] {
 	noBricksMoved := false
-	bricksMoved := make(cmz.MapIB)
+	bricksMoved := make(tpz.Set[int])
 	for noBricksMoved == false {
 		bricksMovedCount := 0
 		for id, b := range gInput {
@@ -196,7 +196,7 @@ func moveBricksDown() cmz.MapIB {
 	return bricksMoved
 }
 
-func printAllBrickSupportMap(brickSupportMap cmz.MapIIB) {
+func printAllBrickSupportMap(brickSupportMap tpz.MapIIB) {
 	for id, b := range gInput {
 		fmt.Printf("allBrickSupportMap : brick-%02d : %v : %v\n", id, b.str(), brickSupportMap[id])
 	}

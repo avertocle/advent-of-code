@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/bytez"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 )
 
 var gInput [][]byte
@@ -75,7 +75,7 @@ func makeExpandedGrid(marker byte) ([][]byte, *arrz.Idx2D) {
 	return grid, newStart
 }
 
-func floodFill(grid [][]byte, curr *arrz.Idx2D, loop cmz.MapVisited, marker byte) {
+func floodFill(grid [][]byte, curr *arrz.Idx2D, loop tpz.StringSet, marker byte) {
 	grid[curr.I][curr.J] = marker
 	neighbours := curr.Neighbours(false)
 	for _, n := range neighbours {
@@ -85,7 +85,7 @@ func floodFill(grid [][]byte, curr *arrz.Idx2D, loop cmz.MapVisited, marker byte
 	}
 }
 
-func markLoopOnGrid(grid [][]byte, loop cmz.MapVisited, marker byte) {
+func markLoopOnGrid(grid [][]byte, loop tpz.StringSet, marker byte) {
 	for p, _ := range loop {
 		pp := arrz.NewIdx2DFromKey(p)
 		grid[pp.I][pp.J] = marker
@@ -94,9 +94,9 @@ func markLoopOnGrid(grid [][]byte, loop cmz.MapVisited, marker byte) {
 
 /***** Common Functions *****/
 
-func findLoop(start, startNext *arrz.Idx2D, grid [][]byte) cmz.MapVisited {
+func findLoop(start, startNext *arrz.Idx2D, grid [][]byte) tpz.StringSet {
 	prev, curr := start.Clone(), startNext.Clone()
-	loop := make(cmz.MapVisited)
+	loop := make(tpz.StringSet)
 	loop[prev.ToKey()] = true
 	for !curr.IsEqual(start) {
 		loop[curr.ToKey()] = true

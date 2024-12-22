@@ -1,18 +1,18 @@
 package arrz
 
-import "github.com/avertocle/contests/io/cmz"
+import "github.com/avertocle/contests/io/tpz"
 
-func IsValidIndexCriterion2D[T cmz.Primitive](grid [][]T, idx []int) bool {
+func IsValidIndexCriterion2D[T tpz.Primitive](grid [][]T, idx []int) bool {
 	return idx[0] >= 0 && idx[0] < len(grid) && idx[1] >= 0 && idx[1] < len(grid[0])
 }
 
-func MakeValueCriterion2D[T cmz.Primitive](val T) CriterionFunc[T] {
+func MakeValueCriterion2D[T tpz.Primitive](val T) CriterionFunc[T] {
 	return func(grid [][]T, index []int) bool {
 		return grid[index[0]][index[1]] == val
 	}
 }
 
-func GenericSelect2D[T cmz.Primitive](grid [][]T, indexList [][]int, criteria []CriterionFunc[T]) [][]int {
+func GenericSelect2D[T tpz.Primitive](grid [][]T, indexList [][]int, criteria []CriterionFunc[T]) [][]int {
 	ans := make([][]int, 0)
 	if indexList != nil {
 		for _, idx := range indexList {
@@ -32,7 +32,7 @@ func GenericSelect2D[T cmz.Primitive](grid [][]T, indexList [][]int, criteria []
 	return ans
 }
 
-func matchAllCriteria[T cmz.Primitive](grid [][]T, index []int, criteria []CriterionFunc[T]) bool {
+func matchAllCriteria[T tpz.Primitive](grid [][]T, index []int, criteria []CriterionFunc[T]) bool {
 	for _, criterion := range criteria {
 		if !criterion(grid, index) {
 			return false
@@ -46,7 +46,7 @@ CriterionFunc
 func(grid2D, index, value)
 serves as a criteria function for both index and value based criteria
 */
-type CriterionFunc[T cmz.Primitive] func([][]T, []int) bool
+type CriterionFunc[T tpz.Primitive] func([][]T, []int) bool
 
 func Neighbours2D(index []int) [][]int {
 	return [][]int{

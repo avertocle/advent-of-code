@@ -3,9 +3,9 @@ package day10
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 )
 
 const DirPath = "../2024/day10"
@@ -18,7 +18,7 @@ func SolveP1() string {
 	ans := 0
 	trailCount := new(int)
 	for _, s := range gStarts {
-		calcTrailCountP1(s, make(cmz.MapVisited), trailCount)
+		calcTrailCountP1(s, make(tpz.StringSet), trailCount)
 	}
 	ans = *trailCount
 	return fmt.Sprintf("%v", ans)
@@ -29,7 +29,7 @@ func SolveP2() string {
 	trailCount := new(int)
 	for _, s := range gStarts {
 		for _, e := range gEnds {
-			calcTrailCountP2(s, e, make(cmz.MapVisited), trailCount)
+			calcTrailCountP2(s, e, make(tpz.StringSet), trailCount)
 		}
 	}
 	ans = *trailCount
@@ -38,7 +38,7 @@ func SolveP2() string {
 
 /***** P1 Functions *****/
 
-func calcTrailCountP1(start *arrz.Idx2D, visited cmz.MapVisited, trailCount *int) {
+func calcTrailCountP1(start *arrz.Idx2D, visited tpz.StringSet, trailCount *int) {
 	visited[start.ToKey()] = true
 	if gInput[start.I][start.J] == '9' {
 		*trailCount++
@@ -53,7 +53,7 @@ func calcTrailCountP1(start *arrz.Idx2D, visited cmz.MapVisited, trailCount *int
 
 /***** P2 Functions *****/
 
-func calcTrailCountP2(start *arrz.Idx2D, end *arrz.Idx2D, visited cmz.MapVisited, trailCount *int) {
+func calcTrailCountP2(start *arrz.Idx2D, end *arrz.Idx2D, visited tpz.StringSet, trailCount *int) {
 	visited[start.ToKey()] = true
 	if start.IsEqual(end) {
 		*trailCount++
@@ -69,7 +69,7 @@ func calcTrailCountP2(start *arrz.Idx2D, end *arrz.Idx2D, visited cmz.MapVisited
 
 /***** Common Functions *****/
 
-func getVisitableNbrs(p *arrz.Idx2D, visited cmz.MapVisited) []*arrz.Idx2D {
+func getVisitableNbrs(p *arrz.Idx2D, visited tpz.StringSet) []*arrz.Idx2D {
 	allNbrs := p.Neighbours(false)
 	visitableNbrs := make([]*arrz.Idx2D, 0)
 	for _, n := range allNbrs {

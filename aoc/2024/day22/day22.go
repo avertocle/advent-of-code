@@ -2,10 +2,10 @@ package day22
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/numz"
+	"github.com/avertocle/contests/io/tpz"
 )
 
 const DirPath = "../2024/day22"
@@ -45,7 +45,7 @@ func SolveP2() string {
 }
 
 // also populates uniqueDiffs for minor optimization
-func makeDiffMap(s int64, simTime int, uniqueDiffs cmz.StringSet) map[string]int {
+func makeDiffMap(s int64, simTime int, uniqueDiffs tpz.Set[string]) map[string]int {
 	_, pAll := evolveNTimes(s, simTime+1)
 	diffMap := make(map[string]int)
 	for i := 1; i < simTime-2; i++ {

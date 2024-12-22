@@ -2,11 +2,11 @@ package geom
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/cmz"
+	"github.com/avertocle/contests/io/tpz"
 	"math"
 )
 
-type Coord2D[T cmz.Number] struct {
+type Coord2D[T tpz.Number] struct {
 	X T
 	Y T
 }
@@ -33,35 +33,35 @@ func (o *Coord2D[T]) IsEqual(o1 *Coord2D[T]) bool {
 
 }
 
-func PPrintCoord2D[T cmz.Number](coords []*Coord2D[T]) {
+func PPrintCoord2D[T tpz.Number](coords []*Coord2D[T]) {
 	for _, c := range coords {
 		fmt.Println(c.Str())
 	}
 }
 
-func NewCoord2D[T cmz.Number](x, y T) *Coord2D[T] {
+func NewCoord2D[T tpz.Number](x, y T) *Coord2D[T] {
 	return &Coord2D[T]{X: x, Y: y}
 }
 
-type Line2D[T cmz.Number] struct {
+type Line2D[T tpz.Number] struct {
 	m T
 	c T
 }
 
-func NewLine2D[T cmz.Number](cd, vel *Coord2D[T]) *Line2D[T] {
+func NewLine2D[T tpz.Number](cd, vel *Coord2D[T]) *Line2D[T] {
 	m := (vel.Y) / (vel.X)
 	c := (cd.Y) - m*(cd.X)
 	//fmt.Println(m, c)
 	return &Line2D[T]{m: m, c: c}
 }
 
-func LineIntersect2D[T cmz.Number](l1, l2 *Line2D[T]) *Coord2D[T] {
+func LineIntersect2D[T tpz.Number](l1, l2 *Line2D[T]) *Coord2D[T] {
 	x := (l2.c - l1.c) / (l1.m - l2.m)
 	y := l1.m*x + l1.c
 	return NewCoord2D[T](x, y)
 }
 
-func Dist2D[T cmz.Number](c1, c2 *Coord2D[T]) float64 {
+func Dist2D[T tpz.Number](c1, c2 *Coord2D[T]) float64 {
 	d2 := (c1.X-c2.X)*(c1.X-c2.X) + (c1.Y-c2.Y)*(c1.Y-c2.Y)
 	return math.Sqrt(float64(d2))
 }

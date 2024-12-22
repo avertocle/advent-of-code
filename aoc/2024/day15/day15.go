@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/bytez"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 	"strings"
 )
 
@@ -96,7 +96,7 @@ func moveVerticalP2(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*id
 func findNeighbours(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) []*idx {
 	// find all neighbours of all cs and return unique ones in order to not disrupt the brackets []
 	nbrsAll := make([]*idx, 0)
-	nbrsSet := make(cmz.MapVisited)
+	nbrsSet := make(tpz.StringSet)
 	for _, c := range cs {
 		nbrsOne := getNext(grid, c)
 		for _, n := range nbrsOne {

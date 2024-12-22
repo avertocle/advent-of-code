@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/bytez"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 )
 
 var DirPath = "../2023/day23"
@@ -20,12 +20,12 @@ func SolveP1() string {
 	ans := 0
 	player := gStart
 	maxPathLen := new(int)
-	hikeSim(player, make(cmz.MapVisited), 0, maxPathLen)
+	hikeSim(player, make(tpz.StringSet), 0, maxPathLen)
 	ans = *maxPathLen - 1
 	return fmt.Sprintf("%v", ans)
 }
 
-func hikeSim(c *arrz.Idx2D, visited cmz.MapVisited, pathLen int, maxPathLen *int) {
+func hikeSim(c *arrz.Idx2D, visited tpz.StringSet, pathLen int, maxPathLen *int) {
 	visited[c.ToKey()] = true
 	pathLen++
 	if c.IsEqual(gEnd) {
@@ -51,7 +51,7 @@ func hikeSim(c *arrz.Idx2D, visited cmz.MapVisited, pathLen int, maxPathLen *int
 	visited[c.ToKey()] = false
 }
 
-func findNextVisitableIndexes(cur *arrz.Idx2D, visited cmz.MapVisited) []*arrz.Idx2D {
+func findNextVisitableIndexes(cur *arrz.Idx2D, visited tpz.StringSet) []*arrz.Idx2D {
 	nextPos := make([]*arrz.Idx2D, 0)
 	if hasSlide(cur) {
 		p := cur.Clone()
@@ -89,7 +89,7 @@ func findNextVisitableIndexes(cur *arrz.Idx2D, visited cmz.MapVisited) []*arrz.I
 	}
 }
 
-func findNextVisitableIndexesP2(cur *arrz.Idx2D, visited cmz.MapVisited) []*arrz.Idx2D {
+func findNextVisitableIndexesP2(cur *arrz.Idx2D, visited tpz.StringSet) []*arrz.Idx2D {
 	nextPos := make([]*arrz.Idx2D, 0)
 	nbrs := cur.Neighbours(false)
 	for _, p := range nbrs {
