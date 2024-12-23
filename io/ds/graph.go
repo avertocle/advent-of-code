@@ -2,6 +2,7 @@ package ds
 
 import (
 	"fmt"
+	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/stringz"
 	"strings"
 )
@@ -33,6 +34,17 @@ func (g *Graph) VList() []string {
 	return vlist
 }
 
+func (g *Graph) AddConnection(vid1, vid2 string, wei int) {
+	errz.SoftAssert(g.hasVertex(vid1) && g.hasVertex(vid2), "graph : vertex not found | %v %v", vid1, vid2)
+	g.AdList[vid1][vid2] = wei
+	g.AdList[vid2][vid1] = wei
+	key := fmt.Sprintf("%v%v%v", vid1, keySep, vid2)
+	g.AdMat[key] = wei
+	key = fmt.Sprintf("%v%v%v", vid2, keySep, vid1)
+	g.AdMat[key] = wei
+
+}
+
 func (g *Graph) AddVertex(vid string, vval int, adjWeightMap map[string]int) {
 	g.VMap[vid] = vval
 	g.addVtoAdList(vid, adjWeightMap)
@@ -49,6 +61,16 @@ func (g *Graph) FindVertexesByValue(v int) []string {
 	return nodeIds
 }
 
+func (g *Graph) AreConnected(v1, v2 string) bool {
+	_, ok := g.AdMat[g.makeAdMatKey(v1, v2)]
+	return ok
+}
+
+func (g *Graph) hasVertex(vid string) bool {
+	_, ok := g.VMap[vid]
+	return ok
+}
+
 func (g *Graph) addVtoAdList(v string, adjWeightMap map[string]int) {
 	currAdj, ok := g.AdList[v]
 	if !ok {
@@ -63,9 +85,15 @@ func (g *Graph) addVtoAdList(v string, adjWeightMap map[string]int) {
 func (g *Graph) addVtoAdMat(v string, adjWeightMap map[string]int) {
 	key := ""
 	for adj, wei := range adjWeightMap {
-		key = fmt.Sprintf("%v%v%v", v, keySep, adj)
+		//key = fmt.Sprintf("%v%v%v", v, keySep, adj)
+		key = g.makeAdMatKey(v, adj)
 		g.AdMat[key] = wei
 	}
+}
+
+func (g *Graph) makeAdMatKey(v, adj string) (key string) {
+	key = fmt.Sprintf("%v%v%v", v, keySep, adj)
+	return
 }
 
 func (g *Graph) PrintAdList() {

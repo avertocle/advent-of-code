@@ -31,3 +31,11 @@ func DecValue[K tpz.PrimitivePlus, V tpz.Number](m map[K]V, k K, delta V, initVa
 	}
 	m[k] = m[k] - delta
 }
+
+func Keys[T tpz.PrimitivePlus, U any](m map[T]U) []T {
+	keys := make([]T, 0)
+	for k, _ := range m {
+		keys = append(keys, k)
+	}
+	return keys
+}
