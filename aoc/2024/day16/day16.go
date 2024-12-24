@@ -3,10 +3,10 @@ package day16
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/intz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 	"math"
 	"slices"
 )
@@ -24,18 +24,18 @@ func SolveP1() string {
 	costGrid := intz.Init3D(len(gInput), len(gInput[0]), 4, math.MaxInt/2)
 	costGrid[gStart.I][gStart.J][gStart.D] = 0
 	unvisited := makeUnvisited(gInput)
-	findShortestPath(gInput, gStart, gEnd, costGrid, make(cmz.MapVisited), unvisited)
+	findShortestPath(gInput, gStart, gEnd, costGrid, make(tpz.StringSet), unvisited)
 	//fmt.Println(costGrid[gEnd.I][gEnd.J])
 	ans = slices.Min(costGrid[gEnd.I][gEnd.J])
 	var ans2 int
-	tilesVisited := make(cmz.MapVisited)
-	findTileCountInAllShortestPaths(gInput, gStart, gEnd, costGrid, tilesVisited, make(cmz.MapVisited), &ans2)
+	tilesVisited := make(tpz.StringSet)
+	findTileCountInAllShortestPaths(gInput, gStart, gEnd, costGrid, tilesVisited, make(tpz.StringSet), &ans2)
 	ans2 = len(tilesVisited)
 	return fmt.Sprintf("%v, %v", ans, ans2)
 }
 
-func uniqueTiles(visited cmz.MapVisited) int {
-	unique := make(cmz.MapVisited)
+func uniqueTiles(visited tpz.StringSet) int {
+	unique := make(tpz.StringSet)
 	for k, ok := range visited {
 		if ok {
 			x := arrz.NewIdx2DDFromKey[int](k)
@@ -45,7 +45,7 @@ func uniqueTiles(visited cmz.MapVisited) int {
 	return len(unique)
 }
 
-func findTileCountInAllShortestPaths(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][]int, tilesVisited, visited cmz.MapVisited, count *int) {
+func findTileCountInAllShortestPaths(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][]int, tilesVisited, visited tpz.StringSet, count *int) {
 	visited[curr.ToKey()] = true
 	if curr.IsEqual(end, true) {
 		for k, v := range visited {
@@ -67,11 +67,11 @@ func findTileCountInAllShortestPaths(grid [][]byte, curr, end *arrz.Idx2DD[int],
 	visited[curr.ToKey()] = false
 }
 
-func findShortestPath(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][]int, visited, unvisited cmz.MapVisited) {
+func findShortestPath(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][]int, visited, unvisited tpz.StringSet) {
 	//printDebug(grid, costGrid, visited, curr, end)
-	if len(visited)%1000 == 0 {
-		fmt.Printf("%v/%v -> ", len(visited), len(unvisited))
-	}
+	//if len(visited)%1000 == 0 {
+	//	fmt.Printf("%v/%v -> ", len(visited), len(unvisited))
+	//}
 	if curr.IsEqual(end, true) {
 		return
 	}
@@ -89,8 +89,8 @@ func findShortestPath(grid [][]byte, curr, end *arrz.Idx2DD[int], costGrid [][][
 	findShortestPath(grid, next, end, costGrid, visited, unvisited)
 }
 
-func makeUnvisited(grid [][]byte) cmz.MapVisited {
-	unVisited := make(cmz.MapVisited)
+func makeUnvisited(grid [][]byte) tpz.StringSet {
+	unVisited := make(tpz.StringSet)
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[0]); j++ {
 			for d := 0; d < 4; d++ {
@@ -103,7 +103,7 @@ func makeUnvisited(grid [][]byte) cmz.MapVisited {
 	return unVisited
 }
 
-func findNextTobeVisitedNode(costGrid [][][]int, visited, unvisited cmz.MapVisited) *arrz.Idx2DD[int] {
+func findNextTobeVisitedNode(costGrid [][][]int, visited, unvisited tpz.StringSet) *arrz.Idx2DD[int] {
 	minCost := math.MaxInt
 	var next *arrz.Idx2DD[int]
 	for k, _ := range unvisited {
@@ -116,7 +116,7 @@ func findNextTobeVisitedNode(costGrid [][][]int, visited, unvisited cmz.MapVisit
 	return next
 }
 
-func findVisitableNbrs(grid [][]byte, curr *arrz.Idx2DD[int], visited cmz.MapVisited) ([]*arrz.Idx2DD[int], []int) {
+func findVisitableNbrs(grid [][]byte, curr *arrz.Idx2DD[int], visited tpz.StringSet) ([]*arrz.Idx2DD[int], []int) {
 	nextStates := curr.NextStates()
 	nbrs, stepCosts := make([]*arrz.Idx2DD[int], 0), make([]int, 0)
 	for _, ns := range nextStates {
@@ -155,7 +155,7 @@ func ParseInput(inputFilePath string) {
 	gEnd = arrz.NewIdx2DD(end[0], end[1], arrz.Right)
 }
 
-func printDebug(grid [][]byte, costGrid [][][]int, visited cmz.MapVisited, curr, end *arrz.Idx2DD[int]) {
+func printDebug(grid [][]byte, costGrid [][][]int, visited tpz.StringSet, curr, end *arrz.Idx2DD[int]) {
 	fmt.Println(curr.Str(), end.Str())
 	for k, _ := range visited {
 		fmt.Printf("%v ", k)

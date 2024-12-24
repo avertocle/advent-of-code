@@ -2,12 +2,12 @@ package numz
 
 import (
 	"fmt"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
+	"github.com/avertocle/contests/io/tpz"
 	"math"
 )
 
-func Max[T cmz.Number](x, y T) T {
+func Max[T tpz.Number](x, y T) T {
 	if x >= y {
 		return x
 	} else {
@@ -15,7 +15,7 @@ func Max[T cmz.Number](x, y T) T {
 	}
 }
 
-func Min[T cmz.Number](x, y T) T {
+func Min[T tpz.Number](x, y T) T {
 	if x <= y {
 		return x
 	} else {
@@ -23,7 +23,7 @@ func Min[T cmz.Number](x, y T) T {
 	}
 }
 
-func Abs[T cmz.Number](x T) T {
+func Abs[T tpz.Number](x T) T {
 	if x >= 0 {
 		return x
 	} else {
@@ -31,11 +31,11 @@ func Abs[T cmz.Number](x T) T {
 	}
 }
 
-func IsBounded[T cmz.Number](x, s, e T) bool {
+func IsBounded[T tpz.Number](x, s, e T) bool {
 	return x >= s && x <= e
 }
 
-func Trim[T cmz.Number](c T, x []T) T {
+func Trim[T tpz.Number](c T, x []T) T {
 	if IsBounded(c, x[0], x[1]) {
 		return c
 	} else if c < x[0] {
@@ -47,7 +47,7 @@ func Trim[T cmz.Number](c T, x []T) T {
 	return math.MaxInt
 }
 
-func Pow[T cmz.Number](x, n T) int64 {
+func Pow[T tpz.Number](x, n T) int64 {
 	return int64(math.Pow(float64(x), float64(n)))
 }
 

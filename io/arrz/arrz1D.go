@@ -3,10 +3,11 @@ package arrz
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/clr"
-	"github.com/avertocle/contests/io/cmz"
+	"github.com/avertocle/contests/io/mapz"
+	"github.com/avertocle/contests/io/tpz"
 )
 
-func Key1D[T cmz.Primitive](keys []T) string {
+func Key1D[T tpz.Primitive](keys []T) string {
 	return fmt.Sprintf("%v", keys)
 }
 
@@ -14,11 +15,21 @@ func RemoveElement1D[T any](arr []T, index int) []T {
 	return append(append([]T{}, arr[:index]...), arr[index+1:]...)
 }
 
+func RemoveElementByVal1D[T tpz.PrimitivePlus](arr []T, val T) []T {
+	ans := make([]T, 0)
+	for _, v := range arr {
+		if v != val {
+			ans = append(ans, v)
+		}
+	}
+	return ans
+}
+
 func FindMid1D[T any](arr []T) T {
 	return arr[len(arr)/2]
 }
 
-func PPrint1D[T cmz.PrimitivePlus](arr []T, withIndex bool) {
+func PPrint1D[T tpz.PrimitivePlus](arr []T, withIndex bool) {
 	for i, cell := range arr {
 		if withIndex {
 			fmt.Printf("(%v:%v) | ", clr.Int(i, clr.Cyan), clr.Gen(cell, clr.Cyan))
@@ -37,7 +48,7 @@ func ToStr1D[T any](arr []T, sep string) string {
 	return ans[1:]
 }
 
-func Join1D[T cmz.PrimitivePlus](arrays ...[]T) []T {
+func Join1D[T tpz.PrimitivePlus](arrays ...[]T) []T {
 	ans := make([]T, 0)
 	for _, arr := range arrays {
 		ans = append(ans, arr...)
@@ -62,7 +73,7 @@ func SwapRangesInPlace1D[T any](arr []T, srcRange, dstRange []int) {
 // FindByVal1D : Find 'count' indices of a value in a 1D array,
 // to find all, send count = len(arr),
 // boundIndex = nil searches the entire array
-func FindByVal1D[T cmz.PrimitivePlus](arr []T, v T, boundIndex []int, maxCount int) []int {
+func FindByVal1D[T tpz.PrimitivePlus](arr []T, v T, boundIndex []int, maxCount int) []int {
 	ans := make([]int, 0)
 	foundCtr := 0
 	if boundIndex == nil {
@@ -82,7 +93,7 @@ func FindByVal1D[T cmz.PrimitivePlus](arr []T, v T, boundIndex []int, maxCount i
 // e.g ("aabbbaabbababbbbaaa, b) finds bbb, bb, b, bbbb upto count instances
 // to find all, send count = len(arr),
 // search happens within bounds, bounds = nil searches the entire array
-func FindRepeatedByVal1D[T cmz.PrimitivePlus](arr []T, v T, bounds []int, minLength, maxCount int) [][]int {
+func FindRepeatedByVal1D[T tpz.PrimitivePlus](arr []T, v T, bounds []int, minLength, maxCount int) [][]int {
 	ans := make([][]int, 0)
 	if bounds == nil {
 		bounds = []int{0, len(arr)}
@@ -100,4 +111,40 @@ func FindRepeatedByVal1D[T cmz.PrimitivePlus](arr []T, v T, bounds []int, minLen
 		}
 	}
 	return ans
+}
+
+func PushToSet[T tpz.PrimitivePlus](set tpz.Set[T], arr []T) {
+	for _, v := range arr {
+		set[v] = true
+	}
+}
+
+//func Union1D[T tpz.PrimitivePlus](arr1, arr2 []T) []T {
+//	m := make(tpz.Set[T])
+//	PushToSet(m, arr1)
+//	PushToSet(m, arr2)
+//	return mapz.Keys(m)
+//}
+
+func Union1D[T tpz.PrimitivePlus](arrs ...[]T) []T {
+	m := make(tpz.Set[T])
+	for _, arr := range arrs {
+		PushToSet(m, arr)
+	}
+	return mapz.Keys(m)
+}
+
+func Intersection1D[T tpz.PrimitivePlus](arrs ...[]T) []T {
+	m := make(tpz.Set[T])
+	PushToSet(m, arrs[0])
+	for i := 1; i < len(arrs); i++ {
+		m2 := make(tpz.Set[T])
+		for _, e := range arrs[i] {
+			if _, ok := m[e]; ok {
+				m2[e] = true
+			}
+		}
+		m = m2
+	}
+	return mapz.Keys(m)
 }

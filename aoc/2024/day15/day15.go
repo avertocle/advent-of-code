@@ -6,6 +6,7 @@ import (
 	"github.com/avertocle/contests/io/bytez"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
+	"github.com/avertocle/contests/io/tpz"
 	"strings"
 )
 
@@ -23,78 +24,142 @@ const Box2S = byte('[')
 const Box2E = byte(']')
 
 type idx = arrz.Idx2D[int]
-type funcNext = func(*idx) *idx
-
-// old debug 334 next move ^
-// old debug 4699 next move v
-// 1475511 too high
 
 func SolveP1() string {
 	ans := 0
-	//grid := arrz.Copy2D(gInput)
-	//curr := findRobot(grid)
-	////arrz.PPrint2D(grid)
-	//for i := 0; i < len(gPath); i++ {
-	//	curr = findRobot(grid)
-	//	moveRobotP1(grid, curr, gPath[i])
-	//}
-	//ans = calcGpsSum(grid)
+	grid := arrz.Copy2D(gInput)
+	curr := findRobot(grid)
+	for i := 0; i < len(gPath); i++ {
+		moveRobot(grid, curr, gPath[i], false)
+		curr = findRobot(grid)
+	}
+	ans = arrz.Reduce2d(grid, 0, calcGpsOneBox)
 	return fmt.Sprintf("%v", ans)
 }
 
 func SolveP2() string {
 	ans := 0
 	grid := makeGridP2()
-	//	grid := arrz.Copy2D(gInput)
-	//fmt.Println("Grid: ", arrz.Count2D(grid, Wall), arrz.Count2D(grid, Space), arrz.Count2D(grid, Box), arrz.Count2D(grid, Box2S), arrz.Count2D(grid, Box2E), calcGpsSum(grid))
 	curr := findRobot(grid)
 	for i := 0; i < len(gPath); i++ {
-		fmt.Println("\n--------------------\n")
-		arrz.PPrint2D(grid)
-		fmt.Println("Next move: ", string(gPath[i]), " | ", i)
 		curr = findRobot(grid)
-		moveRobotP2(grid, curr, gPath[i])
+		moveRobot(grid, curr, gPath[i], true)
 	}
-	//fmt.Println("Grid: ", arrz.Count2D(grid, Wall), arrz.Count2D(grid, Space), arrz.Count2D(grid, Box), arrz.Count2D(grid, Box2S), arrz.Count2D(grid, Box2E))
-	arrz.PPrint2D(grid)
-	ans = calcGpsSum(grid)
+	ans = arrz.Reduce2d(grid, 0, calcGpsOneBox)
 	return fmt.Sprintf("%v", ans)
 }
 
 /***** P1 Functions *****/
 
-func moveRobotP1(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
+func moveRobot(grid [][]byte, curr *arrz.Idx2D[int], dir byte, bigWarehouse bool) {
 	switch dir {
 	case 'v':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I+1, x.J) })
+		if bigWarehouse {
+			moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findNbrsBottom)
+		} else {
+			moveGeneric(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I+1, x.J) })
+		}
 	case '^':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I-1, x.J) })
+		if bigWarehouse {
+			moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findNbrsTop)
+		} else {
+			moveGeneric(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I-1, x.J) })
+		}
 	case '<':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
+		moveGeneric(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
 	case '>':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J+1) })
+		moveGeneric(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J+1) })
 	}
 }
 
-func moveGenericP1(grid [][]byte, c *idx, getNext func(*idx) *idx) bool {
-	canMove := false
-	c1 := getNext(c)
-	if grid[c1.I][c1.J] == Wall {
-		canMove = false
-	} else if grid[c1.I][c1.J] == Space {
-		canMove = true
+func moveVerticalP2(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) bool {
+	nbrs := findNeighbours(grid, cs, getNext)
+	if hasWall(grid, nbrs) {
+		return false
+	}
+	if isAllSpaces(grid, nbrs) {
+		for i := 0; i < len(nbrs); i++ {
+			grid[nbrs[i].I][nbrs[i].J] = grid[cs[i].I][cs[i].J]
+			grid[cs[i].I][cs[i].J] = Space
+		}
+		return true
+	}
+
+	nbrs = filterOnlyBoxNbrs(grid, nbrs)
+	if moveVerticalP2(grid, nbrs, getNext) {
+		moveVerticalP2(grid, cs, getNext)
+		return true
+	}
+	return false
+}
+
+func findNeighbours(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) []*idx {
+	// find all neighbours of all cs and return unique ones in order to not disrupt the brackets []
+	nbrsAll := make([]*idx, 0)
+	nbrsSet := make(tpz.StringSet)
+	for _, c := range cs {
+		nbrsOne := getNext(grid, c)
+		for _, n := range nbrsOne {
+			if _, ok := nbrsSet[n.ToKey()]; !ok {
+				nbrsSet[n.ToKey()] = true
+				nbrsAll = append(nbrsAll, n)
+			}
+		}
+	}
+	return nbrsAll
+}
+
+func findNbrsTop(grid [][]byte, c *idx) []*idx {
+	if grid[c.I-1][c.J] == Box2S {
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J+1)}
+	} else if grid[c.I-1][c.J] == Box2E {
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J-1), arrz.NewIdx2D[int](c.I-1, c.J)}
 	} else {
-		canMove = moveGenericP1(grid, c1, getNext)
+		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J)}
 	}
-
-	if canMove {
-		grid[c1.I][c1.J] = grid[c.I][c.J]
-		grid[c.I][c.J] = Space
-	}
-	return canMove
 }
 
-/***** P2 Functions *****/
+func filterOnlyBoxNbrs(grid [][]byte, cs []*idx) []*idx {
+	cs2 := make([]*idx, 0)
+	for _, c := range cs {
+		if isPartOfBox(grid, c) {
+			cs2 = append(cs2, c)
+		}
+	}
+	return cs2
+}
+
+func findNbrsBottom(grid [][]byte, c *idx) []*idx {
+	if grid[c.I+1][c.J] == Box2S {
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J+1)}
+	} else if grid[c.I+1][c.J] == Box2E {
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J-1), arrz.NewIdx2D[int](c.I+1, c.J)}
+	} else {
+		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J)}
+	}
+}
+
+func hasWall(grid [][]byte, c []*idx) bool {
+	for _, n := range c {
+		if grid[n.I][n.J] == Wall {
+			return true
+		}
+	}
+	return false
+}
+
+func isAllSpaces(grid [][]byte, c []*idx) bool {
+	for _, n := range c {
+		if grid[n.I][n.J] != Space {
+			return false
+		}
+	}
+	return true
+}
+
+func isPartOfBox(grid [][]byte, c *idx) bool {
+	return grid[c.I][c.J] == Box2S || grid[c.I][c.J] == Box2E
+}
 
 func makeGridP2() [][]byte {
 	r, c := len(gInput), len(gInput[0])*2
@@ -115,125 +180,35 @@ func makeGridP2() [][]byte {
 	return grid
 }
 
-func moveRobotP2(grid [][]byte, curr *arrz.Idx2D[int], dir byte) {
-	switch dir {
-	case 'v':
-		moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findBoxesBottom)
-	case '^':
-		moveVerticalP2(grid, []*arrz.Idx2D[int]{curr}, findBoxesTop)
-	case '<':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J-1) })
-	case '>':
-		moveGenericP1(grid, curr, func(x *idx) *idx { return arrz.NewIdx2D[int](x.I, x.J+1) })
-	}
-}
-
-func findBoxesTop(grid [][]byte, c *idx) []*idx {
-	if grid[c.I-1][c.J] == Box2S {
-		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J), arrz.NewIdx2D[int](c.I-1, c.J+1)}
-	} else if grid[c.I-1][c.J] == Box2E {
-		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J-1), arrz.NewIdx2D[int](c.I-1, c.J)}
-	} else {
-		return []*idx{arrz.NewIdx2D[int](c.I-1, c.J)}
-	}
-}
-
-func findBoxesBottom(grid [][]byte, c *idx) []*idx {
-	if grid[c.I+1][c.J] == Box2S {
-		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J), arrz.NewIdx2D[int](c.I+1, c.J+1)}
-	} else if grid[c.I+1][c.J] == Box2E {
-		// make sure to return the same J point first, the ordering is used later
-		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J-1), arrz.NewIdx2D[int](c.I+1, c.J)}
-	} else {
-		return []*idx{arrz.NewIdx2D[int](c.I+1, c.J)}
-	}
-}
-
-func isPartOfBox(grid [][]byte, c *idx) bool {
-	return grid[c.I][c.J] == Box2S || grid[c.I][c.J] == Box2E
-}
-
-func pruneNbs(grid [][]byte, nbs []*idx) []*idx {
-	nbsMap := make(map[string][]*idx)
-	nbsOrder := make([]string, 0)
-	for i := 0; i < len(nbs); i++ {
-		n := nbs[i]
-		if grid[n.I][n.J] == Box2S {
-			key := nbs[i].ToKey() + "-" + nbs[i+1].ToKey()
-			if _, ok := nbsMap[key]; !ok {
-				nbsOrder = append(nbsOrder, key)
-				nbsMap[key] = []*idx{nbs[i], nbs[i+1]}
-			}
-			i++
-		} else {
-			errz.HardAssert(grid[n.I][n.J] != Box2E, "invalid box end : %v : nbs = %v", n.Str(), arrz.Idx2DListToStr(nbs))
-			nbsMap[n.ToKey()] = []*idx{n}
-			nbsOrder = append(nbsOrder, n.ToKey())
-		}
-	}
-	nbs = make([]*idx, 0)
-	for _, key := range nbsOrder {
-		nbs = append(nbs, nbsMap[key]...)
-	}
-	return nbs
-}
-
-func moveVerticalP2(grid [][]byte, cs []*idx, getNext func([][]byte, *idx) []*idx) bool {
-	nbs := make([]*idx, 0)
-	for _, c := range cs {
-		nbs = append(nbs, getNext(grid, c)...)
-	}
-	nbs = pruneNbs(grid, nbs)
-	//fmt.Println(" | cs = ", arrz.Idx2DListToStr(cs), "nbs = ", arrz.Idx2DListToStr(nbs))
-	allNbrClear := true
-	for _, n := range nbs {
-		if grid[n.I][n.J] == Wall {
-			return false
-		} else if isPartOfBox(grid, n) {
-			allNbrClear = false
-			break
-		}
-	}
-	if allNbrClear {
-		for i := 0; i < len(nbs); i++ {
-			grid[nbs[i].I][nbs[i].J] = grid[cs[i].I][cs[i].J]
-			grid[cs[i].I][cs[i].J] = Space
-		}
-		return true
-	} else {
-		nbs2 := make([]*idx, 0)
-		for _, n := range nbs {
-			if isPartOfBox(grid, n) {
-				nbs2 = append(nbs2, n)
-			}
-		}
-		r := moveVerticalP2(grid, nbs2, getNext)
-		if r {
-			moveVerticalP2(grid, cs, getNext)
-			return true
-		}
-	}
-	return false
-}
-
 /***** Common Functions *****/
+
+func moveGeneric(grid [][]byte, c *idx, getNext func(*idx) *idx) bool {
+	c1 := getNext(c)
+	canMove := false
+	if grid[c1.I][c1.J] == Wall {
+		canMove = false
+	} else if grid[c1.I][c1.J] == Space {
+		canMove = true
+	} else {
+		canMove = moveGeneric(grid, c1, getNext)
+	}
+
+	if canMove {
+		grid[c1.I][c1.J] = grid[c.I][c.J]
+		grid[c.I][c.J] = Space
+	}
+	return canMove
+}
 
 func findRobot(grid [][]byte) *idx {
 	return arrz.NewIdx2D[int](bytez.Find2D(grid, '@')[0]...)
 }
 
-func calcGpsSum(grid [][]byte) int {
-	sum := 0
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[0]); j++ {
-			if grid[i][j] == Box {
-				sum += i*100 + j
-			} else if grid[i][j] == Box2S {
-				sum += i*100 + j
-			}
-		}
+func calcGpsOneBox(arr [][]byte, i, j int) int {
+	if arr[i][j] == Box || arr[i][j] == Box2S {
+		return i*100 + j
 	}
-	return sum
+	return 0
 }
 
 /***** Input *****/
@@ -244,5 +219,4 @@ func ParseInput(inputFilePath string) {
 	parts := iutils.BreakByEmptyLineString1D(lines)
 	gInput = iutils.ExtractByte2DFromString1D(parts[0], "", nil, 0)
 	gPath = []byte(strings.Join(parts[1], ""))
-	fmt.Println("Input Parsed: ", len(gPath))
 }

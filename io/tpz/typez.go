@@ -1,4 +1,4 @@
-package cmz
+package tpz
 
 type Primitive interface {
 	int | byte | bool
@@ -14,8 +14,8 @@ type PrimitivePlus interface {
 
 type MapIIB map[int]map[int]bool
 
-type MapIB map[int]bool
+type StringSet = map[string]bool
 
-type MapVisited map[string]bool
+type Set[T PrimitivePlus] map[T]bool
 
 type MapCost map[string]int

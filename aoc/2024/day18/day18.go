@@ -3,10 +3,10 @@ package day18
 import (
 	"fmt"
 	"github.com/avertocle/contests/io/arrz"
-	"github.com/avertocle/contests/io/cmz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
 	"github.com/avertocle/contests/io/stringz"
+	"github.com/avertocle/contests/io/tpz"
 	"math"
 )
 
@@ -53,7 +53,7 @@ func SolveP2() string {
 
 /***** Common Functions *****/
 
-func initStuff(maxBlockCount int) ([][]byte, *arrz.Idx2D[int], *arrz.Idx2D[int], [][]int, cmz.MapVisited) {
+func initStuff(maxBlockCount int) ([][]byte, *arrz.Idx2D[int], *arrz.Idx2D[int], [][]int, tpz.StringSet) {
 	grid := arrz.MarkOnNewGrid2D(gInput[0:maxBlockCount+1], gDims, safe, unsafe, false)
 	s, e := arrz.NewIdx2D(0, 0), arrz.NewIdx2D(gDims.I-1, gDims.J-1)
 	costGrid := arrz.Init2D(gDims.I, gDims.J, math.MaxInt/2)
@@ -62,7 +62,7 @@ func initStuff(maxBlockCount int) ([][]byte, *arrz.Idx2D[int], *arrz.Idx2D[int],
 	return grid, s, e, costGrid, unvisited
 }
 
-func findShortestPath(grid [][]byte, curr, end *arrz.Idx2D[int], costs [][]int, unvisited cmz.MapVisited) {
+func findShortestPath(grid [][]byte, curr, end *arrz.Idx2D[int], costs [][]int, unvisited tpz.StringSet) {
 	delete(unvisited, curr.ToKey())
 	if curr.IsEqual(end) {
 		return
@@ -80,8 +80,8 @@ func findShortestPath(grid [][]byte, curr, end *arrz.Idx2D[int], costs [][]int, 
 	}
 }
 
-func initUnvisited(grid [][]byte) cmz.MapVisited {
-	unvisited := make(cmz.MapVisited)
+func initUnvisited(grid [][]byte) tpz.StringSet {
+	unvisited := make(tpz.StringSet)
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[0]); j++ {
 			if grid[i][j] == safe {
@@ -92,7 +92,7 @@ func initUnvisited(grid [][]byte) cmz.MapVisited {
 	return unvisited
 }
 
-func findNextToVisit(costGrid [][]int, unvisited cmz.MapVisited) *arrz.Idx2D[int] {
+func findNextToVisit(costGrid [][]int, unvisited tpz.StringSet) *arrz.Idx2D[int] {
 	minCost := math.MaxInt
 	var minCostNode *arrz.Idx2D[int]
 	for k, _ := range unvisited {
