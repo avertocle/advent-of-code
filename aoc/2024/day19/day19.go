@@ -21,9 +21,6 @@ const (
 	EndNodeVal   = '#'
 )
 
-// 400, 388 too high
-// 1019 too low
-
 /*
 Adding a '*' to the beginning of the design so that graph have a single start node '*'.
 We can hence avoid maintaining a list of start nodes.
@@ -50,6 +47,12 @@ func SolveP2() string {
 	}
 	return fmt.Sprintf("%v", ans)
 }
+
+/***** P1 Functions *****/
+
+/***** P2 Functions *****/
+
+/***** Common Functions *****/
 
 func countTowelArrangements(memory map[string]int64, design string, currId string, findAll bool) int64 {
 	errz.HardAssert(len(design) > 0, "design cannot be empty")
@@ -82,37 +85,6 @@ func memKey(design, currId string) string {
 	return currId + "-" + design
 }
 
-//
-//func countTowelArrangements(memory map[string]int64, design []byte, currId string, findAll bool) int64 {
-//	if v, ok := memory[fmt.Sprintf("%v-%v", design, currId)]; ok {
-//		return v
-//	}
-//	errz.HardAssert(len(design) > 0, "design cannot be is empty")
-//	if gGraph.VMap[currId] != int(design[0]) {
-//		return 0
-//	}
-//	if len(design) == 1 {
-//		if gGraph.VMap[currId] == gGraph.VMap[EndNodeId] {
-//			memory[fmt.Sprintf("%v-%v", design, currId)] += 1
-//			return 1
-//		} else {
-//			return 0
-//		}
-//	}
-//	nextNodes, _ := gGraph.AdList[currId]
-//	count := int64(0)
-//	for nextNodeId, _ := range nextNodes {
-//		count += countTowelArrangements(memory, design[1:], nextNodeId, findAll)
-//		if !findAll && count > 0 {
-//			break
-//		}
-//	}
-//	if count > 0 {
-//		memory[fmt.Sprintf("%v-%v", design, currId)] += count
-//	}
-//	return count
-//}
-
 func makeGraph() *ds.Graph {
 	g := ds.NewGraph()
 	endNodes := make(map[string]bool)
@@ -144,12 +116,6 @@ func makeGraph() *ds.Graph {
 
 	return g
 }
-
-/***** P1 Functions *****/
-
-/***** P2 Functions *****/
-
-/***** Common Functions *****/
 
 /***** Input *****/
 
