@@ -5,8 +5,8 @@ import (
 	"github.com/avertocle/contests/io/arrz"
 	"github.com/avertocle/contests/io/errz"
 	"github.com/avertocle/contests/io/iutils"
-	"github.com/avertocle/contests/io/tpz"
-	"math"
+	"github.com/avertocle/contests/io/mapz"
+	"slices"
 )
 
 const DirPath = "../2024/day20"
@@ -20,142 +20,167 @@ const (
 	wall  = byte('#')
 )
 
+// 861156 too low
+
 func SolveP1() string {
 	ans := 0
-	basePathCost := findBaseCost()
-	cheatPointMap := xxx()
-	fmt.Println(len(cheatPointMap))
-	costSavingMap := make(map[int]int)
-	for _, v := range cheatPointMap {
-		grid, start, end, costGrid, unvisited := initStuff()
-		fmt.Printf("%v, %v, %v, %v : ", v[0].Str(), v[1].Str(), string(grid[v[0].I][v[0].J]), string(grid[v[1].I][v[1].J]))
-		grid[1][9] = space
-		grid[1][10] = space
-		findShortestPath(grid, start, end, costGrid, unvisited)
-		pathCost := costGrid[end.I][end.J]
-		savings := basePathCost - pathCost
-		fmt.Print(savings, v[0].Str(), v[1].Str(), string(grid[v[0].I][v[0].J]), string(grid[v[1].I][v[1].J]), pathCost)
-		fmt.Println()
-		costSavingMap[savings] += 1
-		break
+	grid, start, end := initStuff()
+	basePath := findBasePath(grid, start, end)
+	fmt.Println("base path len", len(basePath))
+	basePathDistMap := makeBasePathDistMap(basePath)
+	savingsToCheatStartCountMap := make(map[int]map[string]bool)
+	var prev *idx
+	for i, p := range basePath {
+		dests := findPossibleDestAfterCheatP1(grid, p, prev)
+		for d, v := range dests {
+			pathLen := i + 1 + 1 + basePathDistMap[d]
+			pathDiff := len(basePath) - pathLen
+			if pathDiff > 0 {
+				if _, ok := savingsToCheatStartCountMap[pathDiff]; !ok {
+					savingsToCheatStartCountMap[pathDiff] = make(map[string]bool)
+				}
+				fkey := fmt.Sprintf("%v-%v", p.ToKey(), v.ToKey())
+				savingsToCheatStartCountMap[pathDiff][fkey] = true
+			}
+		}
+		prev = p
 	}
-	for k, v := range costSavingMap {
-		fmt.Printf("%v : %v\n", k, v)
+	fmt.Println()
+	keys := mapz.Keys(savingsToCheatStartCountMap)
+	slices.Sort(keys)
+	for _, k := range keys {
+		fmt.Println(k, len(savingsToCheatStartCountMap[k]))
+		if k >= 100 {
+			ans += len(savingsToCheatStartCountMap[k])
+		}
 	}
-	ans = basePathCost
 	return fmt.Sprintf("%v", ans)
 }
 
-func findBaseCost() int {
-	grid, start, end, costGrid, unvisited := initStuff()
-	findShortestPath(grid, start, end, costGrid, unvisited)
-	return costGrid[end.I][end.J]
-}
-
-func xxx() map[string][]*idx {
-	m := make(map[string][]*idx)
-	for i := 0; i < len(gInput); i++ {
-		for j := 0; j < len(gInput[0]); j++ {
-			if gInput[i][j] == wall {
-				if i > 0 && gInput[i-1][j] == wall {
-					a := arrz.NewIdx2D(i, j)
-					b := arrz.NewIdx2D(i-1, j)
-					key := fmt.Sprintf("%v_%v", b.Str(), a.Str())
-					if _, ok := m[key]; !ok {
-						m[key] = []*idx{a, b}
-					}
-				} else if i < len(gInput)-1 && gInput[i+1][j] == wall {
-					a := arrz.NewIdx2D(i, j)
-					b := arrz.NewIdx2D(i+1, j)
-					key := fmt.Sprintf("%v_%v", a.Str(), b.Str())
-					if _, ok := m[key]; !ok {
-						m[key] = []*idx{a, b}
-					}
-				} else if j > 0 && gInput[i][j-1] == wall {
-					a := arrz.NewIdx2D(i, j)
-					b := arrz.NewIdx2D(i, j-1)
-					key := fmt.Sprintf("%v_%v", b.Str(), a.Str())
-					if _, ok := m[key]; !ok {
-						m[key] = []*idx{a, b}
-					}
-				} else if j < len(gInput[0])-1 && gInput[i][j+1] == wall {
-					a := arrz.NewIdx2D(i, j)
-					b := arrz.NewIdx2D(i, j+1)
-					key := fmt.Sprintf("%v_%v", a.Str(), b.Str())
-					if _, ok := m[key]; !ok {
-						m[key] = []*idx{a, b}
-					}
+func SolveP2() string {
+	grid, start, end := initStuff()
+	basePath := findBasePath(grid, start, end)
+	fmt.Println("base path len", len(basePath))
+	basePathDistMap := makeBasePathDistMap(basePath)
+	savingsToCheatStartCountMap := make(map[int]map[string]bool)
+	for i, p := range basePath {
+		dests := findPossibleDestAfterCheatP2(grid, p, 21)
+		for cKey, c := range dests {
+			pathLen := i + c.dist + basePathDistMap[c.e.ToKey()]
+			pathDiff := len(basePath) - pathLen
+			if pathDiff > 0 {
+				if _, ok := savingsToCheatStartCountMap[pathDiff]; !ok {
+					savingsToCheatStartCountMap[pathDiff] = make(map[string]bool)
 				}
+				savingsToCheatStartCountMap[pathDiff][cKey] = true
 			}
 		}
 	}
-	return m
-}
-
-func initStuff() ([][]byte, *arrz.Idx2D[int], *arrz.Idx2D[int], [][]int, tpz.StringSet) {
-	grid := arrz.Copy2D(gInput)
-	s := arrz.NewIdx2D(arrz.Find2D(grid, 'S')[0]...)
-	e := arrz.NewIdx2D(arrz.Find2D(grid, 'E')[0]...)
-	costGrid := arrz.Init2D(len(grid), len(grid[0]), math.MaxInt/2)
-	costGrid[s.I][s.J] = 0
-	unvisited := initUnvisited(grid)
-	return grid, s, e, costGrid, unvisited
-}
-
-func findShortestPath(grid [][]byte, curr *arrz.Idx2D[int], end *arrz.Idx2D[int], costs [][]int, unvisited tpz.StringSet) {
-	delete(unvisited, curr.ToKey())
-	if curr.IsEqual(end) {
-		return
-	}
-	nbrs := findVisitableNbrs(grid, curr)
-	for _, n := range nbrs {
-		if costs[n.I][n.J] > costs[curr.I][curr.J]+1 {
-			costs[n.I][n.J] = costs[curr.I][curr.J] + 1
+	ans := 0
+	keys := mapz.Keys(savingsToCheatStartCountMap)
+	slices.Sort(keys)
+	for _, k := range keys {
+		if k >= 100 {
+			fmt.Println(k, len(savingsToCheatStartCountMap[k]))
+			ans += len(savingsToCheatStartCountMap[k])
 		}
 	}
-	if nextToVisit := findNextToVisit(costs, unvisited); nextToVisit != nil {
-		findShortestPath(grid, nextToVisit, end, costs, unvisited)
+	return fmt.Sprintf("%v", ans)
+}
+
+type cheat struct {
+	s, e *idx
+	dist int
+}
+
+func (c *cheat) ToKey() string {
+	return fmt.Sprintf("%v-%v", c.s.ToKey(), c.e.ToKey())
+}
+
+func findPossibleDestAfterCheatP2(grid [][]byte, cheatPoint *idx, simCount int) map[string]*cheat {
+	dests := make(map[string]*cheat)
+	for i := 0; i < simCount; i++ {
+		for j := 0; j < simCount-i; j++ {
+			//fmt.Println("adding for md ", i+j)
+			p1, p2, p3, p4 := cheatPoint.Clone(), cheatPoint.Clone(), cheatPoint.Clone(), cheatPoint.Clone()
+			p1.MoveBy(-i, -j)
+			p2.MoveBy(-i, j)
+			p3.MoveBy(i, -j)
+			p4.MoveBy(i, j)
+			addToDestsIfValid(grid, cheatPoint, p1, i+j, dests)
+			addToDestsIfValid(grid, cheatPoint, p2, i+j, dests)
+			addToDestsIfValid(grid, cheatPoint, p3, i+j, dests)
+			addToDestsIfValid(grid, cheatPoint, p4, i+j, dests)
+		}
+	}
+	return dests
+}
+
+func addToDestsIfValid(grid [][]byte, s, e *idx, dist int, dests map[string]*cheat) {
+	if e.IsInBounds(len(grid), len(grid[0])) && grid[e.I][e.J] != wall {
+		c := &cheat{s: s, e: e, dist: dist}
+		if _, ok := dests[c.ToKey()]; !ok {
+			dests[c.ToKey()] = c
+		}
+		if dests[c.ToKey()].dist > c.dist {
+			dests[c.ToKey()].dist = c.dist
+		}
 	}
 }
 
-func initUnvisited(grid [][]byte) tpz.StringSet {
-	unvisited := make(tpz.StringSet)
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[0]); j++ {
-			if grid[i][j] == space {
-				unvisited[arrz.NewIdx2D(i, j).ToKey()] = true
+func findPossibleDestAfterCheatP1(grid [][]byte, cheatPoint, prev *idx) map[string]*idx {
+	dests := make(map[string]*idx)
+	nbrsL1 := findValidNbrs(grid, cheatPoint, prev, true)
+	for _, n1 := range nbrsL1 {
+		nbrsL2 := findValidNbrs(grid, n1, cheatPoint, false)
+		for _, n2 := range nbrsL2 {
+			dests[n2.ToKey()] = n2
+		}
+	}
+
+	return dests
+}
+
+func makeBasePathDistMap(path []*idx) map[string]int {
+	distMap := make(map[string]int)
+	for i, p := range path {
+		distMap[p.ToKey()] = len(path) - i
+	}
+	return distMap
+
+}
+
+func findBasePath(grid [][]byte, s, e *idx) []*idx {
+	path := make([]*idx, 0)
+	var curr, prev *idx
+	for curr = s.Clone(); !curr.IsEqual(e); {
+		path = append(path, curr)
+		nbrs := findValidNbrs(grid, curr, prev, false)
+		errz.HardAssert(len(nbrs) > 0, "no valid nbrs found for %v", curr)
+		prev = curr
+		curr = nbrs[0]
+	}
+	return path
+}
+
+func findValidNbrs(grid [][]byte, curr, prev *idx, includeWalls bool) []*idx {
+	nbrs := make([]*idx, 0)
+	allNbrs := curr.Neighbours(false)
+	for _, n := range allNbrs {
+		if n.IsInBounds(len(grid), len(grid[0])) && !n.IsEqual(prev) {
+			if includeWalls || grid[n.I][n.J] != wall {
+				nbrs = append(nbrs, n)
 			}
-		}
-	}
-	return unvisited
-}
-
-func findNextToVisit(costGrid [][]int, unvisited tpz.StringSet) *arrz.Idx2D[int] {
-	minCost := math.MaxInt
-	var minCostNode *arrz.Idx2D[int]
-	for k, _ := range unvisited {
-		node := arrz.NewIdx2DFromKey[int](k)
-		if minCost > costGrid[node.I][node.J] {
-			minCost = costGrid[node.I][node.J]
-			minCostNode = node
-		}
-	}
-	return minCostNode
-}
-
-func findVisitableNbrs(grid [][]byte, curr *arrz.Idx2D[int]) []*arrz.Idx2D[int] {
-	nbrs := make([]*arrz.Idx2D[int], 0)
-	for _, n := range curr.Neighbours(false) {
-		if n.IsInBounds(len(grid), len(grid[0])) && grid[n.I][n.J] != wall {
-			nbrs = append(nbrs, n)
 		}
 	}
 	return nbrs
 }
 
-func SolveP2() string {
-	ans := 0
-	return fmt.Sprintf("%v", ans)
+func initStuff() ([][]byte, *idx, *idx) {
+	grid := arrz.Copy2D(gInput)
+	s := arrz.NewIdx2D(arrz.Find2D(grid, 'S')[0]...)
+	e := arrz.NewIdx2D(arrz.Find2D(grid, 'E')[0]...)
+	return grid, s, e
 }
 
 /***** P1 Functions *****/
